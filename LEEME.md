@@ -26,3 +26,6 @@ El progreso se guarda en el navegador. Usa *Ajustes → Exportar progreso* para 
 - `data/modules/mXX.json`: contenido de cada módulo (teoría, ejercicios, guardián, glosario). Formato en `data/ESQUEMA.md`.
 - `tools/validar.py`: valida los JSON y regenera `js/data.js` (`python tools/validar.py`). Ejecútalo tras editar cualquier módulo.
 - `js/app.js`, `css/style.css`, `index.html`: el juego.
+
+Al publicar cambios, sube el número `?v=` de los tres enlaces de `index.html` (por ejemplo de `v=2` a `v=3`)
+para que los navegadores descarguen la versión nueva en lugar de usar la caché.
