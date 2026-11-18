@@ -1,0 +1,1123 @@
+{
+  "id": "m04",
+  "path": 1,
+  "order": 4,
+  "title": "Introducción a los conceptos de voz con IA",
+  "titleEn": "Introduction to AI speech concepts",
+  "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/",
+  "summary": "Imagina aplicaciones y agentes de IA con los que puedes hablar. Este módulo explica los escenarios de la voz con IA y cómo funcionan por dentro el reconocimiento de voz (voz a texto) y la síntesis de voz (texto a voz).",
+  "objectives": [
+    "Identificar distintos escenarios de uso de la voz con IA",
+    "Describir cómo funciona el reconocimiento de voz",
+    "Describir cómo funciona la síntesis de voz"
+  ],
+  "units": [
+    {
+      "id": "m04u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Hablar es una de las formas más naturales de comunicarse. Añadir voz a las aplicaciones de IA produce experiencias más intuitivas, accesibles y atractivas, ya sea en un asistente de voz, una aplicación accesible o un agente conversacional."
+        },
+        {
+          "type": "p",
+          "text": "Hay dos capacidades fundamentales de voz:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Reconocimiento de voz|speech recognition}}: convierte las palabras habladas en texto.",
+            "{{Síntesis de voz|speech synthesis}}: convierte texto en audio hablado con sonido natural."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Ambas tecnologías trabajan juntas para crear interacciones por voz fluidas en escenarios reales."
+        },
+        {
+          "type": "tip",
+          "text": "Truco de memoria: reconocimiento = **voz → texto** (speech-to-text, STT); síntesis = **texto → voz** (text-to-speech, TTS)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada capacidad con lo que hace.",
+          "pairs": [
+            [
+              "Reconocimiento de voz",
+              "Convierte audio hablado en texto"
+            ],
+            [
+              "Síntesis de voz",
+              "Convierte texto en audio hablado"
+            ],
+            [
+              "Combinación de ambas",
+              "Permite conversaciones por voz en dos sentidos"
+            ]
+          ],
+          "explain": "El reconocimiento escucha y transcribe; la síntesis habla; juntas permiten un diálogo completo.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La síntesis de voz también se conoce como speech-to-text.",
+          "answer": false,
+          "explain": "La síntesis es text-to-speech (texto a voz). Speech-to-text es el reconocimiento de voz.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m04u2",
+      "title": "Soluciones habilitadas por voz",
+      "titleEn": "Speech-enabled solutions",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/2-speech-solutions",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Por qué añadir voz"
+        },
+        {
+          "type": "p",
+          "text": "Las capacidades de voz permiten manejar aplicaciones sin manos, mejoran la accesibilidad y hacen las conversaciones más naturales. Integrar voz ayuda a:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Ampliar la accesibilidad:** atender a usuarios con discapacidad visual o movilidad reducida.",
+            "**Aumentar la productividad:** permitir la multitarea sin teclado ni pantalla.",
+            "**Mejorar la experiencia de usuario:** conversaciones más humanas y atractivas.",
+            "**Llegar a audiencias globales:** admitir varios idiomas y dialectos regionales."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de reconocimiento de voz"
+        },
+        {
+          "type": "p",
+          "text": "El reconocimiento de voz ({{voz a texto|speech-to-text}}) escucha audio y lo transcribe a texto escrito."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Escenario",
+            "Usos",
+            "Valor de negocio"
+          ],
+          "rows": [
+            [
+              "Atención al cliente y soporte",
+              "Transcribir llamadas en tiempo real para el agente y control de calidad; enrutar al departamento correcto según lo que dice el cliente; analizar el sentimiento y detectar problemas frecuentes; generar registros de llamadas buscables para cumplimiento normativo y formación.",
+              "Menos notas manuales, respuestas más precisas e información para mejorar el servicio."
+            ],
+            [
+              "Asistentes y agentes activados por voz",
+              "Aceptar comandos de voz para controlar dispositivos y apps; responder preguntas con comprensión del lenguaje natural; completar tareas (recordatorios, mensajes, búsquedas); controlar hogar inteligente, coches y dispositivos ponibles.",
+              "Más interacción, flujos complejos simplificados y uso donde una pantalla no es práctica."
+            ],
+            [
+              "Transcripción de reuniones y entrevistas",
+              "Notas buscables y listas de tareas; {{subtítulos en tiempo real|real-time captions}} para personas sordas o con pérdida auditiva; resúmenes de entrevistas y grupos de discusión; extraer puntos clave.",
+              "Ahorra horas de transcripción manual, registros precisos y contenido hablado accesible para todos."
+            ],
+            [
+              "Documentación sanitaria",
+              "Dictar notas clínicas directamente en la historia clínica electrónica; actualizar planes de tratamiento sin interrumpir la atención; reducir la carga administrativa y el agotamiento médico; capturar detalles en el momento.",
+              "Más tiempo para el paciente, registros más completos y menos errores."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de síntesis de voz"
+        },
+        {
+          "type": "p",
+          "text": "La síntesis de voz ({{texto a voz|text-to-speech}}) convierte texto escrito en audio hablado."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Escenario",
+            "Usos",
+            "Valor de negocio"
+          ],
+          "rows": [
+            [
+              "IA conversacional y chatbots",
+              "Responder con voz natural en lugar de texto; personalizar tono, ritmo y estilo; atender consultas por canales de voz como el teléfono; experiencia de marca coherente en voz y texto.",
+              "Agentes más cercanos, menos esfuerzo del cliente y servicio en canales solo de voz."
+            ],
+            [
+              "Accesibilidad y consumo de contenido",
+              "Leer en voz alta webs, artículos y documentos para personas con discapacidad visual; apoyar a personas con dislexia; consumir contenido mientras se conduce o hace ejercicio; alternativas de audio a interfaces con mucho texto.",
+              "Mayor alcance, compromiso con la inclusión y más satisfacción."
+            ],
+            [
+              "Notificaciones y alertas",
+              "Anunciar alertas, recordatorios y estados; instrucciones de navegación en GPS; información urgente sin mirar la pantalla; estado de sistemas en entornos industriales.",
+              "La información crítica llega aunque no haya atención visual, mejorando la seguridad."
+            ],
+            [
+              "E-learning y formación",
+              "Lecciones narradas sin estudio de grabación; ejemplos de pronunciación para aprender idiomas; versiones en audio de materiales escritos; producir contenido en varios idiomas.",
+              "Menos costes, distintos estilos de aprendizaje y desarrollo de cursos más rápido."
+            ],
+            [
+              "Entretenimiento y medios",
+              "Voces de personajes en juegos; borradores de pódcast y prototipos de audiolibros; locuciones para vídeos y presentaciones; audio personalizado.",
+              "Producción más barata, prototipado rápido y experiencias personalizadas a escala."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Combinar reconocimiento y síntesis"
+        },
+        {
+          "type": "p",
+          "text": "Las aplicaciones más potentes usan ambas capacidades para conversar en los dos sentidos:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Atención al cliente por voz:** el agente escucha la pregunta (reconocimiento), la procesa y responde (síntesis).",
+            "**Sistemas de {{respuesta de voz interactiva|interactive voice response (IVR)}}:** el llamante dice lo que necesita y el sistema le guía con diálogo natural.",
+            "**Aprendizaje de idiomas:** el alumno pronuncia frases (reconocimiento) y recibe correcciones habladas (síntesis).",
+            "**Vehículos controlados por voz:** el conductor da órdenes sin manos (reconocimiento) y el sistema confirma las acciones (síntesis)."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Recomendación: empieza con una sola capacidad de voz en el escenario de más valor y demuestra que funciona antes de pasar a flujos conversacionales complejos."
+        },
+        {
+          "type": "h",
+          "text": "Consideraciones antes de implementar voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Calidad del audio:** el ruido de fondo, la calidad del micrófono y el ancho de banda de red afectan a la precisión del reconocimiento.",
+            "**Idiomas y dialectos:** comprueba que tus idiomas y variantes regionales están admitidos.",
+            "**Privacidad y cumplimiento:** entiende cómo se procesa, almacena y protege el audio para cumplir la normativa.",
+            "**Latencia:** las conversaciones en tiempo real exigen baja latencia; la {{transcripción por lotes|batch transcription}} tolera retrasos.",
+            "**Estándares de accesibilidad:** cumple las pautas WCAG y no crees barreras para algunos usuarios."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Importante (y conecta con la IA responsable – inclusión): ofrece siempre métodos alternativos de entrada y salida; algunas personas prefieren o necesitan una interfaz de texto aunque haya voz."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un hospital quiere que los médicos dicten las notas del paciente directamente en la historia clínica. ¿Qué capacidad necesita?",
+          "options": [
+            "Síntesis de voz",
+            "Reconocimiento de voz",
+            "Traducción de texto",
+            "Detección de PII"
+          ],
+          "answer": 1,
+          "explain": "Dictar es convertir voz en texto: reconocimiento de voz (speech-to-text).",
+          "obj": "A3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos escenarios son principalmente de síntesis de voz? (Elige 2)",
+          "options": [
+            "Subtítulos en tiempo real de una reunión",
+            "Indicaciones habladas de una app de navegación GPS",
+            "Enrutar llamadas según lo que dice el cliente",
+            "Leer en voz alta artículos para personas con dislexia",
+            "Dictado de notas clínicas"
+          ],
+          "answers": [
+            1,
+            3
+          ],
+          "explain": "El GPS y la lectura en voz alta generan audio a partir de texto (TTS); los demás convierten voz en texto.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un sistema IVR telefónico entiende lo que dice el cliente y le responde hablando. ¿Qué capacidades usa?",
+          "options": [
+            "Solo reconocimiento de voz",
+            "Solo síntesis de voz",
+            "Reconocimiento y síntesis de voz",
+            "Solo análisis de sentimiento"
+          ],
+          "answer": 2,
+          "explain": "Escucha al llamante (reconocimiento) y le guía con respuestas habladas (síntesis).",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Si una aplicación añade voz, puede eliminar la interfaz de texto porque todos los usuarios preferirán hablar.",
+          "answer": false,
+          "explain": "Se recomienda mantener siempre métodos alternativos de entrada y salida: algunas personas prefieren o necesitan texto (principio de inclusión).",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m04u3",
+      "title": "Reconocimiento de voz",
+      "titleEn": "Speech recognition",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/3-speech-recognition",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El reconocimiento de voz (speech-to-text) convierte lenguaje hablado en texto escrito. El camino de la onda sonora al texto tiene **seis etapas**: capturar el audio, preparar características, modelar patrones acústicos, aplicar reglas del lenguaje, decodificar las palabras más probables y refinar el resultado."
+        },
+        {
+          "type": "h",
+          "text": "1. Captura de audio: de analógico a digital"
+        },
+        {
+          "type": "p",
+          "text": "Un micrófono convierte las ondas sonoras en una señal digital. El sistema {{muestrea|samples}} el audio miles de veces por segundo (normalmente **16 000 muestras por segundo, 16 kHz**, para voz) y guarda cada medida como un número."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Frecuencias más altas (como 44,1 kHz para música) captan más detalle pero requieren más procesamiento.",
+            "El reconocimiento de voz equilibra claridad y eficiencia entre 8 kHz y 16 kHz.",
+            "El ruido de fondo, la calidad del micrófono y la distancia al hablante influyen directamente en la precisión posterior."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Antes de pasar a la siguiente etapa suelen aplicarse filtros básicos para quitar zumbidos, chasquidos u otros ruidos."
+        },
+        {
+          "type": "h",
+          "text": "2. Preprocesamiento: extraer características"
+        },
+        {
+          "type": "p",
+          "text": "Las muestras en bruto contienen demasiada información. El preprocesamiento transforma la onda en una representación compacta que resalta las características del habla y descarta detalles irrelevantes, como el volumen absoluto."
+        },
+        {
+          "type": "p",
+          "text": "La técnica más común son los {{coeficientes cepstrales en frecuencia Mel|Mel-Frequency Cepstral Coefficients (MFCC)}}, que imitan cómo percibe el oído humano: dan más peso a las frecuencias donde se concentra la energía del habla y comprimen las menos importantes."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Dividir en tramas:** se corta la señal en ventanas solapadas de 20–30 milisegundos.",
+            "**Aplicar la transformada de Fourier:** cada trama pasa del dominio del tiempo al de la frecuencia, revelando qué tonos hay.",
+            "**Mapear a la escala Mel:** se ajustan las bandas de frecuencia a la sensibilidad del oído (distinguimos mejor los tonos graves que los agudos).",
+            "**Extraer coeficientes:** se calcula un conjunto pequeño de números (a menudo **13 coeficientes**) que resume la forma espectral de cada trama."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El resultado es una secuencia de {{vectores de características|feature vectors}}, uno por trama, que describe cómo suena el audio sin guardar cada muestra. Son la entrada del modelado acústico."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "Trama 1: [ -113.2,  45.3,  12.1,  -3.4,  7.8,  ... ]  # 13 coeficientes\nTrama 2: [ -112.8,  44.7,  11.8,  -3.1,  7.5,  ... ]\nTrama 3: [ -110.5,  43.9,  11.5,  -2.9,  7.3,  ... ]"
+        },
+        {
+          "type": "h",
+          "text": "3. Modelado acústico: reconocer fonemas"
+        },
+        {
+          "type": "p",
+          "text": "El {{modelo acústico|acoustic model}} aprende la relación entre las características de audio y los {{fonemas|phonemes}}: las unidades de sonido más pequeñas que distinguen palabras. El inglés tiene unos 44 fonemas; por ejemplo, «cat» tiene tres: /k/, /æ/ y /t/."
+        },
+        {
+          "type": "p",
+          "text": "Los modelos acústicos modernos usan arquitecturas {{transformador|transformer}}, redes de aprendizaje profundo muy buenas con secuencias. Procesan los vectores MFCC y predicen qué fonema es más probable en cada momento gracias a:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Mecanismo de atención:** examina las tramas cercanas para resolver ambigüedades (la /t/ suena distinta al principio de «top» que al final de «bat»).",
+            "**Procesamiento en paralelo:** a diferencia de los antiguos modelos recurrentes, analiza muchas tramas a la vez, ganando velocidad y precisión.",
+            "**Predicciones contextualizadas:** aprende qué secuencias de fonemas son frecuentes en el habla natural."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La salida es una **distribución de probabilidad sobre fonemas** para cada trama (por ejemplo, trama 42: 80 % /æ/, 15 % /ɛ/, 5 % otros). Los fonemas dependen del idioma: un modelo entrenado con fonemas ingleses no reconoce los tonos del mandarín sin volver a entrenarse."
+        },
+        {
+          "type": "h",
+          "text": "4. Modelado del lenguaje: predecir secuencias de palabras"
+        },
+        {
+          "type": "p",
+          "text": "Los fonemas no bastan: «their» y «there» suenan igual. El {{modelo de lenguaje|language model}} resuelve la ambigüedad con conocimiento de vocabulario, gramática y patrones habituales:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Patrones estadísticos:** «The weather is nice» aparece mucho más que «The whether is nice».",
+            "**Contexto:** tras «I need to» se esperan verbos como «go» o «finish», no sustantivos como «table».",
+            "**Adaptación al dominio:** modelos de lenguaje personalizados con terminología médica o legal mejoran la precisión en escenarios especializados."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "5. Decodificación: elegir la mejor hipótesis"
+        },
+        {
+          "type": "p",
+          "text": "Los algoritmos de {{decodificación|decoding}} buscan entre millones de secuencias posibles la transcripción que mejor encaja con las predicciones acústicas y del lenguaje, equilibrando fidelidad al audio y texto legible y gramatical."
+        },
+        {
+          "type": "p",
+          "text": "La técnica más común es la {{búsqueda en haz|beam search}}: mantiene una lista corta (el «haz») de transcripciones parciales con mejor puntuación; en cada paso amplía cada hipótesis con la siguiente palabra más probable, descarta los caminos de baja puntuación y conserva solo los mejores. Para una frase de tres segundos puede evaluar miles de hipótesis antes de elegir «Please send the report by Friday» frente a «Please sent the report buy Friday»."
+        },
+        {
+          "type": "tip",
+          "text": "La decodificación es costosa computacionalmente: las aplicaciones en tiempo real equilibran precisión y latencia limitando el ancho del haz y la profundidad de las hipótesis."
+        },
+        {
+          "type": "h",
+          "text": "6. Posprocesamiento: refinar el resultado"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Mayúsculas:** «hello my name is sam» → «Hello my name is Sam».",
+            "**Restaurar puntuación:** añadir puntos, comas e interrogaciones según la {{prosodia|prosody}} y la gramática.",
+            "**Formato de números:** «one thousand twenty three» → «1,023».",
+            "**Filtrado de palabras malsonantes:** enmascarar o eliminar palabras inapropiadas si la política lo exige.",
+            "**{{Normalización inversa del texto|Inverse text normalization}}:** convertir formas habladas como «three p m» en «3 PM».",
+            "**Puntuación de confianza:** marcar palabras con baja confianza para revisión humana en aplicaciones críticas (p. ej., transcripción médica)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Azure Speech devuelve la transcripción final junto con metadatos como **marcas de tiempo por palabra** y **puntuaciones de confianza**, para que la aplicación pueda resaltar fragmentos dudosos o activar comportamientos alternativos."
+        },
+        {
+          "type": "h",
+          "text": "Cómo encaja todo"
+        },
+        {
+          "type": "p",
+          "text": "Captura (señal en bruto) → preprocesamiento (MFCC) → modelo acústico (probabilidades de fonemas con transformadores) → modelo de lenguaje (vocabulario y gramática) → decodificación (mejor secuencia) → posprocesamiento (formato legible). Al separar responsabilidades, cuando la calidad falla se puede localizar la etapa culpable: mala captura, modelo de lenguaje poco entrenado o un posprocesamiento demasiado agresivo."
+        },
+        {
+          "type": "tip",
+          "text": "Pregunta frecuente: en el **preprocesamiento** se extraen vectores de características (MFCC) de la onda de audio para el modelado; no se cambia el formato del archivo ni se añade ruido."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las etapas del reconocimiento de voz.",
+          "items": [
+            "Captura de audio",
+            "Preprocesamiento (MFCC)",
+            "Modelado acústico",
+            "Modelado del lenguaje",
+            "Decodificación",
+            "Posprocesamiento"
+          ],
+          "explain": "El audio se digitaliza, se convierte en características, se predicen fonemas, se aplica conocimiento del lenguaje, se elige la mejor secuencia y se formatea.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué ocurre durante la etapa de preprocesamiento del reconocimiento de voz?",
+          "options": [
+            "Se convierte el audio a otro formato de archivo",
+            "Se extraen vectores de características de la onda para el modelado",
+            "Se añade ruido para hacer el modelo más robusto",
+            "Se elige la mejor frase con búsqueda en haz"
+          ],
+          "answer": 1,
+          "explain": "El preprocesamiento (normalmente con MFCC) transforma la onda en vectores compactos que el modelo acústico puede analizar.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "La transcripción confunde «their» y «there». ¿Qué etapa está diseñada para resolver este tipo de ambigüedad?",
+          "options": [
+            "Captura de audio",
+            "Modelado acústico",
+            "Modelado del lenguaje",
+            "Filtrado de ruido"
+          ],
+          "answer": 2,
+          "explain": "Ambas palabras tienen los mismos fonemas; el modelo de lenguaje usa contexto, gramática y frecuencias para elegir la correcta.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada tarea de posprocesamiento con su ejemplo.",
+          "pairs": [
+            [
+              "Normalización inversa del texto",
+              "«three p m» → «3 PM»"
+            ],
+            [
+              "Restauración de puntuación",
+              "Añadir signos de interrogación y comas"
+            ],
+            [
+              "Puntuación de confianza",
+              "Marcar palabras dudosas para revisión humana"
+            ],
+            [
+              "Capitalización",
+              "«sam» → «Sam»"
+            ]
+          ],
+          "explain": "El posprocesamiento convierte el texto bruto del decodificador en una transcripción legible y fiable.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m04u4",
+      "title": "Síntesis de voz",
+      "titleEn": "Speech synthesis",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/4-speech-synthesis",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La síntesis de voz ({{texto a voz|text-to-speech (TTS)}}) convierte texto escrito en audio hablado: la oyes cuando un asistente lee notificaciones, un navegador anuncia direcciones o una herramienta de accesibilidad lee contenido. El texto pasa por **cuatro etapas** que lo transforman poco a poco hasta obtener una onda de audio natural e inteligible."
+        },
+        {
+          "type": "h",
+          "text": "1. Normalización del texto"
+        },
+        {
+          "type": "p",
+          "text": "La {{normalización del texto|text normalization}} prepara el texto para pronunciarlo expandiendo abreviaturas, números y símbolos a su forma hablada. Ejemplo: «Dr. Smith ordered 3 items for $25.50 on 12/15/2023» pasa a «Doctor Smith ordered three items for twenty-five dollars and fifty cents on December fifteenth, two thousand twenty-three»."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Expandir abreviaturas («Dr.» → «Doctor», «Inc.» → «Incorporated»).",
+            "Convertir números en palabras («3» → «three»).",
+            "Tratar fechas y horas («12/15/2023» → «December fifteenth…»).",
+            "Procesar símbolos y caracteres especiales («$» → «dollars», «@» → «at»).",
+            "Resolver {{homógrafos|homographs}} según el contexto («read» en presente o en pasado)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Así el sistema no intenta pronunciar símbolos o dígitos en bruto, lo que sonaría antinatural o incomprensible. Cada dominio necesita reglas propias: un texto médico trata nombres de fármacos y dosis de forma distinta a uno financiero con divisas y porcentajes."
+        },
+        {
+          "type": "h",
+          "text": "2. Análisis lingüístico: del texto a los fonemas"
+        },
+        {
+          "type": "p",
+          "text": "El {{análisis lingüístico|linguistic analysis}} divide el texto normalizado en fonemas y decide cómo pronunciar cada palabra:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Segmenta el texto en palabras y sílabas.",
+            "Busca pronunciaciones en {{léxicos|lexicons}} (diccionarios de pronunciación).",
+            "Aplica reglas G2P o modelos neuronales para palabras desconocidas.",
+            "Marca los límites de sílaba y las sílabas tónicas.",
+            "Determina el contexto fonético de los sonidos adyacentes."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La {{conversión de grafema a fonema|grapheme-to-phoneme (G2P) conversion}} relaciona letras escritas (grafemas) con sonidos (fonemas). En inglés la ortografía no indica bien la pronunciación: «though» /θoʊ/, «through» /θruː/ y «cough» /kɔːf/ comparten «ough» pero suenan muy distinto. Los sistemas G2P modernos usan redes neuronales entrenadas con diccionarios de pronunciación, y manejan mejor que las reglas las palabras raras, los nombres propios y las variantes regionales."
+        },
+        {
+          "type": "p",
+          "text": "A menudo se usa un modelo transformador para tener en cuenta el contexto: «read» se pronuncia /riːd/ en «I read books» y /rɛd/ en «I read that book yesterday»."
+        },
+        {
+          "type": "h",
+          "text": "3. Generación de prosodia"
+        },
+        {
+          "type": "p",
+          "text": "La {{prosodia|prosody}} es el ritmo, el acento y la entonación que hacen que el habla suene natural. Esta etapa decide **cómo** decir las palabras, no solo qué sonidos producir. Sus elementos:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Contornos de tono:** subidas o bajadas que distinguen preguntas de afirmaciones.",
+            "**Duración:** cuánto se alarga cada sonido, para dar énfasis o ritmo.",
+            "**Intensidad:** variaciones de volumen que destacan palabras importantes.",
+            "**Pausas:** cortes entre frases que ayudan a entender.",
+            "**Patrones de acento:** qué sílabas o palabras reciben énfasis."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "La frase «I never said he ate the cake» cambia de significado según la palabra que se enfatiza: si se recalca «I», se insinúa que lo dijo otra persona; si se recalca «said», que quizá lo dio a entender sin decirlo; si se recalca «cake», que se comió otra cosa."
+        },
+        {
+          "type": "p",
+          "text": "Los sistemas modernos predicen la prosodia con transformadores, que entienden el contexto de toda la frase:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Codificación de la entrada:** recibe la secuencia de fonemas con rasgos lingüísticos (puntuación, categoría gramatical, estructura).",
+            "**Análisis contextual:** la {{autoatención|self-attention}} identifica relaciones entre palabras (a qué sustantivo se refiere un pronombre, dónde acaban las frases).",
+            "**Predicción de prosodia:** genera valores de tono, duración y energía para cada fonema.",
+            "**Factores de estilo:** considera el estilo (neutral, expresivo, conversacional) y las características del hablante."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Aprenden de miles de horas de voz grabada con su transcripción: las preguntas suben de tono al final, las comas indican pausas breves, las palabras enfatizadas se alargan y la última palabra suele bajar de tono. Influyen la **sintaxis** (pausas en límites de cláusula), la **semántica** (énfasis en conceptos importantes), el **contexto del discurso** (contrastes, respuestas), la **identidad del hablante** (rango de tono y velocidad) y el **tono emocional**. El resultado es una especificación objetivo, del tipo «produce /æ/ a 180 Hz durante 80 ms con intensidad moderada y luego pausa de 200 ms»."
+        },
+        {
+          "type": "tip",
+          "text": "La prosodia es clave para la naturalidad: una voz robótica suele deberse a una prosodia plana y monótona, no a errores de pronunciación de los fonemas."
+        },
+        {
+          "type": "h",
+          "text": "4. Síntesis del audio"
+        },
+        {
+          "type": "p",
+          "text": "Se genera la onda de audio final a partir de los fonemas y la prosodia. Los sistemas modernos usan {{vocoders neuronales|neural vocoders}}, modelos de aprendizaje profundo que generan muestras de audio directamente (arquitecturas como WaveNet, WaveGlow y HiFi-GAN)."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Generación de características acústicas:** un modelo acústico (a menudo un transformador) convierte fonemas y prosodia en {{espectrogramas Mel|mel-spectrograms}}, representaciones visuales de las frecuencias a lo largo del tiempo.",
+            "**Vocodificación:** el vocoder convierte los espectrogramas en ondas de audio (entre 16 000 y 48 000 muestras por segundo).",
+            "**Posprocesamiento:** filtrado, normalización o efectos para cumplir las especificaciones de salida."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Ventajas de los vocoders neuronales: **alta fidelidad** (calidad cercana a un estudio), **naturalidad** (respiración, timbre), **eficiencia** (generación en tiempo real) y **flexibilidad** (distintos hablantes, idiomas y estilos). El vocoder hace básicamente lo inverso del reconocimiento automático: este convierte audio en texto y el vocoder convierte representaciones lingüísticas en audio."
+        },
+        {
+          "type": "h",
+          "text": "El proceso completo"
+        },
+        {
+          "type": "example",
+          "text": "«Dr. Chen's appointment is at 3:00 PM» → normalización: «Doctor Chen's appointment is at three o'clock P M» → análisis lingüístico: fonemas /ˈdɑktər ˈtʃɛnz əˈpɔɪntmənt…/ → prosodia: ligera subida en «appointment», pausa tras «is», énfasis en «three» → síntesis: onda de audio. Todo suele tardar menos de un segundo."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las etapas de la síntesis de voz.",
+          "items": [
+            "Normalización del texto",
+            "Análisis lingüístico (fonemas)",
+            "Generación de prosodia",
+            "Síntesis del audio con vocoder"
+          ],
+          "explain": "Primero se expande el texto, luego se convierte en fonemas, se decide cómo decirlo y finalmente se genera la onda.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Por qué es importante generar prosodia en la síntesis de voz?",
+          "options": [
+            "Para maximizar el volumen del audio",
+            "Para traducir el texto al idioma del oyente",
+            "Para que la pronunciación y la cadencia suenen naturales",
+            "Para eliminar el ruido de fondo"
+          ],
+          "answer": 2,
+          "explain": "La prosodia (tono, duración, intensidad, pausas, acento) da ritmo y entonación naturales; sin ella la voz suena monótona y robótica.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "El sistema TTS lee «$25» como «dólar dos cinco». ¿Qué etapa está fallando?",
+          "options": [
+            "Normalización del texto",
+            "Vocodificación",
+            "Generación de prosodia",
+            "Captura de audio"
+          ],
+          "answer": 0,
+          "explain": "La normalización expande números y símbolos a su forma hablada («veinticinco dólares»).",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Un fonema es la unidad de sonido más pequeña que distingue una palabra de otra.",
+          "answer": true,
+          "explain": "Por ejemplo «cat» tiene tres fonemas: /k/, /æ/ y /t/. Se usan tanto en reconocimiento como en síntesis.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m04u5",
+      "title": "Ejercicio: explorar la voz con IA",
+      "titleEn": "Exercise - Explore AI speech",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/5-exercise-speech",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo**: conversar por voz con un modelo generativo para ver en acción la {{conversión de voz a texto|speech-to-text (STT)}} y la {{conversión de texto a voz|text-to-speech (TTS)}} (unos 15 minutos)."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "p",
+          "text": "Navegador moderno (Chrome, Edge o Firefox recientes, con WASM SIMD; {{WebGPU|WebGPU}} recomendado), CPU de 64 bits y 8 núcleos, 8 GB de RAM o más (16 GB recomendados), GPU recomendada y espacio para cachear entre 300 y 800 MB de modelos. Micrófono y altavoces si se usa la voz. No hace falta suscripción de Azure. Aquí el micrófono y los altavoces son imprescindibles; mejor en un sitio silencioso o con auriculares."
+        },
+        {
+          "type": "h",
+          "text": "1. Abrir el Chat Playground"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir `https://aka.ms/chat-playground` y esperar a que cargue Phi 3.5 Mini (o empezar en modo básico si tarda mucho).",
+            "La app usa las APIs **Web Speech** del navegador para reconocer y sintetizar voz, con un modelo local de voz a texto como respaldo."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. Configurar el modo de voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En el panel izquierdo, bajo el modelo, activar **Voice mode**; si no aparece el panel de configuración, abrirlo con **Configuration (⚙)**.",
+            "Revisar la lista **Voice**: las {{voces|voices}} controlan cadencia, pronunciación y timbre. Dependen del navegador y del sistema operativo (voces locales u online).",
+            "Elegir una voz y escucharla con **Preview selected voice (▷)**; las voces online se descargan al momento. Opcionalmente, elegir un avatar.",
+            "Cerrar el panel de configuración."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "3. Hablar con el modelo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cambiar las **Instructions** (prompt del sistema) por el de experto en historia de la informática.",
+            "Pulsar **Start session** y permitir el micrófono.",
+            "Con el estado **Listening…**, decir algo como «What's speech recognition?».",
+            "El estado pasa a **Processing…**: la voz se transcribe (STT) y se envía al modelo como prompt.",
+            "En **Speaking…**, la respuesta se lee en voz alta (TTS). Si no hay voces disponibles, no se vocaliza.",
+            "Vuelve a **Listening…**: seguir la conversación (por ejemplo, «What's speech synthesis?»). El botón **[CC]** muestra la transcripción.",
+            "Terminar con **X**: se muestra la transcripción completa. Una sesión nueva no conserva el historial anterior."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "You are an expert in the history of computing and AI. You provide succinct and concise responses."
+        },
+        {
+          "type": "h",
+          "text": "Resultado"
+        },
+        {
+          "type": "p",
+          "text": "Se comprueba el ciclo completo: escuchar → transcribir → generar respuesta → sintetizar voz. La app es una versión simplificada del agent playground de Microsoft Foundry, donde se puede añadir **Voice Live** de **Azure Speech** a un agente. La app solo permite turnos «hablar - esperar - hablar», mientras que Voice Live ofrece conversaciones en tiempo real con {{interrupciones|interruptions}} y {{supresión de ruido de fondo|background noise suppression}}."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: STT = reconocimiento de voz (entrada hablada → texto); TTS = síntesis de voz (texto → audio), y la voz elegida define cómo suena. Para un agente de voz en tiempo real con interrupciones, piensa en Azure Speech Voice Live en Foundry."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: `https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/04-speech.html`"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los estados por los que pasa la app durante un turno de conversación por voz.",
+          "items": [
+            "Listening… (escucha al usuario)",
+            "Processing… (transcribe y consulta al modelo)",
+            "Speaking… (lee la respuesta en voz alta)",
+            "Listening… de nuevo para el siguiente turno"
+          ],
+          "explain": "Cada turno escucha, convierte la voz en texto y obtiene la respuesta del modelo, la sintetiza y vuelve a escuchar.",
+          "obj": "B2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada acción del laboratorio con la capacidad que usa.",
+          "pairs": [
+            [
+              "Decir «What's speech recognition?» al micrófono",
+              "Voz a texto (STT)"
+            ],
+            [
+              "Oír la respuesta del modelo por los altavoces",
+              "Texto a voz (TTS)"
+            ],
+            [
+              "Elegir una voz en la lista Voice",
+              "Configuración de la síntesis de voz"
+            ],
+            [
+              "Cambiar las Instructions",
+              "Prompt del sistema del modelo"
+            ]
+          ],
+          "explain": "El reconocimiento transcribe la entrada, la síntesis vocaliza la salida con la voz elegida y las instrucciones guían al modelo.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Según el laboratorio, Azure Speech Voice Live en Foundry permite conversaciones en tiempo real con interrupciones y supresión de ruido de fondo.",
+          "answer": true,
+          "explain": "La app del laboratorio solo admite turnos «hablar - esperar - hablar»; Voice Live añade conversación en tiempo real, interrupciones y supresión de ruido.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "En el laboratorio, ¿de qué dependen las voces disponibles en la lista Voice?",
+          "options": [
+            "Del modelo Phi 3.5 Mini seleccionado",
+            "Del navegador y del sistema operativo",
+            "De las instrucciones del sistema",
+            "De la región de Azure"
+          ],
+          "answer": 1,
+          "explain": "La app usa Web Speech, así que las voces son las locales del sistema operativo o las online que ofrece el navegador.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m04u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Preprocesamiento (reconocimiento):** se extraen vectores de características (MFCC) de la onda de audio para el modelado.",
+            "**Fonema:** la unidad de sonido más pequeña del habla; el modelo acústico predice probabilidades de fonemas y el análisis lingüístico de la síntesis convierte texto en fonemas.",
+            "**Prosodia:** ritmo, acento y entonación; garantiza una pronunciación y cadencia naturales (no sube el volumen ni traduce).",
+            "**Reconocimiento (6 etapas):** captura → preprocesamiento → modelo acústico → modelo de lenguaje → decodificación → posprocesamiento.",
+            "**Síntesis (4 etapas):** normalización → análisis lingüístico → prosodia → síntesis con vocoder."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué componente del reconocimiento de voz produce una distribución de probabilidad sobre fonemas para cada trama de audio?",
+          "options": [
+            "Modelo acústico",
+            "Modelo de lenguaje",
+            "Posprocesamiento",
+            "Vocoder"
+          ],
+          "answer": 0,
+          "explain": "El modelo acústico (normalmente un transformador) relaciona características MFCC con fonemas.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada concepto con su pipeline.",
+          "pairs": [
+            [
+              "MFCC",
+              "Reconocimiento de voz"
+            ],
+            [
+              "Búsqueda en haz",
+              "Reconocimiento de voz"
+            ],
+            [
+              "Conversión grafema a fonema",
+              "Síntesis de voz"
+            ],
+            [
+              "Vocoder neuronal",
+              "Síntesis de voz"
+            ]
+          ],
+          "explain": "MFCC y beam search pertenecen al paso de audio a texto; G2P y vocoders al paso de texto a audio.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La prosodia sirve principalmente para traducir el habla al idioma del oyente.",
+          "answer": false,
+          "explain": "La prosodia controla tono, duración, intensidad y pausas para sonar natural; no traduce.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m04u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Has explorado las tecnologías de voz que hacen posibles las interacciones naturales con aplicaciones de IA:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Escenarios:** la voz transforma la atención al cliente, la accesibilidad, la IA conversacional, la documentación sanitaria y el e-learning; combinar reconocimiento y síntesis crea conversaciones fluidas en dos sentidos con menos fricción.",
+            "**Reconocimiento de voz:** pipeline de seis etapas desde la onda sonora hasta la transcripción formateada; MFCC extrae patrones, los transformadores predicen fonemas y el modelo de lenguaje resuelve ambigüedades con vocabulario y gramática.",
+            "**Síntesis de voz:** cuatro etapas (normalización, análisis lingüístico, prosodia y síntesis); G2P maneja las irregularidades ortográficas, los transformadores predicen ritmo y énfasis y los vocoders neuronales generan audio de alta fidelidad."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Siguiente paso: el módulo «Get started with speech in Azure», donde estas capacidades se usan con el servicio Azure Speech."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuántas etapas tiene el pipeline de síntesis de voz descrito en el módulo?",
+          "options": [
+            "Dos",
+            "Cuatro",
+            "Seis",
+            "Ocho"
+          ],
+          "answer": 1,
+          "explain": "Normalización del texto, análisis lingüístico, generación de prosodia y síntesis del audio.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Los vocoders neuronales realizan, en esencia, la operación inversa del reconocimiento de voz.",
+          "answer": true,
+          "explain": "El reconocimiento pasa de audio a texto; el vocoder pasa de representaciones lingüísticas (espectrogramas) a audio.",
+          "obj": "A3"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Una plataforma de cursos quiere crear lecciones narradas en diez idiomas sin contratar estudios de grabación. ¿Qué capacidad necesita?",
+      "options": [
+        "Reconocimiento de voz",
+        "Detección de idioma",
+        "Síntesis de voz",
+        "Transcripción por lotes"
+      ],
+      "answer": 2,
+      "explain": "Generar narración a partir de texto es síntesis de voz (TTS), un escenario típico de e-learning.",
+      "obj": "A3"
+    },
+    {
+      "type": "order",
+      "q": "Ordena los pasos del cálculo de MFCC.",
+      "items": [
+        "Dividir el audio en tramas de 20-30 ms",
+        "Aplicar la transformada de Fourier a cada trama",
+        "Mapear las frecuencias a la escala Mel",
+        "Extraer unos 13 coeficientes por trama"
+      ],
+      "explain": "Así se obtiene un vector de características compacto por trama, que imita la percepción del oído humano.",
+      "obj": "A3"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada etapa con su función.",
+      "pairs": [
+        [
+          "Decodificación",
+          "Buscar la secuencia de palabras más probable con beam search"
+        ],
+        [
+          "Normalización del texto",
+          "Convertir «Dr.» en «Doctor» y «3» en «three»"
+        ],
+        [
+          "Generación de prosodia",
+          "Decidir tono, duración, pausas y énfasis"
+        ],
+        [
+          "Captura de audio",
+          "Muestrear la señal del micrófono, normalmente a 16 kHz"
+        ]
+      ],
+      "explain": "Decodificación y captura son del reconocimiento; normalización y prosodia, de la síntesis.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "Para reconocimiento de voz, una frecuencia de muestreo entre 8 kHz y 16 kHz equilibra claridad y eficiencia.",
+      "answer": true,
+      "explain": "Frecuencias más altas, como 44,1 kHz, se usan para música y requieren más procesamiento.",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "Antes de implementar voz en una app, ¿qué dos factores debes evaluar según el módulo? (Elige 2)",
+      "options": [
+        "La calidad del audio y el ruido de fondo",
+        "El número de colores de la interfaz",
+        "La latencia que admite el escenario (tiempo real o por lotes)",
+        "El tamaño del logotipo",
+        "La resolución de la pantalla"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "Las consideraciones clave son calidad de audio, idiomas y dialectos, privacidad, latencia y accesibilidad (WCAG).",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "La voz generada pronuncia bien cada sonido pero suena robótica y monótona. ¿Cuál es la causa más probable?",
+      "options": [
+        "Un modelo de lenguaje poco entrenado",
+        "Una prosodia plana",
+        "Una frecuencia de muestreo baja en el micrófono",
+        "Falta de posprocesamiento de mayúsculas"
+      ],
+      "answer": 1,
+      "explain": "La falta de naturalidad suele deberse a una prosodia plana, no a fallos en los fonemas.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Una app de transcripción médica debe señalar las palabras de las que no está segura para que las revise un profesional. ¿Qué dato devuelto por Azure Speech lo permite?",
+      "options": [
+        "La puntuación de confianza",
+        "El espectrograma Mel",
+        "El lema de cada palabra",
+        "La escala Mel"
+      ],
+      "answer": 0,
+      "explain": "Azure Speech devuelve la transcripción con marcas de tiempo por palabra y puntuaciones de confianza para resaltar segmentos dudosos.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "Un modelo acústico entrenado con fonemas ingleses puede reconocer los tonos del mandarín sin reentrenarse.",
+      "answer": false,
+      "explain": "Los fonemas son específicos de cada idioma; hace falta reentrenar el modelo.",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos escenarios combinan reconocimiento y síntesis de voz? (Elige 2)",
+      "options": [
+        "Una app de idiomas que escucha tu pronunciación y te corrige hablando",
+        "Subtítulos en directo de una conferencia",
+        "Un audiolibro generado a partir de un texto",
+        "Un coche que recibe órdenes por voz y confirma las acciones en voz alta",
+        "Dictado de notas clínicas"
+      ],
+      "answers": [
+        0,
+        3
+      ],
+      "explain": "Ambos escuchan (reconocimiento) y responden hablando (síntesis); los demás usan una sola capacidad.",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Reconocimiento de voz",
+      "en": "Speech recognition (speech-to-text)",
+      "def": "Conversión de audio hablado en texto escrito."
+    },
+    {
+      "es": "Síntesis de voz",
+      "en": "Speech synthesis (text-to-speech, TTS)",
+      "def": "Conversión de texto escrito en audio hablado."
+    },
+    {
+      "es": "Frecuencia de muestreo",
+      "en": "Sampling rate",
+      "def": "Número de medidas por segundo al digitalizar el audio; para voz suele ser 16 kHz."
+    },
+    {
+      "es": "MFCC",
+      "en": "Mel-Frequency Cepstral Coefficients",
+      "def": "Técnica de extracción de características que resume cada trama de audio en unos 13 coeficientes imitando al oído humano."
+    },
+    {
+      "es": "Fonema",
+      "en": "Phoneme",
+      "def": "Unidad de sonido más pequeña que distingue palabras."
+    },
+    {
+      "es": "Modelo acústico",
+      "en": "Acoustic model",
+      "def": "Modelo que predice la probabilidad de cada fonema a partir de las características de audio."
+    },
+    {
+      "es": "Modelo de lenguaje",
+      "en": "Language model",
+      "def": "Modelo que usa vocabulario, gramática y contexto para elegir la secuencia de palabras correcta."
+    },
+    {
+      "es": "Búsqueda en haz",
+      "en": "Beam search",
+      "def": "Algoritmo de decodificación que mantiene solo las mejores hipótesis parciales en cada paso."
+    },
+    {
+      "es": "Normalización inversa del texto",
+      "en": "Inverse text normalization",
+      "def": "Convertir formas habladas («three p m») en formato escrito («3 PM»)."
+    },
+    {
+      "es": "Normalización del texto",
+      "en": "Text normalization",
+      "def": "En TTS, expandir abreviaturas, números y símbolos a su forma hablada."
+    },
+    {
+      "es": "Conversión grafema a fonema",
+      "en": "Grapheme-to-phoneme (G2P)",
+      "def": "Traducir letras escritas a sonidos de pronunciación."
+    },
+    {
+      "es": "Prosodia",
+      "en": "Prosody",
+      "def": "Ritmo, acento y entonación que dan naturalidad al habla."
+    },
+    {
+      "es": "Espectrograma Mel",
+      "en": "Mel-spectrogram",
+      "def": "Representación visual de las frecuencias del sonido a lo largo del tiempo."
+    },
+    {
+      "es": "Vocoder neuronal",
+      "en": "Neural vocoder",
+      "def": "Modelo de aprendizaje profundo que convierte espectrogramas en ondas de audio (WaveNet, HiFi-GAN…)."
+    }
+  ]
+}

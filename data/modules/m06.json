@@ -1,0 +1,1092 @@
+{
+  "id": "m06",
+  "path": 1,
+  "order": 6,
+  "title": "Introducción a los conceptos de extracción de información con IA",
+  "titleEn": "Introduction to AI-powered information extraction concepts",
+  "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/",
+  "summary": "La extracción de información con IA obtiene valores de datos estructurados a partir de documentos, imágenes y otras fuentes no estructuradas. Este módulo explica el proceso de OCR en cinco etapas y cómo la extracción de campos asigna el texto reconocido a campos de datos con significado de negocio.",
+  "objectives": [
+    "Comprender los conceptos clave de la extracción de información.",
+    "Describir cómo el reconocimiento óptico de caracteres (OCR) extrae texto de las imágenes.",
+    "Explicar cómo la extracción de campos asigna el texto extraído a campos de datos."
+  ],
+  "units": [
+    {
+      "id": "m06u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las soluciones de {{extracción de información|information extraction}} con IA se usan para obtener {{campos de datos estructurados|structured data fields}} a partir de {{contenido no estructurado|unstructured content}}: documentos, imágenes e incluso vídeos y grabaciones de audio."
+        },
+        {
+          "type": "tip",
+          "text": "Este módulo se centra en documentos e imágenes, pero ya existen soluciones que combinan {{reconocimiento de voz|speech recognition}} y otras técnicas para extraer información también de audio y vídeo."
+        },
+        {
+          "type": "p",
+          "text": "Los escenarios van desde algo tan sencillo como una app que lee los datos de contacto de la foto de una **tarjeta de visita** hasta sistemas complejos de **automatización de flujos de negocio** que procesan documentos financieros y legales."
+        },
+        {
+          "type": "h",
+          "text": "Documentos financieros"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo de documento",
+            "Qué se extrae"
+          ],
+          "rows": [
+            [
+              "Facturas",
+              "Datos del proveedor (nombre, dirección, contacto); detalles de la transacción (número de factura, fechas, condiciones de pago); líneas de detalle (descripción, cantidad, precio unitario, total); información fiscal (tipos, importes, partidas exentas)."
+            ],
+            [
+              "Recibos / tiques",
+              "Datos del comercio (nombre de la tienda, ubicación, ID de transacción); compra (artículos, precios, descuentos); pago (método de pago, cambio, puntos de fidelización)."
+            ],
+            [
+              "Estados financieros",
+              "Información de cuenta (número, saldos, historial de movimientos); métricas de rendimiento (ingresos, gastos, márgenes); datos de cumplimiento (campos de informes regulatorios, pista de auditoría)."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Documentos legales y de cumplimiento"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Contratos**: partes contratantes, firmantes y testigos; condiciones (fechas de entrada en vigor, renovación, cláusulas de rescisión); términos económicos (calendario de pagos, penalizaciones, requisitos de seguro).",
+            "**Formularios regulatorios**: documentos fiscales (como los W-2 o 1099 estadounidenses), formularios de seguros (número de póliza, importe reclamado, detalles del incidente) y formularios de la administración (datos de solicitud, requisitos de certificación)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Documentación sanitaria"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Datos del paciente**: datos demográficos, número de historia clínica, datos del seguro.",
+            "**Datos clínicos**: diagnósticos, tratamientos, medicación y constantes vitales.",
+            "**Datos administrativos**: citas, códigos de facturación e información del profesional sanitario."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cadena de suministro y logística"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Documentos de envío**: número de seguimiento, peso y dimensiones; remitente, destinatario e instrucciones de entrega; documentación aduanera (códigos de mercancía, valor, origen).",
+            "**Órdenes de compra**: datos del proveedor; especificaciones del producto (códigos, descripciones, cantidades); requisitos de entrega (plazos, lugares, instrucciones especiales)."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Una app fotografía una tarjeta de visita y rellena automáticamente los campos Nombre, Empresa, Teléfono y Correo de un contacto. Es el caso más simple de extracción de información."
+        },
+        {
+          "type": "p",
+          "text": "La extracción de información con IA suele ser la **base de los sistemas de automatización** en todos estos escenarios."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué describe mejor la extracción de información con IA?",
+          "options": [
+            "Copiar archivos entre almacenamientos en la nube",
+            "Obtener campos y valores estructurados a partir de contenido no estructurado como documentos o imágenes",
+            "Ejecutar consultas SQL sobre una base de datos relacional",
+            "Generar documentos nuevos a partir de una plantilla"
+          ],
+          "answer": 1,
+          "explain": "La extracción de información analiza contenido no estructurado (documentos, imágenes, audio, vídeo) para identificar y sacar campos con sus valores en formato estructurado.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada documento con un dato típico que se extrae de él.",
+          "pairs": [
+            [
+              "Factura",
+              "Número de factura y condiciones de pago"
+            ],
+            [
+              "Recibo de compra",
+              "Método de pago y puntos de fidelización"
+            ],
+            [
+              "Contrato",
+              "Partes firmantes y cláusulas de rescisión"
+            ],
+            [
+              "Documento de envío",
+              "Número de seguimiento y códigos aduaneros"
+            ]
+          ],
+          "explain": "Cada tipo de documento tiene sus propios campos de interés: las facturas recogen datos de transacción, los recibos datos de pago, los contratos partes y condiciones, y los envíos datos logísticos.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La extracción de información con IA solo es aplicable a documentos escaneados en papel.",
+          "answer": false,
+          "explain": "Se aplica a documentos, imágenes, PDF, fotos e incluso audio y vídeo mediante técnicas como el reconocimiento de voz.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m06u2",
+      "title": "Visión general de la extracción de información",
+      "titleEn": "Overview of information extraction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/2-overview",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La extracción de información es una {{carga de trabajo|workload}} que combina varias técnicas de IA para obtener datos de contenido, normalmente documentos digitales. Una solución completa reúne:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Visión artificial|computer vision}}** para detectar el texto en datos basados en imágenes, mediante {{reconocimiento óptico de caracteres|optical character recognition (OCR)}}.",
+            "**{{Aprendizaje automático|machine learning}}** o, cada vez más, **{{IA generativa|generative AI}}** para identificar los valores y asignarlos semánticamente a campos de datos concretos ({{asignación de campos|field mapping}})."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Una solución de gastos de empresa lee un recibo escaneado y obtiene: Proveedor = Fourth Coffee, Fecha = 2024-08-15, Subtotal = 6,48 $, Impuestos = 0,49 $, Total reclamado = 6,97 $. Así la reclamación se procesa sin teclear nada a mano."
+        },
+        {
+          "type": "h",
+          "text": "Elegir el enfoque adecuado"
+        },
+        {
+          "type": "p",
+          "text": "Al planificar una solución hay que analizar sus requisitos y restricciones. Se agrupan en dos bloques."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Factor",
+            "Qué considerar"
+          ],
+          "rows": [
+            [
+              "Consistencia del diseño (documentos)",
+              "Formularios estandarizados favorecen un enfoque basado en {{plantillas|templates}}; si hay muchos formatos y diseños distintos, hace falta una solución más compleja basada en aprendizaje automático."
+            ],
+            [
+              "Volumen (documentos)",
+              "Procesar grandes volúmenes se beneficia de modelos automatizados ejecutados en hardware optimizado."
+            ],
+            [
+              "Precisión (documentos)",
+              "Las aplicaciones críticas pueden requerir validación con {{intervención humana|human-in-the-loop}}."
+            ],
+            [
+              "Seguridad y privacidad (infraestructura)",
+              "Los documentos pueden contener datos sensibles: hay que proteger el acceso y cumplir la normativa del sector."
+            ],
+            [
+              "Potencia de cálculo (infraestructura)",
+              "Los modelos de aprendizaje profundo e IA generativa requieren muchos recursos de cómputo."
+            ],
+            [
+              "Latencia (infraestructura)",
+              "El procesamiento en tiempo real puede limitar la complejidad del modelo."
+            ],
+            [
+              "Escalabilidad (infraestructura)",
+              "Las soluciones en la nube escalan mejor ante cargas variables."
+            ],
+            [
+              "Complejidad de integración (infraestructura)",
+              "Compatibilidad de API y requisitos de formato de datos."
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "En muchos casos no hace falta construir todo desde cero: servicios como **Azure Document Intelligence** y **Azure Content Understanding** (ambos en Microsoft Foundry Tools) reducen mucho el esfuerzo de desarrollo y ofrecen rendimiento, precisión, escalabilidad e integración probados. En el examen, si te preguntan qué servicio de Azure usar para extraer campos de facturas o formularios, piensa en ellos."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Qué dos técnicas componen una solución completa de extracción de información? (elige 2)",
+          "options": [
+            "OCR para detectar y extraer el texto de las imágenes",
+            "Síntesis de voz para leer el documento en voz alta",
+            "Aprendizaje automático o IA generativa para asignar el texto a campos de datos",
+            "Generación de imágenes para reconstruir el documento"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "El proceso combina visión artificial (OCR) para obtener el texto y un modelo de ML o IA generativa para mapear ese texto a campos con significado.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Una aseguradora procesa formularios de reclamación de cientos de formatos distintos. ¿Qué enfoque es el más adecuado?",
+          "options": [
+            "Plantillas fijas con posiciones de campo predefinidas",
+            "Una consulta SQL sobre las imágenes",
+            "Transcripción manual por empleados",
+            "Una solución basada en aprendizaje automático capaz de manejar diseños variables"
+          ],
+          "answer": 3,
+          "explain": "Las plantillas funcionan bien con formularios estandarizados; cuando hay muchos diseños distintos conviene un enfoque de aprendizaje automático.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "En aplicaciones críticas donde la precisión es esencial, puede ser necesario añadir validación con intervención humana (human-in-the-loop).",
+          "answer": true,
+          "explain": "Los requisitos de precisión altos pueden exigir que una persona revise los resultados antes de darlos por buenos.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m06u3",
+      "title": "Reconocimiento óptico de caracteres (OCR)",
+      "titleEn": "Optical character recognition (OCR)",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/3-vision-extraction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El {{reconocimiento óptico de caracteres|optical character recognition (OCR)}} convierte automáticamente el texto visible en imágenes (documentos escaneados, fotos o archivos digitales) en texto editable y buscable. En lugar de transcribir a mano, permite extraer datos de:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Facturas y recibos escaneados",
+            "Fotografías digitales de documentos",
+            "PDF que contienen imágenes de texto",
+            "Capturas de pantalla",
+            "Formularios y notas manuscritas"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "La canalización de OCR en cinco etapas"
+        },
+        {
+          "type": "list",
+          "items": [
+            "1. **Adquisición y entrada de la imagen**",
+            "2. **Preprocesamiento y mejora de la imagen**",
+            "3. **Detección de regiones de texto**",
+            "4. **Reconocimiento y clasificación de caracteres**",
+            "5. **Generación de la salida y posprocesamiento**"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 1: adquisición de la imagen"
+        },
+        {
+          "type": "p",
+          "text": "Entra en el sistema una imagen con texto: una foto del móvil, un documento escaneado, un fotograma extraído de un vídeo o una página PDF renderizada como imagen."
+        },
+        {
+          "type": "tip",
+          "text": "La calidad de la imagen en esta primera etapa condiciona mucho la precisión final del texto extraído."
+        },
+        {
+          "type": "h",
+          "text": "Etapa 2: preprocesamiento y mejora"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Técnica",
+            "Objetivo",
+            "Métodos clásicos",
+            "Métodos de IA"
+          ],
+          "rows": [
+            [
+              "{{Reducción de ruido|noise reduction}}",
+              "Eliminar artefactos, motas de polvo e imperfecciones del escaneo",
+              "Filtros gaussianos y de mediana, operaciones morfológicas",
+              "{{Autocodificadores de eliminación de ruido|denoising autoencoders}} y CNN entrenadas para limpiar documentos"
+            ],
+            [
+              "{{Ajuste de contraste|contrast adjustment}}",
+              "Aumentar la diferencia entre texto y fondo",
+              "Ecualización de histograma, umbralización adaptativa, corrección gamma",
+              "Modelos profundos que aprenden los parámetros óptimos según el tipo de documento"
+            ],
+            [
+              "{{Corrección de inclinación|skew correction}}",
+              "Enderezar el documento para que las líneas queden horizontales",
+              "Transformada de Hough, perfiles de proyección, análisis de componentes conectados",
+              "CNN de regresión que predicen el ángulo de rotación"
+            ],
+            [
+              "{{Optimización de resolución|resolution optimization}}",
+              "Llevar la imagen a la resolución óptima para reconocer caracteres",
+              "Interpolación bicúbica, bilineal o Lanczos",
+              "Modelos de {{superresolución|super-resolution}}: GAN y redes residuales"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 3: detección de regiones de texto"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Análisis de diseño|layout analysis}}**: distingue regiones de texto, imágenes, gráficos y espacios en blanco. Clásico: componentes conectados, codificación run-length, segmentación por proyección. Profundo: redes de {{segmentación semántica|semantic segmentation}} como U-Net o Mask R-CNN y modelos de diseño documental (LayoutLM, modelos entrenados con PubLayNet).",
+            "**Identificación de bloques de texto**: agrupa caracteres en palabras, líneas y párrafos según su posición. Clásico: agrupamiento por distancia, análisis de espacios en blanco. Neuronal: redes neuronales de grafos y transformadores que entienden la estructura espacial.",
+            "**Determinación del {{orden de lectura|reading order}}**: decide la secuencia de lectura (izquierda a derecha y de arriba abajo en inglés o español). Con reglas geométricas sobre los {{cuadros delimitadores|bounding boxes}} o con modelos de predicción de secuencias y de grafos.",
+            "**Clasificación de regiones**: identifica encabezados, cuerpo, pies de foto o tablas. Con clasificadores SVM basados en rasgos (tamaño de letra, posición, formato) o con CNN y {{transformadores de visión|vision transformers}}."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 4: reconocimiento y clasificación de caracteres"
+        },
+        {
+          "type": "p",
+          "text": "Es el núcleo del OCR: aquí se identifica cada carácter individual."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Extracción de características|feature extraction}}**: analiza forma, tamaño y rasgos distintivos de cada carácter. Tradicional: momentos estadísticos, descriptores de Fourier, rasgos estructurales (bucles, extremos, intersecciones). Profundo: CNN que aprenden rasgos directamente de los píxeles.",
+            "**{{Coincidencia de patrones|pattern matching}}**: compara los rasgos con modelos entrenados con distintas fuentes, tamaños y caligrafías. Opciones: plantillas por correlación; clasificadores estadísticos (modelos ocultos de Márkov, SVM, k vecinos más cercanos); redes neuronales (perceptrón multicapa, CNN, LeNet para dígitos); arquitecturas avanzadas (ResNet, DenseNet, EfficientNet).",
+            "**{{Análisis de contexto|context analysis}}**: usa caracteres y palabras vecinas para mejorar la precisión. Modelos de n-gramas, corrección con diccionario y distancia de edición (Levenshtein), modelos de lenguaje neuronales (LSTM, variantes de BERT) y mecanismos de {{atención|attention}}.",
+            "**{{Puntuación de confianza|confidence scoring}}**: asigna a cada carácter una probabilidad de acierto. Enfoques bayesianos, salidas softmax de la última capa de la red y métodos de conjunto ({{ensemble|ensemble}}) que combinan varios modelos."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 5: salida y posprocesamiento"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Compilación del texto**: une los caracteres en palabras y frases. Ensamblado por reglas (proximidad y umbrales de confianza), modelos de secuencia (RNN, LSTM) o transformadores con atención.",
+            "**Conservación del formato**: mantiene párrafos, saltos de línea y espacios. Algoritmos geométricos, modelos de comprensión del diseño (redes de grafos) y transformadores multimodales como LayoutLM, que combinan texto y diseño.",
+            "**Mapeo de coordenadas**: registra la posición exacta de cada elemento de texto en la imagen original. Transformación de coordenadas píxel-documento, índices espaciales (R-trees, quad-trees) y modelos de regresión.",
+            "**Validación de calidad**: aplica comprobaciones ortográficas y gramaticales para detectar errores. Validación con diccionarios y vocabularios de dominio, modelos de n-gramas, modelos neuronales preentrenados (GPT, BERT) ajustados para corregir OCR, y validación combinada."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: el OCR solo responde a **qué texto hay y dónde está** (texto + coordenadas + confianza). No sabe qué significa ese texto; eso lo resuelve la extracción de campos."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las etapas de la canalización de OCR.",
+          "items": [
+            "Adquisición y entrada de la imagen",
+            "Preprocesamiento y mejora de la imagen",
+            "Detección de regiones de texto",
+            "Reconocimiento y clasificación de caracteres",
+            "Generación de la salida y posprocesamiento"
+          ],
+          "explain": "Primero se obtiene la imagen, luego se mejora, se localizan las zonas con texto, se reconocen los caracteres y por último se compone y valida la salida.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada técnica de preprocesamiento con su finalidad.",
+          "pairs": [
+            [
+              "Reducción de ruido",
+              "Quitar motas y artefactos del escaneo"
+            ],
+            [
+              "Ajuste de contraste",
+              "Distinguir mejor el texto del fondo"
+            ],
+            [
+              "Corrección de inclinación",
+              "Alinear horizontalmente las líneas de texto"
+            ],
+            [
+              "Optimización de resolución",
+              "Escalar la imagen a la resolución ideal para reconocer"
+            ]
+          ],
+          "explain": "Las cuatro técnicas de la etapa 2 preparan la imagen antes de buscar texto en ella.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿En qué etapa del OCR se asigna a cada carácter una probabilidad que indica cuán seguro está el sistema de haberlo reconocido bien?",
+          "options": [
+            "Adquisición de la imagen",
+            "Detección de regiones de texto",
+            "Reconocimiento y clasificación de caracteres (puntuación de confianza)",
+            "Preprocesamiento"
+          ],
+          "answer": 2,
+          "explain": "La puntuación de confianza forma parte de la etapa 4, junto con la extracción de características, la coincidencia de patrones y el análisis de contexto.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Determinar el orden de lectura del texto forma parte de la etapa de detección de regiones de texto.",
+          "answer": true,
+          "explain": "La etapa 3 incluye análisis de diseño, identificación de bloques, determinación del orden de lectura y clasificación de regiones.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m06u4",
+      "title": "Extracción y asignación de campos",
+      "titleEn": "Field extraction and mapping",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/4-form-extraction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{extracción de campos|field extraction}} toma el texto que devuelve el OCR y asigna cada valor a un **campo de datos etiquetado** con significado de negocio. El OCR dice **qué texto hay**; la extracción de campos dice **qué significa y a dónde pertenece** en tus sistemas."
+        },
+        {
+          "type": "h",
+          "text": "La canalización de extracción de campos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "1. **Ingesta de la salida del OCR**",
+            "2. **Detección de campos e identificación de candidatos**",
+            "3. **Asignación y asociación de campos**",
+            "4. **Normalización y estandarización de datos**",
+            "5. **Integración con procesos y sistemas de negocio**"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 1: ingesta de la salida del OCR"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Texto bruto**: caracteres y palabras extraídos.",
+            "**Metadatos de posición**: cuadros delimitadores, página y orden de lectura.",
+            "**Puntuaciones de confianza** del motor OCR para cada elemento.",
+            "**Información de diseño**: estructura, saltos de línea, límites de párrafo."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "La extracción de campos depende mucho de **dónde** aparece el texto, no solo de lo que dice. El valor «12345» puede ser un número de factura, un ID de cliente o un teléfono según su posición."
+        },
+        {
+          "type": "h",
+          "text": "Etapa 2: detección de campos candidatos"
+        },
+        {
+          "type": "p",
+          "text": "Identifica posibles valores de campo. Se pueden combinar tres enfoques:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Enfoque",
+            "Cómo funciona",
+            "Ventajas / limitaciones"
+          ],
+          "rows": [
+            [
+              "Basado en {{plantillas|templates}}",
+              "Reglas de coincidencia de patrones: diseños predefinidos con posiciones y palabras ancla conocidas, búsqueda de pares etiqueta-valor («Invoice Number:», «Total:»), {{expresiones regulares|regular expressions}}.",
+              "Ventajas: alta precisión con tipos de documento conocidos, rápido y explicable. Limitaciones: hay que crear plantillas a mano; los cambios de diseño o de nombre de campo lo complican."
+            ],
+            [
+              "Basado en aprendizaje automático",
+              "Se entrena un modelo con un corpus de documentos de ejemplo para que aprenda las relaciones. Los modelos {{transformadores|transformers}} aprovechan pistas de contexto. Entrenamiento: supervisado (datos etiquetados), {{autosupervisado|self-supervised}} (preentrenado con grandes corpus), multimodal (texto + visual + posición). Arquitecturas: redes neuronales de grafos (GNN), mecanismos de atención, modelos secuencia a secuencia.",
+              "No requiere lógica codificada a mano para cada nombre y posición."
+            ],
+            [
+              "IA generativa con {{esquema|schema}}",
+              "Con {{modelos de lenguaje grandes|large language models (LLM)}}: extracción mediante {{prompts|prompts}} (das al LLM el texto y la definición del esquema y él empareja texto y campos), {{aprendizaje con pocos ejemplos|few-shot learning}} para campos personalizados y razonamiento {{cadena de pensamiento|chain-of-thought}} paso a paso.",
+              "Más eficiente y eficaz; mínimo esfuerzo para campos nuevos."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Etapa 3: asignación y asociación de campos"
+        },
+        {
+          "type": "p",
+          "text": "**{{Emparejamiento clave-valor|key-value pairing}}**: muchos campos son valores discretos asociables a una clave (proveedor, fecha, total). Técnicas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Análisis de proximidad**: agrupamiento espacial por distancia, seguir el orden de lectura para unir etiqueta y valor, relaciones geométricas (alineación, sangría, posición).",
+            "**Reconocimiento de patrones lingüísticos**: {{reconocimiento de entidades con nombre|named entity recognition (NER)}} para fechas, importes o nombres; {{etiquetado gramatical|part-of-speech tagging}}; {{análisis de dependencias|dependency parsing}}."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Tablas y contenido estructurado** (por ejemplo, las líneas de una factura con artículo, precio y cantidad). Para detectar una tabla: CNN especializadas en estructura de tablas, detección de objetos adaptada a celdas o análisis basado en grafos. Para asignar las celdas a campos: asociación fila-columna, detección de encabezados de columna y procesamiento jerárquico de tablas anidadas y subtotales."
+        },
+        {
+          "type": "p",
+          "text": "**Puntuación de confianza y validación**: como los modelos pueden equivocarse, se evalúa la fiabilidad de cada valor con: confianza heredada del OCR, confianza de coincidencia de patrones, validación por contexto y **validación cruzada entre campos** (por ejemplo, comprobar que la suma de las líneas coincide con el total de la factura)."
+        },
+        {
+          "type": "h",
+          "text": "Etapa 4: normalización y estandarización"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo",
+            "Operaciones"
+          ],
+          "rows": [
+            [
+              "Fechas",
+              "Detectar el formato (MM/DD/AAAA, DD-MM-AAAA…), convertirlo a formato ISO y resolver ambigüedades."
+            ],
+            [
+              "Moneda y números",
+              "Reconocer símbolos de moneda y separadores de miles, normalizar el separador decimal según la configuración regional, convertir unidades."
+            ],
+            [
+              "Texto",
+              "Mayúsculas/minúsculas coherentes, codificación de caracteres uniforme, expansión de abreviaturas."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Además se valida la calidad: **por reglas** (formato de teléfono o correo, rangos numéricos razonables, campos obligatorios presentes) y **estadística** (detección de valores atípicos, comparación con distribuciones históricas, coherencia entre documentos relacionados)."
+        },
+        {
+          "type": "h",
+          "text": "Etapa 5: integración con sistemas de negocio"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Asignación de esquema|schema mapping}}**: adaptar los campos al destino, ya sean columnas de una base de datos, cargas útiles de una API REST o mensajes de una cola para procesamiento asíncrono. Transformaciones: renombrar campos, convertir tipos de datos y aplicar lógica condicional de negocio.",
+            "**Métricas de calidad e informes**: confianza a nivel de campo, evaluación global del documento y categorización de errores por tipo y causa."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Una factura llega con «Fecha: 03/07/2025» y «Total: 1.585,98 €». La extracción identifica la etiqueta y el valor, la normalización convierte la fecha a 2025-07-03 y el importe a 1585.98, la validación cruzada confirma que coincide con la suma de líneas y la integración inserta el registro en la tabla de facturas del ERP."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál es la diferencia principal entre el OCR y la extracción de campos?",
+          "options": [
+            "El OCR genera texto nuevo y la extracción de campos lo traduce",
+            "El OCR identifica qué texto hay; la extracción de campos determina qué significa y a qué campo pertenece",
+            "Son el mismo proceso con distinto nombre",
+            "La extracción de campos mejora la imagen antes del OCR"
+          ],
+          "answer": 1,
+          "explain": "El OCR convierte la imagen en texto; la extracción de campos interpreta ese texto y lo asigna a campos de negocio.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada enfoque de detección de campos con su característica.",
+          "pairs": [
+            [
+              "Basado en plantillas",
+              "Reglas, palabras ancla y expresiones regulares; muy explicable"
+            ],
+            [
+              "Aprendizaje automático",
+              "Aprende relaciones a partir de un corpus de documentos de ejemplo"
+            ],
+            [
+              "IA generativa",
+              "Un LLM recibe el texto y un esquema y empareja los valores con los campos"
+            ]
+          ],
+          "explain": "Los tres enfoques pueden combinarse; la IA generativa es la tendencia más reciente gracias a los LLM.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Comprobar que la suma de los importes de las líneas coincide con el total de la factura es un ejemplo de...",
+          "options": [
+            "Validación cruzada entre campos",
+            "Corrección de inclinación",
+            "Coincidencia de plantillas",
+            "Análisis de diseño"
+          ],
+          "answer": 0,
+          "explain": "La validación cruzada verifica relaciones lógicas entre varios campos extraídos.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Convertir todas las fechas extraídas a un formato ISO común forma parte de la etapa de normalización y estandarización.",
+          "answer": true,
+          "explain": "La etapa 4 estandariza fechas, monedas, números y texto para que los datos sean coherentes.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m06u5",
+      "title": "Ejercicio: explorar la extracción de información con IA",
+      "titleEn": "Exercise - Explore AI information extraction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/6b-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Objetivo"
+        },
+        {
+          "type": "p",
+          "text": "Comprobar por ti mismo que extraer información de documentos tiene dos fases: un {{reconocimiento óptico de caracteres|optical character recognition (OCR)}} que detecta el texto de una imagen y una fase de {{extracción de campos|field extraction}} que asigna cadenas concretas a campos con significado. Se usa la app web **Information Extractor** sobre imágenes de placas de circuito y de recibos. Duración aproximada: 15 minutos."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Navegador moderno (Chrome, Edge o Firefox recientes) con WASM SIMD; se recomienda WebGPU.",
+            "CPU de 64 bits con 8 núcleos, 8 GB de RAM (16 GB recomendados) y GPU recomendada.",
+            "Unos 300-800 MB libres para almacenar en caché el modelo.",
+            "No hace falta suscripción de Azure: el modelo se ejecuta localmente en el navegador."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Si hay WebGPU, la app ejecuta el {{modelo de lenguaje pequeño|small language model (SLM)}} **Phi 3.5 Mini** en la GPU; si no, en la CPU (con peor calidad). Si eso también falla, se activa un **modo básico** sin modelo, basado en procesamiento de texto y coincidencia de patrones. El interruptor **Use Generative AI** permite cambiar de modo."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 1: iniciar la app"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abre Information Extractor en https://aka.ms/info-extractor y espera a que el modelo se descargue e inicialice (la primera vez tarda unos minutos).",
+            "Mientras tanto, descarga en otra pestaña los archivos de ejemplo: `pcbs.zip` (https://aka.ms/pcb-images) y `receipts.zip` (https://aka.ms/receipts).",
+            "Vuelve a la app cuando esté lista."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 2: leer texto de una imagen con OCR"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Selecciona la opción **OCR/Read** con la tarjeta de visita de ejemplo cargada y lanza el análisis.",
+            "Revisa el texto extraído en el panel **Result** de la derecha.",
+            "Descomprime `pcbs.zip`, sube una imagen de placa de circuito impreso, analízala y repite con las demás."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Resultado**: el OCR devuelve el texto impreso en la imagen (serigrafías, etiquetas…), útil por ejemplo para buscar después información sobre un componente. Al ser un OCR básico, la calidad varía según la nitidez del texto."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 3: extraer campos de recibos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cambia de **OCR/Read** a **Receipt Fields**; se carga un recibo de ejemplo y aparece una pestaña **Fields** junto a **Result**.",
+            "Analiza el recibo y espera a que terminen el OCR y la extracción de campos (con el modelo de IA puede tardar).",
+            "Compara la pestaña **Fields** (valores ya asociados: comercio, teléfono, fecha, importes…) con el texto OCR completo de **Result**.",
+            "Descomprime `receipts.zip`, sube otros recibos (o uno escaneado tuyo) y repite el análisis."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Escenario: automatizar las solicitudes de reembolso de gastos. El OCR localiza el texto y su posición en el recibo; el modelo generativo decide qué valor es el nombre de la empresa, la fecha o el total."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: OCR = **qué texto hay y dónde**; la extracción de campos = **qué significa cada valor**. En Microsoft Foundry, la solución multimodal para esto es **Content Understanding**, que analiza documentos, imágenes, audio y vídeo."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio (Microsoft Learning): https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/06-info-extraction.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los pasos para extraer campos de un recibo en el laboratorio Information Extractor.",
+          "items": [
+            "Esperar a que el modelo se descargue e inicialice",
+            "Cambiar la opción de OCR/Read a Receipt Fields",
+            "Subir la imagen del recibo",
+            "Ejecutar el análisis (OCR + extracción de campos)",
+            "Revisar los valores en la pestaña Fields"
+          ],
+          "explain": "Primero se prepara el modelo, luego se elige el modo de recibos, se carga la imagen, se analiza y se revisan los campos extraídos.",
+          "obj": "B4"
+        },
+        {
+          "type": "mc",
+          "q": "En el laboratorio, al usar solo la opción **OCR/Read** sobre una placa de circuito, ¿qué obtienes?",
+          "options": [
+            "Una lista de campos con nombre (empresa, fecha, total)",
+            "El texto detectado en la imagen",
+            "Una descripción generada de la placa",
+            "La traducción del texto a español"
+          ],
+          "answer": 1,
+          "explain": "El modo OCR/Read solo lee el texto de la imagen; asignarlo a campos es tarea de la fase de extracción.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Si el navegador no puede ejecutar el modelo Phi 3.5 Mini, la app recurre a un modo básico que extrae campos mediante procesamiento de texto y coincidencia de patrones.",
+          "answer": true,
+          "explain": "El modo básico no usa modelo: aplica reglas de texto y patrones, con resultados más simples.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué servicio de Microsoft Foundry ofrece esta misma idea (OCR + extracción de campos) para documentos, imágenes, audio y vídeo?",
+          "options": [
+            "Azure Speech",
+            "Content Understanding",
+            "Azure Language",
+            "Foundry IQ"
+          ],
+          "answer": 1,
+          "explain": "Content Understanding es la solución multimodal de extracción de información de Foundry.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m06u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/7-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Extracción de información**: analizar contenido no estructurado para identificar y extraer campos y valores relevantes.",
+            "**OCR**: reconocimiento óptico de caracteres; convierte imágenes de texto en texto legible por máquina.",
+            "**IA generativa en la extracción**: usa modelos de lenguaje semánticos para emparejar con precisión los valores extraídos con los campos de datos, incluso sin reglas codificadas para cada documento.",
+            "Canalización OCR: adquisición → preprocesamiento → detección de regiones → reconocimiento de caracteres → salida.",
+            "Canalización de campos: ingesta OCR → detección de candidatos → asignación → normalización → integración."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Cuidado con los distractores que inventan significados para las siglas: OCR es siempre Optical Character Recognition."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué significa OCR en el contexto de la extracción de información?",
+          "options": [
+            "Online Content Retrieval",
+            "Optical Character Recognition",
+            "Open Conversion Routine",
+            "Object Classification Recognition"
+          ],
+          "answer": 1,
+          "explain": "OCR = reconocimiento óptico de caracteres: convierte imágenes de texto en texto que una máquina puede procesar.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cómo mejora la IA generativa la extracción de datos?",
+          "options": [
+            "Generando documentos nuevos desde cero",
+            "Obligando a codificar reglas manuales para cada tipo de documento",
+            "Usando modelos de lenguaje semánticos para emparejar los valores extraídos con los campos adecuados",
+            "Aumentando la resolución de los escáneres"
+          ],
+          "answer": 2,
+          "explain": "Los LLM entienden el significado del texto, de modo que pueden asignar valores a un esquema aunque las etiquetas cambien.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Una empresa que solo procesa un único formulario estandarizado puede obtener buenos resultados con un enfoque basado en plantillas.",
+          "answer": true,
+          "explain": "Las plantillas son precisas, rápidas y explicables cuando el diseño del documento es consistente.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m06u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/8-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Extraer información clave de contenido no estructurado y guardarla en formatos estructurados (por ejemplo, bases de datos) es esencial, pero hacerlo a mano es lento y propenso a errores. La extracción de información con IA lo automatiza combinando **OCR**, **análisis de texto**, **aprendizaje automático** e **IA generativa**."
+        },
+        {
+          "type": "tip",
+          "text": "Servicios de Azure para construir estas soluciones: **Azure Document Intelligence in Foundry Tools** y **Azure Content Understanding in Foundry Tools**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Qué técnicas usa la extracción de información con IA? (elige 3)",
+          "options": [
+            "OCR",
+            "Aprendizaje automático",
+            "Generación de vídeo",
+            "IA generativa",
+            "Síntesis de voz"
+          ],
+          "answers": [
+            0,
+            1,
+            3
+          ],
+          "explain": "El módulo menciona OCR, análisis de texto, aprendizaje automático e IA generativa.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué servicio de Microsoft Foundry Tools está pensado para extraer información de documentos, imágenes, audio y vídeo?",
+          "options": [
+            "Azure Content Understanding",
+            "Azure Speech",
+            "Azure Translator",
+            "Azure Monitor"
+          ],
+          "answer": 0,
+          "explain": "Azure Content Understanding (y también Azure Document Intelligence para documentos) es el servicio de extracción de información.",
+          "obj": "B4"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Un hospital quiere digitalizar historias clínicas en papel y cargar diagnósticos y medicación en su sistema. ¿Qué carga de trabajo de IA necesita?",
+      "options": [
+        "Generación de imágenes",
+        "Traducción automática",
+        "Síntesis de voz",
+        "Extracción de información"
+      ],
+      "answer": 3,
+      "explain": "Obtener campos estructurados (diagnóstico, medicación) de documentos es extracción de información.",
+      "obj": "A3"
+    },
+    {
+      "type": "order",
+      "q": "Ordena las etapas de la canalización de extracción de campos.",
+      "items": [
+        "Ingesta de la salida del OCR",
+        "Detección de campos e identificación de candidatos",
+        "Asignación y asociación de campos",
+        "Normalización y estandarización de datos",
+        "Integración con procesos y sistemas de negocio"
+      ],
+      "explain": "Se parte del resultado del OCR, se detectan candidatos, se asignan a campos, se normalizan y se envían a los sistemas de destino.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "El valor «12345» aparece en un documento. ¿Qué información de la salida del OCR ayuda más a decidir si es un número de factura o un teléfono?",
+      "options": [
+        "Los metadatos de posición del texto",
+        "El tamaño del archivo",
+        "El color del papel",
+        "El nombre del archivo"
+      ],
+      "answer": 0,
+      "explain": "La extracción de campos depende mucho de dónde aparece el texto (cuadros delimitadores, cercanía a etiquetas).",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué técnicas pertenecen a la etapa de preprocesamiento del OCR? (elige 2)",
+      "options": [
+        "Corrección de inclinación",
+        "Reconocimiento de entidades con nombre",
+        "Reducción de ruido",
+        "Asignación de esquema a columnas de base de datos"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "La reducción de ruido, el ajuste de contraste, la corrección de inclinación y la optimización de resolución preparan la imagen.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "El OCR básico entiende el significado de las palabras y las relaciones entre ellas.",
+      "answer": false,
+      "explain": "El OCR solo convierte imágenes en texto (con posición y confianza); la interpretación semántica la añade la extracción de campos.",
+      "obj": "A3"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada consideración de diseño con su consecuencia.",
+      "pairs": [
+        [
+          "Formularios estandarizados",
+          "Favorecen un enfoque de plantillas"
+        ],
+        [
+          "Aplicación crítica",
+          "Puede necesitar validación con intervención humana"
+        ],
+        [
+          "Carga variable",
+          "Las soluciones en la nube escalan mejor"
+        ],
+        [
+          "Procesamiento en tiempo real",
+          "Puede limitar la complejidad del modelo"
+        ]
+      ],
+      "explain": "Las características del documento y de la infraestructura determinan el enfoque de la solución.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Le das a un LLM el texto de un recibo y una definición JSON con los campos Comercio, Fecha y Total, y le pides que los rellene. ¿Qué técnica estás usando?",
+      "options": [
+        "Extracción basada en prompts con esquema (IA generativa)",
+        "Coincidencia de plantillas con expresiones regulares",
+        "Corrección de inclinación",
+        "Superresolución con GAN"
+      ],
+      "answer": 0,
+      "explain": "La extracción basada en esquema con IA generativa proporciona al modelo el texto y el esquema para que empareje valores y campos.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Los documentos de una empresa contienen datos personales protegidos. ¿Qué factor de infraestructura es prioritario?",
+      "options": [
+        "Latencia",
+        "Seguridad y privacidad",
+        "Resolución de imagen",
+        "Orden de lectura"
+      ],
+      "answer": 1,
+      "explain": "Con datos sensibles, la solución debe proteger el acceso y cumplir la normativa sobre datos protegidos, en línea con el principio de privacidad y seguridad.",
+      "obj": "A1"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué actividades forman parte de la normalización de datos extraídos? (elige 2)",
+      "options": [
+        "Convertir fechas a formato ISO",
+        "Detectar regiones de texto en la imagen",
+        "Unificar el separador decimal de los importes",
+        "Fotografiar el documento"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "La normalización estandariza fechas, monedas, números y texto; detectar regiones o capturar imágenes pertenece al OCR.",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Extracción de información",
+      "en": "Information extraction",
+      "def": "Carga de trabajo de IA que obtiene campos y valores estructurados a partir de contenido no estructurado."
+    },
+    {
+      "es": "Reconocimiento óptico de caracteres",
+      "en": "Optical character recognition (OCR)",
+      "def": "Tecnología que convierte el texto contenido en imágenes en texto editable y buscable."
+    },
+    {
+      "es": "Extracción de campos",
+      "en": "Field extraction",
+      "def": "Proceso que asigna los valores de texto del OCR a campos de datos con significado de negocio."
+    },
+    {
+      "es": "Preprocesamiento",
+      "en": "Preprocessing",
+      "def": "Etapa del OCR que mejora la imagen: reducción de ruido, contraste, inclinación y resolución."
+    },
+    {
+      "es": "Cuadro delimitador",
+      "en": "Bounding box",
+      "def": "Coordenadas que delimitan la posición de un elemento de texto en la imagen."
+    },
+    {
+      "es": "Puntuación de confianza",
+      "en": "Confidence score",
+      "def": "Probabilidad que indica cuán seguro está el modelo de un carácter o campo reconocido."
+    },
+    {
+      "es": "Emparejamiento clave-valor",
+      "en": "Key-value pairing",
+      "def": "Asociación de una etiqueta (clave) con su valor, por ejemplo «Total» con «6,97 $»."
+    },
+    {
+      "es": "Esquema",
+      "en": "Schema",
+      "def": "Definición de los campos que se quieren extraer y su estructura."
+    },
+    {
+      "es": "Normalización",
+      "en": "Normalization",
+      "def": "Conversión de los valores extraídos a formatos coherentes (fechas ISO, decimales, mayúsculas)."
+    },
+    {
+      "es": "Intervención humana",
+      "en": "Human-in-the-loop",
+      "def": "Revisión de los resultados por una persona cuando se requiere alta precisión."
+    },
+    {
+      "es": "Validación cruzada entre campos",
+      "en": "Cross-field validation",
+      "def": "Comprobación de relaciones lógicas entre campos, como que las líneas sumen el total."
+    }
+  ]
+}

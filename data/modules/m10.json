@@ -1,0 +1,1237 @@
+{
+  "id": "m10",
+  "path": 2,
+  "order": 3,
+  "title": "Introducción al análisis de texto en Azure",
+  "titleEn": "Get started with text analysis in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/",
+  "summary": "Aprende a usar tanto modelos de IA de uso general como Azure Language in Foundry Tools para analizar texto, a crear una aplicación cliente ligera en Python y a conectar un agente al servidor MCP de Azure Language.",
+  "objectives": [
+    "Usar las capacidades de Microsoft Foundry para el análisis de texto",
+    "Distinguir cuándo usar un modelo de IA de uso general y cuándo Azure Language in Foundry Tools",
+    "Crear una aplicación cliente en Python con la API Responses de OpenAI y con el SDK de Azure Language",
+    "Conectar un agente al servidor MCP de Azure Language"
+  ],
+  "units": [
+    {
+      "id": "m10u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El procesamiento y análisis de texto es posible gracias al {{procesamiento del lenguaje natural|natural language processing (NLP)}}, que permite a las máquinas entender, interpretar y responder al lenguaje humano. Su objetivo es analizar texto existente y extraer de él significado o estructura."
+        },
+        {
+          "type": "p",
+          "text": "El {{análisis de texto|text analysis}} es el proceso de examinar automáticamente texto escrito para extraer información útil —sentimiento, palabras clave, entidades o temas—. Se apoya en el NLP para convertir texto no estructurado en información valiosa."
+        },
+        {
+          "type": "h",
+          "text": "Aplicaciones del análisis de texto"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Ámbito",
+            "Para qué se usa"
+          ],
+          "rows": [
+            [
+              "Análisis de opiniones de clientes",
+              "Procesar grandes volúmenes de reseñas, tickets de soporte y encuestas para detectar tendencias, descubrir insatisfacción a tiempo y mejorar la experiencia."
+            ],
+            [
+              "Sanidad",
+              "Extraer información clínica de documentos médicos no estructurados (síntomas, medicamentos, diagnósticos) para decidir más rápido y con más precisión."
+            ],
+            [
+              "Documentos financieros",
+              "Extraer automáticamente datos clave de contratos, solicitudes de préstamo y documentos regulatorios (tipos de interés, datos del prestatario, riesgos de cumplimiento), reduciendo la revisión manual."
+            ],
+            [
+              "Resumen de documentos legales",
+              "Resumir expedientes, sentencias y contratos largos, destacar cláusulas importantes y clasificar documentos por tema para que los abogados trabajen más rápido."
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "En el examen, el análisis de texto pertenece a las cargas de trabajo de IA (A3) y su implementación en Foundry al área B2."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un banco quiere extraer automáticamente tipos de interés y datos del prestatario de miles de solicitudes de préstamo. ¿Qué tipo de carga de trabajo es?",
+          "options": [
+            "Visión por computador",
+            "Síntesis de voz",
+            "Análisis de texto",
+            "Generación de imágenes"
+          ],
+          "answer": 2,
+          "explain": "Extraer datos clave de documentos de texto es un caso típico de análisis de texto con NLP.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "El análisis de texto convierte texto no estructurado en información estructurada como sentimiento, palabras clave o entidades.",
+          "answer": true,
+          "explain": "Esa es precisamente su definición: examinar texto escrito para extraer información útil.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m10u2",
+      "title": "Entender el análisis de texto en Foundry",
+      "titleEn": "Understand text analysis in Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/2-azure-language",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Dos enfoques en Microsoft Foundry"
+        },
+        {
+          "type": "p",
+          "text": "Microsoft Foundry es la plataforma para crear aplicaciones y agentes de IA en Azure. Su portal ofrece dos enfoques para analizar texto:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Modelos de IA de uso general:** cubren una gran variedad de tareas mediante prompts en lenguaje natural.",
+            "**Herramientas de lenguaje especializadas** (Azure Language in Foundry Tools): devuelven resultados estructurados y {{deterministas|deterministic}} para tareas concretas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El portal web de Foundry tiene dos interfaces, la clásica y la nueva; el contenido describe el **nuevo portal de Foundry**. Para empezar necesitas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Un {{recurso de Foundry|Foundry resource}}: recurso de Azure que da acceso a servicios de IA y modelos desplegados.",
+            "Un {{proyecto de Foundry|Foundry project}}: espacio de trabajo dentro del recurso donde organizas el trabajo, despliegas modelos y accedes a herramientas como el {{área de pruebas de chat|chat playground}} y los servicios de IA."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Modelos de IA de uso general"
+        },
+        {
+          "type": "p",
+          "text": "Desde tu proyecto puedes desplegar un {{modelo de IA de uso general|general-purpose AI model}}: un modelo de lenguaje entrenado con enormes cantidades de texto que entiende el lenguaje de forma amplia y puede seguir instrucciones en lenguaje natural para analizar sentimiento, extraer entidades, resumir, traducir, responder preguntas y mucho más, **sin configuración ni entrenamiento por tu parte**."
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Extracción de frases clave|Key phrase extraction}}: enumera los conceptos principales del texto.",
+            "{{Vinculación de entidades|Entity linking}}: identifica entidades conocidas junto con un enlace a Wikipedia.",
+            "{{Análisis de sentimiento y minería de opiniones|Sentiment analysis and opinion mining}}: indica si el texto es positivo o negativo.",
+            "{{Resumen|Summarization}}: resume el texto identificando la información más importante."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Puedes probar estas capacidades en el chat playground: tras desplegar un modelo, escribes un prompt y el modelo responde. Como entiende el contexto, puedes hacer preguntas de seguimiento o refinar el análisis en la misma conversación, lo que lo hace útil para explorar antes de construir una aplicación."
+        },
+        {
+          "type": "h",
+          "text": "Extracción de frases clave"
+        },
+        {
+          "type": "p",
+          "text": "Identifica los puntos principales del texto; ayuda, por ejemplo, a indexar y buscar documentos relevantes."
+        },
+        {
+          "type": "example",
+          "text": "Reseña: «Comí de maravilla en el diner de Seattle el sábado. El risotto de setas estaba perfecto y muy sabroso. Nuestro camarero, Pete, fue amable y eficiente y nos recomendó un postre (tarta de queso con fresas). Lo recomiendo para una cena informal.» Frases clave: cena informal, postre, comida fantástica, diner, gran recomendación, risotto de setas, Pete, sitio, sábado, Seattle, tarta de queso con fresas, camarero."
+        },
+        {
+          "type": "h",
+          "text": "Reconocimiento de entidades"
+        },
+        {
+          "type": "p",
+          "text": "El {{reconocimiento de entidades con nombre|named entity recognition (NER)}} encuentra personas, lugares, fechas y otras entidades. Una {{entidad|entity}} es un elemento de un tipo o categoría y, a veces, de un subtipo."
+        },
+        {
+          "type": "example",
+          "text": "Texto: «El 2 de mayo de 2017, John Smith visitó Nueva York para asistir a una conferencia organizada por Microsoft. El evento empezó a las 8:00 y duró 3 horas. Más del 25 % de los 40 asistentes viajó más de 10 millas.»"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo de entidad",
+            "Subtipo / categoría",
+            "Valor"
+          ],
+          "rows": [
+            [
+              "Person",
+              "—",
+              "John Smith"
+            ],
+            [
+              "Location",
+              "—",
+              "New York"
+            ],
+            [
+              "Organization",
+              "—",
+              "Microsoft"
+            ],
+            [
+              "DateTime",
+              "Date",
+              "May 2nd, 2017"
+            ],
+            [
+              "DateTime",
+              "Time",
+              "8:00 AM"
+            ],
+            [
+              "DateTime",
+              "Duration",
+              "3 hours"
+            ],
+            [
+              "Quantity",
+              "Percentage",
+              "25%"
+            ],
+            [
+              "Quantity",
+              "Number",
+              "40"
+            ],
+            [
+              "Quantity",
+              "Dimension",
+              "10 miles"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Análisis de sentimiento y minería de opiniones"
+        },
+        {
+          "type": "p",
+          "text": "Clasifica un documento como positivo, negativo o neutro; útil para redes sociales, reseñas o foros. Como un modelo de uso general responde a prompts, **el resultado depende de cómo formules la petición**: puedes pedir una puntuación global o un desglose frase a frase. Cuanto más específico el prompt, más estructurada y detallada la respuesta."
+        },
+        {
+          "type": "example",
+          "text": "Reseña de un bistró en Portland (cena estupenda, salmón perfecto, camarera Maria atenta, tarta de limón excelente, «lo recomiendo totalmente»). Un análisis frase a frase marca cada frase como positiva y explica por qué (p. ej., «cocinado a la perfección», «lleno de sabor»), y concluye: sentimiento global **muy positivo**, sin frases neutras ni negativas."
+        },
+        {
+          "type": "h",
+          "text": "Cuándo usar un modelo de uso general"
+        },
+        {
+          "type": "p",
+          "text": "Además de frases clave, entidades y sentimiento, puede resumir documentos largos, traducir, clasificar contenido en categorías que tú definas o responder preguntas sobre un texto. Al estar todo guiado por prompts, puedes combinar tareas libremente (por ejemplo, traducir una reseña y luego resumirla en la misma conversación)."
+        },
+        {
+          "type": "h",
+          "text": "Azure Language in Foundry Tools"
+        },
+        {
+          "type": "p",
+          "text": "Un modelo de lenguaje grande suele hacer bien el análisis de texto, pero a veces una herramienta especializada da resultados **más predecibles**. Azure Language in Foundry Tools es un servicio de NLP con analizadores diseñados para tareas concretas. Usan técnicas estadísticas para devolver resultados **estructurados y deterministas**, ideales para {{canalizaciones automatizadas|automated pipelines}} en las que importa la coherencia."
+        },
+        {
+          "type": "p",
+          "text": "En el nuevo portal se prueban desde **Build → Models → pestaña AI services**, donde hay una selección de servicios de IA para probar en el playground. Dos capacidades destacadas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Detección de idioma|Language detection}}: detecta el idioma y el dialecto del texto.",
+            "{{Detección de PII|Personally identifiable information (PII) detection}}: identifica información personal sensible, incluida la {{información sanitaria personal|personal health information (PHI)}}."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Detección de idioma"
+        },
+        {
+          "type": "p",
+          "text": "En flujos multilingües suele ser el primer paso, para enviar cada documento al modelo o proceso adecuado. Devuelve el idioma principal y una {{puntuación de confianza|confidence score}}. Admite muchos idiomas y dialectos regionales."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Texto",
+            "Idioma",
+            "Código ISO 639-1",
+            "Confianza"
+          ],
+          "rows": [
+            [
+              "«¡Hola! Me llamo Josefina y vivo en Madrid, España.»",
+              "Spanish",
+              "es",
+              "1.00"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Detección de información de identificación personal (PII)"
+        },
+        {
+          "type": "p",
+          "text": "Las organizaciones necesitan localizar y {{ocultar (redactar)|redact}} datos personales antes de almacenar o compartir texto, para cumplir la normativa de privacidad. La detección de PII identifica nombres, teléfonos, correos y direcciones y, opcionalmente, los oculta."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Texto detectado",
+            "Categoría"
+          ],
+          "rows": [
+            [
+              "Maria Garcia",
+              "Person"
+            ],
+            [
+              "020 7946 0958",
+              "Phone number"
+            ],
+            [
+              "42 Market Road, London, UK, SW1A 1AA",
+              "Address"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Regla de examen: ¿necesitas flexibilidad, combinar tareas o conversar? → **modelo de uso general**. ¿Necesitas el mismo resultado estructurado cada vez (código de idioma, confianza, texto redactado) en una canalización automática? → **Azure Language**."
+        },
+        {
+          "type": "tip",
+          "text": "La detección de PII también sirve de apoyo al principio de IA responsable de **privacidad y seguridad**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Necesitas que una canalización automática devuelva siempre el mismo código de idioma y puntuación de confianza para el mismo texto. ¿Qué opción es la adecuada?",
+          "options": [
+            "Un modelo de uso general en el chat playground",
+            "Azure Language in Foundry Tools",
+            "Un modelo de generación de imágenes",
+            "Un prompt de sistema más largo"
+          ],
+          "answer": 1,
+          "explain": "Azure Language usa analizadores especializados que devuelven resultados estructurados y deterministas.",
+          "obj": "B2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada capacidad con su resultado.",
+          "pairs": [
+            [
+              "Vinculación de entidades",
+              "Entidad reconocida con un enlace a Wikipedia"
+            ],
+            [
+              "Detección de PII",
+              "Texto con nombres y teléfonos ocultos"
+            ],
+            [
+              "Detección de idioma",
+              "Idioma, código ISO 639-1 y confianza"
+            ],
+            [
+              "Extracción de frases clave",
+              "Lista de los conceptos principales del texto"
+            ]
+          ],
+          "explain": "Cada capacidad devuelve un tipo de información distinto sobre el texto.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos elementos necesitas crear para empezar a analizar texto en el nuevo portal de Foundry? (Elige 2)",
+          "options": [
+            "Un recurso de Foundry",
+            "Una máquina virtual con GPU",
+            "Un proyecto de Foundry",
+            "Un recurso de Azure Language separado obligatoriamente",
+            "Una cuenta de almacenamiento de datos de entrenamiento"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "El recurso de Foundry da acceso a servicios y modelos, y el proyecto es el espacio de trabajo donde despliegas modelos y usas el playground.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Con un modelo de uso general, el formato del análisis de sentimiento depende de cómo redactes el prompt.",
+          "answer": true,
+          "explain": "Puedes pedir una puntuación global o un desglose por frases; cuanto más específico el prompt, más estructurada la respuesta.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m10u3",
+      "title": "Crear una aplicación cliente que analiza texto",
+      "titleEn": "Create a client application that analyzes text",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/3-language-sdk",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Conceptos básicos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Aplicación cliente|Client application}}: programa que se conecta a un servicio o modelo y usa sus capacidades; envía peticiones y recibe resultados automáticamente, lo que permite procesar mucho texto o integrar la IA en un flujo de trabajo.",
+            "{{API|Application Programming Interface}}: conjunto de reglas que define cómo se comunican dos programas.",
+            "{{Biblioteca cliente|Client library}}: código ya hecho que facilita hablar con un servicio o API desde tu aplicación."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Opción 1: modelo de uso general con la API Responses"
+        },
+        {
+          "type": "p",
+          "text": "Partes de un recurso y un proyecto de Foundry; en el nuevo portal exploras el {{catálogo de modelos|model catalog}} y despliegas un modelo de uso general. Tu aplicación se comunica con Microsoft Foundry Models usando la API de Azure OpenAI: envía peticiones a un {{punto de conexión|endpoint}} junto con una {{clave de API|API key}} que demuestra que estás autorizado."
+        },
+        {
+          "type": "p",
+          "text": "La {{API Responses|Responses API}} es la API moderna y unificada de Azure OpenAI para interactuar con modelos de lenguaje; está pensada para interacciones completas, no solo generación de texto. Es útil cuando quieres un análisis flexible y conversacional que no exige una salida estructurada fija."
+        },
+        {
+          "type": "p",
+          "text": "La biblioteca de Python de OpenAI es un {{kit de desarrollo de software|software development kit (SDK)}} oficial que permite interactuar con los modelos desde código en lugar de con peticiones HTTP en bruto. El código se escribe en un editor como Visual Studio Code, cuyo terminal integrado permite ejecutar comandos sin salir del entorno."
+        },
+        {
+          "type": "p",
+          "text": "**Paso 1 – Instalar el paquete:**"
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "pip install openai"
+        },
+        {
+          "type": "p",
+          "text": "**Paso 2 – Crear un archivo de configuración** `.env` con las {{variables de entorno|environment variables}}:"
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "AZURE_OPENAI_ENDPOINT=https://<tu-recurso>.openai.azure.com/openai/v1/\nMODEL_DEPLOYMENT_NAME=gpt-4.1-mini\nAPI_KEY=<tu-clave-de-foundry>"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El endpoint contiene el nombre de tu recurso de Foundry seguido de `openai.azure.com/openai/v1`.",
+            "La clave de API es la clave de tu proyecto de Foundry.",
+            "El {{nombre de implementación|deployment name}} es el nombre que das al modelo al desplegarlo (p. ej., despliegas gpt-4.1 como `gpt-demo-model`). Si no lo personalizas, coincide con el nombre del modelo."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Paso 3 – Escribir la lógica de la aplicación:**"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os\nfrom dotenv import load_dotenv\nfrom openai import OpenAI\n\n# Cargar variables del archivo .env\nload_dotenv()\nendpoint = os.getenv(\"AZURE_OPENAI_ENDPOINT\")\napi_key = os.getenv(\"API_KEY\")\ndeployment_name = os.getenv(\"MODEL_DEPLOYMENT_NAME\")\n\n# Crear el objeto cliente\nclient = OpenAI(base_url=endpoint, api_key=api_key)\n\n# Enviar la petición (input contiene el prompt de análisis)\nmessage = client.responses.create(\n    model=deployment_name,\n    input=\"Analiza el sentimiento de esta reseña: ...\",\n)\n\n# Mostrar el resultado\nprint(f\"Sentiment: {message.output[0]}\")"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`load_dotenv()` lee el `.env` y carga sus valores en el entorno; `os.getenv(\"NOMBRE\")` recupera cada uno. Los nombres deben coincidir **exactamente** (si el archivo usa `API_KEY`, el código debe pedir `API_KEY`) o faltarán valores en tiempo de ejecución.",
+            "La clase `OpenAI` del SDK es la plantilla para conectarse a la API; con el endpoint y la clave se crea un {{objeto cliente autenticado|authenticated client object}} que hace llamadas autorizadas sin que tu código gestione tokens o secretos manualmente.",
+            "Una {{clase|class}} es un plano que define qué datos tiene un tipo de cosa y qué acciones puede hacer; un {{objeto|object}} es una instancia concreta (la clase Car define color, drive() y stop(); un coche rojo concreto es un objeto).",
+            "Sobre el cliente se llaman métodos, como `responses.create`, indicando el despliegue (`model`) y el prompt (`input`).",
+            "La aplicación se ejecuta en el terminal con `python <archivo>.py`."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Con la API de OpenAI los resultados pueden variar entre llamadas, porque el modelo genera texto de forma probabilística: el mismo prompt puede devolver redacción o formato algo distintos. Si necesitas valores estructurados y coherentes (código de idioma, confianza, texto redactado), usa el SDK de Azure Language."
+        },
+        {
+          "type": "h",
+          "text": "Opción 2: el SDK de Azure Language"
+        },
+        {
+          "type": "p",
+          "text": "El SDK de Azure Language es la biblioteca cliente de Azure Language in Foundry Tools; facilita añadir funciones de NLP, como detección de idioma o redacción de PII. Necesitas un recurso de Foundry, una versión compatible de Python y el paquete:"
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "pip install azure-ai-textanalytics"
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "AZURE_LANGUAGE_ENDPOINT=https://<tu-recurso>.cognitiveservices.azure.com/\nAPI_KEY=<tu-clave-de-foundry>"
+        },
+        {
+          "type": "p",
+          "text": "Fíjate en que el endpoint de Azure Language usa el dominio `cognitiveservices.azure.com`, mientras que el de OpenAI usa `openai.azure.com/openai/v1/`."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os\nfrom dotenv import load_dotenv\nfrom azure.core.credentials import AzureKeyCredential\nfrom azure.ai.textanalytics import TextAnalyticsClient\n\nload_dotenv()\nendpoint = os.getenv(\"AZURE_LANGUAGE_ENDPOINT\")\nkey = os.getenv(\"API_KEY\")\n\n# Crear el cliente\nclient = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))"
+        },
+        {
+          "type": "p",
+          "text": "Los métodos del cliente llaman a las funciones de Azure Language, como `detect_language` y `recognize_pii_entities`. Ambos reciben una **lista** de textos."
+        },
+        {
+          "type": "p",
+          "text": "**Detección de idioma:** `detect_language()` devuelve el idioma detectado, su código ISO 639-1 y una confianza entre 0 y 1."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "text = \"¡Hola! Me llamo Josefina y vivo en Madrid, España.\"\nresult = client.detect_language([text])[0]\nprint(f\"Language   : {result.primary_language.name}\")\nprint(f\"ISO code   : {result.primary_language.iso6391_name}\")\nprint(f\"Confidence : {result.primary_language.confidence_score:.2f}\")"
+        },
+        {
+          "type": "p",
+          "text": "**Detección de PII:** `recognize_pii_entities()` devuelve el texto redactado (`redacted_text`) y la lista de entidades encontradas con su categoría y confianza."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "text = \"Maria Garcia called from 020 7946 0958 and asked to send documents to 42 Market Road, London, UK, SW1A 1AA.\"\nresult = client.recognize_pii_entities([text])[0]\nprint(\"Redacted text:\", result.redacted_text)\nfor entity in result.entities:\n    print(f\"  {entity.text} | category={entity.category} | confidence={entity.confidence_score}\")"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Aspecto",
+            "OpenAI (API Responses)",
+            "SDK de Azure Language"
+          ],
+          "rows": [
+            [
+              "Paquete",
+              "`openai`",
+              "`azure-ai-textanalytics`"
+            ],
+            [
+              "Cliente",
+              "`OpenAI(base_url, api_key)`",
+              "`TextAnalyticsClient(endpoint, AzureKeyCredential(key))`"
+            ],
+            [
+              "Llamada",
+              "`client.responses.create(model, input)`",
+              "`detect_language([...])`, `recognize_pii_entities([...])`"
+            ],
+            [
+              "Salida",
+              "Texto generado, flexible, puede variar",
+              "Estructurada y determinista"
+            ],
+            [
+              "Ideal para",
+              "Análisis conversacional y tareas combinadas",
+              "Canalizaciones que necesitan valores coherentes"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "El **objeto cliente** sirve para que el código de la aplicación se comunique con el servicio (no guarda la interfaz ni el texto a analizar)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué paquete instalas para usar el SDK de Azure Language en Python?",
+          "options": [
+            "pip install openai",
+            "pip install azure-ai-textanalytics",
+            "pip install azure-speech",
+            "pip install dotenv-language"
+          ],
+          "answer": 1,
+          "explain": "La biblioteca cliente de Azure Language para Python es azure-ai-textanalytics.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "En el código de Azure Language, ¿qué método usarías para obtener una versión del texto con los teléfonos y nombres ocultos?",
+          "options": [
+            "detect_language()",
+            "responses.create()",
+            "load_dotenv()",
+            "recognize_pii_entities()"
+          ],
+          "answer": 3,
+          "explain": "recognize_pii_entities() devuelve redacted_text y la lista de entidades PII con su categoría y confianza.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Si el archivo .env define API_KEY pero el código llama a os.getenv(\"AZURE_KEY\"), la aplicación obtendrá igualmente la clave.",
+          "answer": false,
+          "explain": "Los nombres deben coincidir exactamente; si no, os.getenv devuelve un valor vacío y la autenticación fallará.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada elemento del código con su función.",
+          "pairs": [
+            [
+              "load_dotenv()",
+              "Carga las variables del archivo .env en el entorno"
+            ],
+            [
+              "os.getenv(\"API_KEY\")",
+              "Recupera un valor concreto por su nombre"
+            ],
+            [
+              "OpenAI(base_url=..., api_key=...)",
+              "Crea un objeto cliente autenticado"
+            ],
+            [
+              "client.responses.create(model=..., input=...)",
+              "Envía el prompt al modelo desplegado"
+            ]
+          ],
+          "explain": "Son los pasos de una aplicación cliente: cargar configuración, leerla, autenticarse y llamar al modelo.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m10u4",
+      "title": "Usar Azure Language con un agente",
+      "titleEn": "Use Azure Language with an agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/4-language-mcp",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los {{agentes de IA|AI agents}} usan herramientas y modelos para razonar, planificar, recuperar información y llamar a servicios externos. Un modelo generativo entiende y genera lenguaje, pero por sí solo no ofrece el análisis **determinista y estructurado** que requieren algunas tareas. Añadir Azure Language in Foundry Tools al agente le da análisis de texto coherente y predecible."
+        },
+        {
+          "type": "h",
+          "text": "Qué es MCP"
+        },
+        {
+          "type": "p",
+          "text": "El {{Protocolo de contexto de modelo|Model Context Protocol (MCP)}} es un estándar abierto que define cómo se conectan los agentes de IA a herramientas y fuentes de datos externas. Funciona como un **adaptador universal**: en lugar de escribir código de integración para cada servicio, conectas el agente a un servidor MCP que ya expone esas capacidades de forma estándar."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Pieza",
+            "Papel"
+          ],
+          "rows": [
+            [
+              "{{Cliente MCP|MCP client}}",
+              "El agente (o la aplicación host que lo ejecuta). Envía peticiones y recibe respuestas."
+            ],
+            [
+              "{{Servidor MCP|MCP server}}",
+              "El servicio que expone herramientas, datos o acciones. Escucha peticiones, ejecuta la capacidad adecuada y devuelve un resultado estructurado."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Al conectarse, el agente **descubre** qué herramientas ofrece el servidor y las invoca cuando las necesita, sin integración a medida. El servidor puede responder **aportando datos** (puntuaciones de sentimiento, frases clave, entidades) o **realizando acciones** (procesar un lote de documentos). Esta separación mantiene limpia la lógica del agente y permite cambiar o ampliar capacidades conectando otros servidores MCP."
+        },
+        {
+          "type": "h",
+          "text": "Servidor MCP de Azure Language"
+        },
+        {
+          "type": "p",
+          "text": "El {{servidor MCP de Azure Language|Azure Language MCP server}} es un servicio gestionado que expone las capacidades de Azure Language in Foundry Tools mediante MCP: reconocimiento de entidades con nombre, análisis de sentimiento, detección de idioma y más. Hace de puente entre el agente y el servicio, de modo que no necesitas llamar directamente a la API REST de Azure Language ni gestionar tokens de autenticación en el código del agente."
+        },
+        {
+          "type": "h",
+          "text": "Pasos en el portal de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Despliega un modelo y guárdalo como agente desde el playground.",
+            "En las herramientas del agente, busca «Azure Language in Foundry Tools» y añade el servidor MCP.",
+            "Configura la conexión con el **nombre de tu recurso de Foundry**.",
+            "Usa prompts para indicar al agente que analice texto con la herramienta."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Así el agente combina el razonamiento del modelo con la precisión de Azure Language: por ejemplo, enrutar tickets de soporte según el idioma detectado o identificar y redactar PII."
+        },
+        {
+          "type": "tip",
+          "text": "Un recurso de Foundry ya incluye acceso a las herramientas de Language: **no necesitas crear un recurso de Azure Language separado** para usar el servidor MCP."
+        },
+        {
+          "type": "tip",
+          "text": "El servidor MCP de Azure Language **no sustituye** al modelo generativo del agente; le añade herramientas de análisis estructurado."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál es la finalidad principal del servidor MCP de Azure Language?",
+          "options": [
+            "Sustituir el modelo generativo del agente",
+            "Exponer las capacidades de Azure Language a los agentes mediante el Model Context Protocol",
+            "Generar diseños de páginas web para el agente",
+            "Entrenar un modelo de lenguaje personalizado"
+          ],
+          "answer": 1,
+          "explain": "Hace de puente estándar para que el agente invoque detección de idioma, NER, sentimiento, PII, etc.",
+          "obj": "B2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada pieza de la arquitectura MCP con su papel.",
+          "pairs": [
+            [
+              "Cliente MCP",
+              "El agente que envía las peticiones"
+            ],
+            [
+              "Servidor MCP",
+              "Expone herramientas y devuelve resultados estructurados"
+            ],
+            [
+              "Model Context Protocol",
+              "Estándar abierto que define cómo se conectan ambos"
+            ]
+          ],
+          "explain": "MCP usa una arquitectura cliente-servidor: el agente es el cliente y el servicio que expone herramientas es el servidor.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Para conectar un agente al servidor MCP de Azure Language debes crear antes un recurso de Azure Language independiente.",
+          "answer": false,
+          "explain": "El recurso de Foundry ya da acceso a las herramientas de Language; basta con configurar la conexión con el nombre del recurso de Foundry.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m10u5",
+      "title": "Ejercicio: empezar con el análisis de texto en Microsoft Foundry",
+      "titleEn": "Exercise - Get started with text analysis in Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/5-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Objetivo"
+        },
+        {
+          "type": "p",
+          "text": "Comparar las dos formas de analizar texto en Microsoft Foundry: un **modelo generativo de propósito general** al que se le pide la tarea en lenguaje natural, y las herramientas especializadas de **Azure Language in Foundry Tools**, que devuelven resultados estructurados y {{deterministas|deterministic}}. Duración aproximada: 20 minutos."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Una suscripción de Azure con permisos para crear recursos.",
+            "Acceso al portal de Microsoft Foundry (https://ai.azure.com) con la opción **New Foundry** activada.",
+            "Cuota en la región elegida para desplegar un modelo GPT de chat (por ejemplo `gpt-5.4-mini`)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 1: crear un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abre https://ai.azure.com, inicia sesión con tu cuenta de Azure y activa **New Foundry** en la barra superior si no lo está.",
+            "Crea un {{proyecto|project}} con nombre único y despliega **Advanced options** para indicar: nombre del {{recurso de Foundry|Foundry resource}}, suscripción, {{grupo de recursos|resource group}} (nuevo o existente) y una región recomendada.",
+            "Si tus permisos son limitados, desmarca la opción de crear los recursos recomendados.",
+            "Pulsa **Create** y espera unos minutos a que el proyecto esté listo (también puedes reutilizar uno existente)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 2: resumir texto con un modelo generativo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Catalog > Models** busca `gpt-5.4-mini`, revisa su ficha y despliégalo con **Deploy** (configuración por defecto); se abre el playground de chat.",
+            "Cambia **Instructions** por algo como «Eres un asistente de IA que analiza y resume texto».",
+            "Pide resumir en un párrafo corto una reseña de los años 80 sobre el Commodore 64 (puntos fuertes, pegas y conclusión)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Resultado**: el modelo genera el {{resumen|summarization}}. Los LLM nacen de técnicas de {{procesamiento de lenguaje natural|natural language processing (NLP)}}, por lo que se les da bien resumir, extraer entidades y clasificar textos por sentimiento, tema o estilo."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 3: explorar Azure Language"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Ve a la página **Build** (sin guardar la configuración del modelo) y abre **Services**.",
+            "Revisa los servicios de IA disponibles (antes llamados Cognitive Services): voz, traducción, lenguaje y Content Understanding."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 4: detectar el idioma"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Selecciona **Language > Language detection**.",
+            "Elige un documento de ejemplo en **Input text** y pulsa **Detect**.",
+            "Con el botón **Edit**, escribe el texto de la etiqueta de un ordenador antiguo (Schneider CPC 464, en alemán) y detecta su idioma."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La {{detección de idioma|language detection}} suele ser el primer paso de un flujo: identifica el idioma principal para enrutar el texto al modelo o agente adecuado (después podría traducirse con el servicio Text Translator)."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 5: identificar información personal"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la lista **Type** elige **Text PII Redaction**.",
+            "Analiza un ejemplo con **Detect** y luego, con **Edit**, pega una factura de 1984 con nombre, dirección y teléfono de una clienta.",
+            "Revisa las entidades detectadas (nombres de persona, correos, teléfonos, direcciones…) y el texto con esos datos ocultos."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Detectar y {{ocultar|redact}} la {{información de identificación personal|personally identifiable information (PII)}} ayuda a cumplir políticas y leyes de privacidad."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 6: revisar el código de ejemplo"
+        },
+        {
+          "type": "p",
+          "text": "La pestaña **Code** muestra un ejemplo en Python que se autentica con **clave + endpoint** del recurso de Language y llama a `recognize_pii_entities`:"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "from azure.ai.textanalytics import TextAnalyticsClient\nfrom azure.core.credentials import AzureKeyCredential\n\nclient = TextAnalyticsClient(endpoint=endpoint,\n                             credential=AzureKeyCredential(key))\nresponse = client.recognize_pii_entities(documents, language=\"en\")\nfor doc in response:\n    if not doc.is_error:\n        print(doc.redacted_text)\n        for entity in doc.entities:\n            print(entity.text, entity.category, entity.confidence_score)"
+        },
+        {
+          "type": "p",
+          "text": "Para cada documento se obtiene el texto ocultado y, por entidad, su texto, {{categoría|category}}, {{puntuación de confianza|confidence score}}, posición (offset) y longitud."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: un LLM es flexible y sirve para muchas tareas de texto con prompts; Azure Language da resultados estructurados y predecibles (detección de idioma, PII, etc.), ideales para canalizaciones automatizadas o como herramienta que usa un agente."
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Para no generar costes, abre el portal de Azure (https://portal.azure.com), entra en el grupo de recursos usado en el laboratorio, pulsa **Delete resource group** y confirma escribiendo su nombre."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio (Microsoft Learning): https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/03b-text-analysis.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada tarea del laboratorio con la herramienta usada.",
+          "pairs": [
+            [
+              "Resumir la reseña del Commodore 64",
+              "Modelo gpt-5.4-mini en el playground de chat"
+            ],
+            [
+              "Identificar el idioma de la etiqueta del CPC 464",
+              "Azure Language - Language detection"
+            ],
+            [
+              "Ocultar nombre, dirección y teléfono de la factura",
+              "Azure Language - Text PII Redaction"
+            ]
+          ],
+          "explain": "El resumen se pide al modelo generativo; la detección de idioma y de PII se hacen con los analizadores especializados de Azure Language.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Por qué el laboratorio propone Azure Language en lugar del LLM para algunas tareas?",
+          "options": [
+            "Porque el LLM no sabe analizar texto",
+            "Porque devuelve resultados estructurados y deterministas, útiles en canalizaciones automatizadas",
+            "Porque no necesita ningún recurso de Azure",
+            "Porque genera textos más creativos"
+          ],
+          "answer": 1,
+          "explain": "Los analizadores de Azure Language devuelven salidas consistentes y estructuradas, a diferencia de las respuestas generadas dinámicamente por un LLM.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "Según el código de ejemplo de PII, ¿qué datos se obtienen de cada entidad detectada? (elige 3)",
+          "options": [
+            "Categoría",
+            "Puntuación de confianza",
+            "Traducción al inglés",
+            "Offset (posición) en el texto",
+            "Sentimiento de la frase"
+          ],
+          "answers": [
+            0,
+            1,
+            3
+          ],
+          "explain": "El ejemplo imprime texto, categoría, puntuación de confianza, offset y longitud de cada entidad.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "En el laboratorio, el código de ejemplo de Azure Language se autentica con una clave (AzureKeyCredential) y el endpoint del recurso.",
+          "answer": true,
+          "explain": "El ejemplo crea un TextAnalyticsClient con el endpoint y AzureKeyCredential(key).",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m10u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Salida determinista y estructurada** basada en técnicas estadísticas → SDK de Azure Language (no la API Responses ni el playground).",
+            "**Objeto cliente** del SDK: permite que el código de la aplicación se comunique con el servicio de Azure Language.",
+            "**Servidor MCP de Azure Language:** expone las capacidades de Azure Language a los agentes a través del Model Context Protocol.",
+            "**API Responses:** sigue instrucciones en lenguaje natural; flexible, pero puede variar entre llamadas.",
+            "**Chat playground:** útil para explorar y hacer preguntas de seguimiento antes de construir la aplicación."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un equipo debe procesar cada noche 100 000 correos y guardar el idioma con su código y confianza en una base de datos, con resultados idénticos si se reprocesan. ¿Qué elige?",
+          "options": [
+            "La API Responses con un prompt detallado",
+            "El chat playground de Foundry",
+            "El SDK de Azure Language con detect_language()",
+            "Un modelo de visión"
+          ],
+          "answer": 2,
+          "explain": "Azure Language devuelve valores estructurados y deterministas, ideales para canalizaciones automáticas.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "El objeto cliente del SDK de Azure Language almacena el texto que se va a analizar.",
+          "answer": false,
+          "explain": "El objeto cliente sirve para comunicarse con el servicio; el texto se pasa como lista a sus métodos.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos afirmaciones sobre la API Responses de Azure OpenAI son correctas? (Elige 2)",
+          "options": [
+            "Puede seguir instrucciones en lenguaje natural para analizar texto",
+            "Siempre devuelve exactamente el mismo texto para el mismo prompt",
+            "Es la API moderna y unificada para interactuar con modelos de lenguaje",
+            "Solo funciona para detección de PII",
+            "Requiere el paquete azure-ai-textanalytics"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "La API Responses es la API unificada y sigue prompts; su salida puede variar y usa el paquete openai.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m10u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-text-analysis-azure/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Has visto cómo las aplicaciones y agentes de IA dan sentido al texto escrito con NLP y cómo implementar análisis de texto en aplicaciones cliente."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Dos formas de analizar texto en Microsoft Foundry: **modelos de IA de uso general** y **Azure Language in Foundry Tools**.",
+            "Dos formas de construir la aplicación cliente: la **API de OpenAI** (Responses) o el **SDK de Azure Language**.",
+            "Conectar un agente al **servidor MCP de Azure Language** para que realice tareas de lenguaje estructuradas dentro de un flujo automatizado."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Para ampliar: documentación de la API Responses de Azure OpenAI, de Azure Language in Foundry Tools y de la biblioteca cliente Azure Text Analytics."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada necesidad con la herramienta del módulo.",
+          "pairs": [
+            [
+              "Análisis flexible y conversacional desde código",
+              "API Responses de OpenAI"
+            ],
+            [
+              "Resultados estructurados y coherentes desde código",
+              "SDK de Azure Language"
+            ],
+            [
+              "Dar análisis de texto a un agente sin integración a medida",
+              "Servidor MCP de Azure Language"
+            ]
+          ],
+          "explain": "Cada opción cubre un caso: flexibilidad, determinismo o integración con agentes.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Un agente conectado al servidor MCP de Azure Language combina el razonamiento del modelo con la precisión del análisis de Azure Language.",
+          "answer": true,
+          "explain": "Esa combinación permite, por ejemplo, enrutar tickets por idioma o redactar PII dentro de un flujo automatizado.",
+          "obj": "B2"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Un analista quiere explorar en el portal qué puede hacer un modelo con unas reseñas, haciendo preguntas de seguimiento antes de programar nada. ¿Qué usa?",
+      "options": [
+        "El SDK de Azure Language",
+        "El chat playground de Foundry con un modelo de uso general",
+        "El servidor MCP sin agente",
+        "pip install azure-ai-textanalytics"
+      ],
+      "answer": 1,
+      "explain": "El playground permite conversar con el modelo desplegado y refinar el análisis antes de construir la aplicación.",
+      "obj": "B2"
+    },
+    {
+      "type": "order",
+      "q": "Ordena los pasos para crear una aplicación cliente con la API Responses.",
+      "items": [
+        "Instalar el paquete openai",
+        "Crear el archivo .env con endpoint, clave y nombre de despliegue",
+        "Cargar las variables con load_dotenv() y os.getenv()",
+        "Crear el cliente OpenAI con base_url y api_key",
+        "Llamar a client.responses.create() con el modelo y el prompt"
+      ],
+      "explain": "Instalar, configurar, cargar la configuración, autenticarse y enviar la petición.",
+      "obj": "B1"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada endpoint o valor de configuración con el servicio o dato al que corresponde.",
+      "pairs": [
+        [
+          "https://<recurso>.openai.azure.com/openai/v1/",
+          "Endpoint para la API de OpenAI"
+        ],
+        [
+          "https://<recurso>.cognitiveservices.azure.com/",
+          "Endpoint del SDK de Azure Language"
+        ],
+        [
+          "MODEL_DEPLOYMENT_NAME",
+          "Nombre dado al modelo al desplegarlo"
+        ],
+        [
+          "API_KEY",
+          "Clave del proyecto de Foundry"
+        ]
+      ],
+      "explain": "El módulo usa un endpoint distinto para cada SDK; el nombre de despliegue identifica el modelo a llamar.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "En la detección de entidades del texto «El evento duró 3 horas», ¿cómo se clasificaría «3 horas»?",
+      "options": [
+        "Quantity / Number",
+        "Person",
+        "DateTime / Duration",
+        "Location"
+      ],
+      "answer": 2,
+      "explain": "Las duraciones son entidades DateTime con subtipo Duration.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "Dos llamadas con el mismo prompt a la API Responses pueden devolver redacción o formato ligeramente distintos.",
+      "answer": true,
+      "explain": "El modelo genera texto de forma probabilística; para resultados coherentes se recomienda Azure Language.",
+      "obj": "A2"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos capacidades de Azure Language se destacan en el nuevo portal de Foundry? (Elige 2)",
+      "options": [
+        "Detección de idioma",
+        "Generación de imágenes",
+        "Detección de PII (incluida PHI)",
+        "Síntesis de voz",
+        "Clasificación de imágenes"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "El módulo destaca la detección de idioma y la detección de información personal, incluida la sanitaria.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "Un agente de soporte debe detectar el idioma de cada ticket y redactar datos personales usando Azure Language sin llamar a la API REST directamente. ¿Qué añades al agente?",
+      "options": [
+        "Un modelo de visión",
+        "Un índice de búsqueda vectorial",
+        "Un vocoder neuronal",
+        "El servidor MCP de Azure Language como herramienta"
+      ],
+      "answer": 3,
+      "explain": "El servidor MCP expone las capacidades de Azure Language al agente de forma estándar, sin gestionar tokens ni REST.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué devuelve detect_language() para cada texto?",
+      "options": [
+        "El texto traducido al inglés",
+        "El idioma, su código ISO 639-1 y una puntuación de confianza entre 0 y 1",
+        "Una lista de entidades PII",
+        "El sentimiento del texto"
+      ],
+      "answer": 1,
+      "explain": "Se accede a result.primary_language.name, .iso6391_name y .confidence_score.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "Un modelo de IA de uso general necesita entrenarse con tus datos antes de poder extraer frases clave o analizar sentimiento.",
+      "answer": false,
+      "explain": "Ya tiene una comprensión amplia del lenguaje y sigue instrucciones en lenguaje natural sin configuración ni entrenamiento adicional.",
+      "obj": "A2"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Análisis de texto",
+      "en": "Text analysis",
+      "def": "Examinar texto automáticamente para extraer sentimiento, palabras clave, entidades o temas."
+    },
+    {
+      "es": "Modelo de IA de uso general",
+      "en": "General-purpose AI model",
+      "def": "Modelo de lenguaje entrenado con mucho texto que realiza muchas tareas siguiendo prompts."
+    },
+    {
+      "es": "Azure Language in Foundry Tools",
+      "en": "Azure Language in Foundry Tools",
+      "def": "Servicio de NLP con analizadores especializados que devuelven resultados estructurados y deterministas."
+    },
+    {
+      "es": "Recurso de Foundry",
+      "en": "Foundry resource",
+      "def": "Recurso de Azure que da acceso a servicios de IA y modelos desplegados."
+    },
+    {
+      "es": "Proyecto de Foundry",
+      "en": "Foundry project",
+      "def": "Espacio de trabajo dentro del recurso para desplegar modelos y usar el playground y los servicios."
+    },
+    {
+      "es": "Vinculación de entidades",
+      "en": "Entity linking",
+      "def": "Identificar entidades conocidas y enlazarlas a una referencia como Wikipedia."
+    },
+    {
+      "es": "Reconocimiento de entidades con nombre",
+      "en": "Named entity recognition (NER)",
+      "def": "Detectar personas, lugares, organizaciones, fechas, cantidades y otras entidades en el texto."
+    },
+    {
+      "es": "Detección de PII",
+      "en": "PII detection",
+      "def": "Identificar y opcionalmente ocultar datos personales como nombres, teléfonos o direcciones."
+    },
+    {
+      "es": "API Responses",
+      "en": "Responses API",
+      "def": "API moderna y unificada de Azure OpenAI para interactuar con modelos de lenguaje."
+    },
+    {
+      "es": "SDK de Azure Language",
+      "en": "Azure Language SDK",
+      "def": "Biblioteca cliente (azure-ai-textanalytics) para usar Azure Language desde código."
+    },
+    {
+      "es": "Objeto cliente",
+      "en": "Client object",
+      "def": "Objeto autenticado que permite al código comunicarse con un servicio."
+    },
+    {
+      "es": "Protocolo de contexto de modelo",
+      "en": "Model Context Protocol (MCP)",
+      "def": "Estándar abierto que define cómo los agentes se conectan a herramientas y datos externos."
+    },
+    {
+      "es": "Servidor MCP",
+      "en": "MCP server",
+      "def": "Servicio que expone herramientas, datos o acciones a los agentes mediante MCP."
+    }
+  ]
+}

@@ -1,0 +1,834 @@
+{
+  "id": "m13",
+  "path": 2,
+  "order": 6,
+  "title": "Introducción a la extracción de información con IA en Azure",
+  "titleEn": "Get started with AI-powered information extraction in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/",
+  "summary": "Aprende a usar Azure Content Understanding in Foundry Tools para extraer datos estructurados (JSON) de documentos, imágenes, audio y vídeo mediante analizadores y esquemas, desde el portal de Foundry o con el SDK de Python.",
+  "objectives": [
+    "Describir qué hace Azure Content Understanding y qué tipos de contenido admite.",
+    "Explicar el papel de los esquemas y los analizadores.",
+    "Extraer información de documentos, audio y vídeo en el portal de Foundry y desde código."
+  ],
+  "units": [
+    {
+      "id": "m13u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Procesar facturas o formularios a mano es costoso. La {{extracción de información|information extraction}} con IA elimina ese esfuerzo y permite obtener conocimiento útil de datos que estarían «atrapados» en documentos, imágenes, audio o vídeo."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Escenario",
+            "Qué se extrae"
+          ],
+          "rows": [
+            [
+              "Gastos de empresa",
+              "Descripciones e importes de recibos escaneados."
+            ],
+            [
+              "Atención al cliente",
+              "Problemas frecuentes y resoluciones a partir de llamadas grabadas."
+            ],
+            [
+              "Planificación de capacidad",
+              "Estimación de visitantes de una organización turística a partir de vídeos e imágenes."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Azure Content Understanding in Foundry Tools** usa IA para extraer información estructurada de contenido no estructurado: identifica {{entidades|entities}}, campos, relaciones y significado."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Documentos e imágenes**: PDF, formularios, facturas, recibos, contratos.",
+            "**Audio**: grabaciones o llamadas.",
+            "**Vídeo**: reuniones grabadas u otros archivos multimedia."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Idea clave: Content Understanding convierte contenido no estructurado en **datos legibles por máquina** que se pueden buscar y analizar. Si una pregunta de examen menciona extraer campos de documentos, audio o vídeo en Azure, la respuesta suele ser Content Understanding."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿De qué tipos de contenido puede extraer información Azure Content Understanding? (elige 3)",
+          "options": [
+            "Documentos e imágenes",
+            "Audio",
+            "Vídeo",
+            "Bases de datos SQL ya estructuradas"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "Content Understanding trabaja con contenido no estructurado: documentos/imágenes, audio y vídeo.",
+          "obj": "B4"
+        },
+        {
+          "type": "mc",
+          "q": "Una agencia quiere identificar los problemas más comunes en sus llamadas de soporte grabadas. ¿Qué servicio encaja?",
+          "options": [
+            "Azure Content Understanding",
+            "Un modelo de generación de imágenes",
+            "Sora 2",
+            "Azure Monitor"
+          ],
+          "answer": 0,
+          "explain": "Analizar grabaciones de audio para extraer información estructurada es un caso de Content Understanding.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "Content Understanding identifica entidades, campos, relaciones y significado dentro del contenido.",
+          "answer": true,
+          "explain": "No se limita a leer texto: entiende qué representa cada dato.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m13u2",
+      "title": "Extraer información de documentos",
+      "titleEn": "Extract information from documents",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/2-documents",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los procesos de negocio dependen de datos en formularios, recibos y facturas; procesarlos manualmente introduce retrasos y errores."
+        },
+        {
+          "type": "h",
+          "text": "Cómo funciona Content Understanding"
+        },
+        {
+          "type": "list",
+          "items": [
+            "1. **{{Ingesta|ingest}} del contenido**: envías el contenido al servicio.",
+            "2. **Análisis con IA**: combina OCR, {{reconocimiento de voz|speech recognition}}, {{comprensión del lenguaje natural|natural language understanding}} y modelos multimodales.",
+            "3. **Salida estructurada**: devuelve resultados estructurados (por ejemplo en {{JSON|JavaScript Object Notation}}) que coinciden con tu modelo, listos para guardar, buscar o integrar."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "JSON es un formato de texto para almacenar e intercambiar datos estructurados entre sistemas; fácil de leer para personas y de procesar para máquinas."
+        },
+        {
+          "type": "h",
+          "text": "Esquemas"
+        },
+        {
+          "type": "p",
+          "text": "El **OCR básico** lee el texto impreso de imágenes y lo convierte en texto digital, pero **no entiende el significado, el contexto ni las relaciones** entre palabras. Content Understanding va más allá con la **extracción basada en {{esquema|schema}}**: esto es lo que lo diferencia del OCR o de un servicio de transcripción."
+        },
+        {
+          "type": "p",
+          "text": "Un esquema describe **qué información quieres extraer y cómo debe estructurarse**: enumera los campos o entidades que te interesan. Ejemplo para facturas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nombre del proveedor, número de factura, fecha, nombre y dirección del cliente.",
+            "**Items** (colección de líneas), cada una con: descripción, precio unitario, cantidad y total de línea.",
+            "Subtotal, impuestos, gastos de envío y total de la factura."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los esquemas admiten **campos estructurados y anidados**, no solo texto plano: Items es una colección y cada elemento tiene sus propios subcampos. Esto permite entender las **relaciones** entre valores, algo que el OCR solo no puede hacer."
+        },
+        {
+          "type": "example",
+          "text": "Aplicando el esquema a una factura de Adventure Works Cycles se obtiene: número 1234, fecha 03/07/2025, cliente John Smith; Items: bicicleta de carreras (1 × 1299,00), casco (1 × 25,99), camiseta (2 × 42,50 = 85,00); subtotal 1409,99; impuestos 140,99; envío 35,00; total 1585,98."
+        },
+        {
+          "type": "p",
+          "text": "Los esquemas se aplican de forma **semántica**: un campo se extrae aunque su etiqueta sea distinta o **no tenga etiqueta**. «Invoice No.», «Invoice #» o un número sin rótulo pueden asignarse todos a `InvoiceNumber` si el analizador deduce que representan el mismo concepto."
+        },
+        {
+          "type": "h",
+          "text": "Analizadores"
+        },
+        {
+          "type": "p",
+          "text": "Un {{analizador|analyzer}} es la unidad de Content Understanding que **recibe la entrada, aplica el análisis de IA y produce resultados estructurados**. Define cómo se procesa el contenido y qué datos se devuelven. Una vez configurado, aplica **siempre la misma lógica y el mismo esquema** a cada petición y genera JSON predecible, lo que facilita el almacenamiento, la búsqueda y la automatización."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Eliges o creas un analizador ({{prediseñado|prebuilt}} o {{personalizado|custom}}).",
+            "El analizador incluye un esquema con los campos y la estructura.",
+            "Envías contenido para analizar.",
+            "El servicio aplica el esquema.",
+            "Recibes JSON estructurado conforme al esquema."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Content Understanding en el portal de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "Tras crear un recurso de Microsoft Foundry, en el nuevo portal puedes probar Content Understanding con ejemplos o con tus propios archivos. Con la imagen de un documento obtienes el **texto y la información de diseño**; con una factura, los **campos** (p. ej. Vendor address) y sus **valores** (p. ej. 123 456th Street). También puedes ver el **resultado JSON**."
+        },
+        {
+          "type": "h",
+          "text": "Aplicación cliente con la API"
+        },
+        {
+          "type": "p",
+          "text": "Una {{aplicación cliente|client application}} se ejecuta en el dispositivo del usuario y solicita servicios a un servidor mediante una API, recibiendo una respuesta estructurada. Con la API de Content Understanding eliges un analizador prediseñado o personalizado. Analizadores prediseñados: `prebuilt-invoice`, `prebuilt-imageSearch`, `prebuilt-audioSearch` y `prebuilt-videoSearch`."
+        },
+        {
+          "type": "tip",
+          "text": "El análisis es **asíncrono**: el resultado llega más tarde. Hay que **sondear la URL Operation-Location** (o analyzerResults) hasta que el trabajo termine con éxito. Con el SDK de Python, el `poller` se encarga del sondeo."
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "python -m pip install azure-ai-contentunderstanding\n# Endpoint típico: https://<tu-recurso>.services.ai.azure.com/"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os\nfrom azure.ai.contentunderstanding import ContentUnderstandingClient\nfrom azure.core.credentials import AzureKeyCredential\n\nclient = ContentUnderstandingClient(\n    endpoint=os.environ[\"FOUNDRY_ENDPOINT\"],\n    credential=AzureKeyCredential(os.environ[\"FOUNDRY_KEY\"]))\n\n# 1) Iniciar el análisis con el id del analizador y las entradas\nanalyzer_id = \"prebuilt-invoice\"\ninputs = [{\"url\": \"https://.../invoice.pdf\"}]\npoller = client.begin_analyze(analyzer_id=analyzer_id, inputs=inputs)  # operación de larga duración (LRO)\n\n# 2) Esperar: el SDK sondea por ti\nresult = poller.result()\n\n# 3) Leer markdown y campos estructurados\nfor content in result.contents:\n    print(content.markdown)\n    print(content.fields)"
+        },
+        {
+          "type": "p",
+          "text": "La salida JSON incluye `status` (p. ej. Succeeded), `analyzerId`, `apiVersion` y una lista `contents`; cada elemento trae el **markdown** del documento y los **fields**. Cada campo tiene `type` (string, date…), el valor (`valueString`, `valueDate`…) y una **puntuación de `confidence`** (p. ej. CustomerName = MICROSOFT CORPORATION con 0,95; InvoiceDate = 2019-11-15 con 0,994)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál es la ventaja clave de Content Understanding frente al OCR básico?",
+          "options": [
+            "Extrae texto más rápido porque se salta el preprocesamiento",
+            "Entiende la estructura del documento y asigna los datos a un esquema definido",
+            "Solo funciona con texto manuscrito",
+            "Genera documentos nuevos"
+          ],
+          "answer": 1,
+          "explain": "El enfoque basado en esquema, que entiende significado y relaciones, es lo que lo diferencia del OCR básico.",
+          "obj": "B4"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cuál es la función principal de un analizador en Content Understanding?",
+          "options": [
+            "Almacenar los datos extraídos en una base de datos",
+            "Convertir el JSON en texto legible",
+            "Definir cómo se procesa el contenido y qué datos estructurados se devuelven",
+            "Reentrenar el modelo con cada documento"
+          ],
+          "answer": 2,
+          "explain": "El analizador recibe la entrada, aplica la IA con su esquema y produce resultados estructurados consistentes.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "Content Understanding puede extraer el campo InvoiceNumber aunque en la factura aparezca como «Invoice #» o sin etiqueta.",
+          "answer": true,
+          "explain": "Los esquemas se aplican semánticamente: importa el significado, no la etiqueta literal.",
+          "obj": "B4"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos del código del SDK de Python para analizar una factura.",
+          "items": [
+            "Crear el ContentUnderstandingClient con endpoint y credencial",
+            "Indicar analyzer_id = prebuilt-invoice y las entradas",
+            "Llamar a begin_analyze para iniciar la operación",
+            "Esperar con poller.result()",
+            "Recorrer result.contents y leer markdown y fields"
+          ],
+          "explain": "Cliente → analizador y entradas → inicio de la operación de larga duración → espera → lectura de resultados.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m13u3",
+      "title": "Extraer información de audio y vídeo",
+      "titleEn": "Extract information from audio and video",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/3-audio-video",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Cada vez más información de negocio está en audio y vídeo: llamadas grabadas para analizarlas después o reuniones de videoconferencia. Content Understanding admite la extracción y el análisis de ambos formatos."
+        },
+        {
+          "type": "h",
+          "text": "Audio"
+        },
+        {
+          "type": "p",
+          "text": "Puede proporcionar {{transcripciones|transcriptions}}, {{resúmenes|summaries}} y otra información clave de archivos de audio. Por ejemplo, para resumir el buzón de voz defines un esquema con: llamante, resumen del mensaje, acciones solicitadas, número de devolución de llamada y datos de contacto alternativos."
+        },
+        {
+          "type": "example",
+          "text": "Mensaje: «Hola, soy Ava de Contoso; tras la reunión de la semana pasada, creo que podemos ajustarnos a vuestro precio. Llamadme al 555-12345 o escribidme a Ava@contoso.com». Resultado: Llamante = Ava de Contoso; Resumen = seguimiento de la reunión, pueden cumplir las expectativas de precio y piden contacto; Acciones = devolver la llamada o enviar un correo; Número = 555-12345; Contacto alternativo = Ava@contoso.com."
+        },
+        {
+          "type": "h",
+          "text": "Análisis de audio en el portal"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Seleccionar un analizador de audio o vídeo y ejecutarlo sobre un archivo multimedia.",
+            "Revisar salidas como la **transcripción** (en audio) y los datos extraídos según el esquema.",
+            "Ver el **JSON** devuelto para procesarlo en sistemas posteriores."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "En lugar de escuchar una llamada entera, ejecutas el analizador de audio prediseñado y obtienes la transcripción escrita y la información específica en JSON. Probar en el portal es la forma rápida de **validar que el analizador devuelve los campos esperados** antes de automatizar en código."
+        },
+        {
+          "type": "h",
+          "text": "Vídeo"
+        },
+        {
+          "type": "p",
+          "text": "Puedes analizar una videoconferencia grabada para obtener asistencia, ubicación y más. Con un esquema de ubicación, asistentes presenciales, remotos y total, aplicado a un fotograma de la cámara de la sala, se obtiene: Ubicación = sala de conferencias; presenciales = 1; remotos = 3; total = 4."
+        },
+        {
+          "type": "tip",
+          "text": "Para un vídeo completo el esquema podría incluir además: asistencia en distintos intervalos de tiempo, quién habló y qué dijo, un resumen de la reunión y la lista de tareas asignadas."
+        },
+        {
+          "type": "h",
+          "text": "Aplicación cliente para audio o vídeo"
+        },
+        {
+          "type": "p",
+          "text": "El código es igual que con documentos; solo cambia el analizador, por ejemplo `prebuilt-audioSearch` (o `prebuilt-videoSearch` para vídeo):"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "client = ContentUnderstandingClient(\n    endpoint=os.environ[\"FOUNDRY_ENDPOINT\"],  # https://<recurso>.services.ai.azure.com/\n    credential=AzureKeyCredential(os.environ[\"FOUNDRY_KEY\"]))\n\nanalyzer_id = \"prebuilt-audioSearch\"\ninputs = [{\"url\": \"https://<tu-host>/samples/voicemail.wav\"}]\n\npoller = client.begin_analyze(analyzer_id=analyzer_id, inputs=inputs)  # asíncrono\nresult = poller.result()  # el SDK sondea internamente\n\nfor content in result.contents:\n    print(getattr(content, \"markdown\", None))  # transcripción, si la hay\n    print(getattr(content, \"fields\", None))    # campos extraídos"
+        },
+        {
+          "type": "p",
+          "text": "Según el analizador y el esquema, el resultado puede incluir la **transcripción** (como markdown) y/o los **campos extraídos**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué analizador prediseñado usarías para extraer información de un mensaje de buzón de voz?",
+          "options": [
+            "prebuilt-invoice",
+            "prebuilt-audioSearch",
+            "prebuilt-imageSearch",
+            "prebuilt-videoSearch"
+          ],
+          "answer": 1,
+          "explain": "prebuilt-audioSearch es el analizador prediseñado para archivos de audio.",
+          "obj": "B4"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada campo del esquema de buzón de voz con el valor extraído del mensaje de Ava.",
+          "pairs": [
+            [
+              "Llamante",
+              "Ava de Contoso"
+            ],
+            [
+              "Número de devolución",
+              "555-12345"
+            ],
+            [
+              "Contacto alternativo",
+              "Ava@contoso.com"
+            ],
+            [
+              "Acciones solicitadas",
+              "Devolver la llamada o enviar un correo"
+            ]
+          ],
+          "explain": "Content Understanding aplica el esquema al audio y rellena cada campo con la información correspondiente.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "Para analizar vídeo con el SDK se usa un cliente distinto y un método diferente a begin_analyze.",
+          "answer": false,
+          "explain": "Se usa el mismo ContentUnderstandingClient y begin_analyze; solo cambia el analyzer_id.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m13u4",
+      "title": "Ejercicio: extracción de información en Microsoft Foundry",
+      "titleEn": "Exercise - Get started with information extraction in Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/4-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo:** usar Azure Content Understanding en Foundry para convertir contenido no estructurado (imágenes y documentos) en datos estructurados, probando tres {{analizadores|analyzers}} de capacidad creciente: Read, Layout y Receipt. Duración aproximada: 25 minutos."
+        },
+        {
+          "type": "p",
+          "text": "**Requisitos:** una suscripción de Azure, un proyecto en una región compatible (por ejemplo West US, Sweden Central o Australia East) y el archivo `pcbs.zip` con fotos de placas de circuito con texto impreso."
+        },
+        {
+          "type": "h",
+          "text": "1. Crear un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir el portal de Microsoft Foundry (https://ai.azure.com), activar la opción **New Foundry** y crear un {{proyecto|project}} con nombre único (o reutilizar uno existente). En **Advanced options** se indica el recurso de Foundry, la suscripción, el {{grupo de recursos|resource group}} y una región recomendada. Si faltan permisos, desmarcar la creación de recursos recomendados."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. Leer texto con OCR (analizador Read)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la barra superior elegir **Build** y, en el menú izquierdo, la página **Services** (servicios de Foundry Tools para voz, traducción, lenguaje y Content Understanding).",
+            "Elegir **Document Intelligence and Content Understanding** y el analizador **OCR (Read)**.",
+            "Seleccionar una imagen de ejemplo y pulsar **Run**; revisar las pestañas **Markdown**, **Paragraphs** y **Result**.",
+            "Subir las fotos de `pcbs.zip` y analizarlas: el {{reconocimiento óptico de caracteres|optical character recognition (OCR)}} extrae el texto impreso en las placas."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "3. Analizar la estructura (analizador Layout)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la lista de analizadores elegir **Layout**, ejecutar el análisis sobre una muestra y revisar **Markdown**, **Paragraphs**, **Tables** y **Result**.",
+            "Layout añade la {{estructura|layout}} y jerarquía del documento (párrafos, tablas), útil cuando los documentos tienen un formato consistente."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "4. Extraer campos (analizador Receipt)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Escenario: automatizar gastos a partir de recibos escaneados. En **Category** elegir **Procurement** y el analizador **Receipt**.",
+            "La extracción de {{campos|fields}} combina OCR con un modelo generativo que asocia cada valor a un campo (empresa, teléfono, fecha, importes…). Si se pide desplegar modelos, pulsar **Cancel**: no se ejecuta el análisis, se revisan resultados ya preparados.",
+            "Revisar las pestañas **Fields**, **Markdown**, **Paragraphs** y **Result**. **Fields** es una vista amigable del JSON de **Result**, que es lo que recibiría una aplicación cliente."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "5. Revisar el código con el SDK de Python"
+        },
+        {
+          "type": "p",
+          "text": "Con **View Code** sobre el analizador Receipt se obtiene un script (paquetes `azure-ai-contentunderstanding` y `azure-identity`) que se autentica con clave o `DefaultAzureCredential`, envía la URL del archivo al analizador `prebuilt-receipt` y espera el resultado de la operación asíncrona:"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "client = ContentUnderstandingClient(endpoint=endpoint, credential=credential,\n                                    api_version=api_version)\npoller = client.begin_analyze(\n    analyzer_id=\"prebuilt-receipt\",\n    inputs=[AnalysisInput(url=file_url)],\n)\nresult = poller.result()\nprint(json.dumps(result.as_dict(), indent=2))"
+        },
+        {
+          "type": "p",
+          "text": "**Resultado:** el mismo JSON que se ve en la pestaña Result, con los campos extraídos y sus puntuaciones de confianza."
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Al terminar, en el portal de Azure (https://portal.azure.com) se abre el grupo de recursos usado y se elige **Delete resource group**, escribiendo su nombre para confirmar; así no se generan costes."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: **Read** = solo texto; **Layout** = texto + estructura (párrafos, tablas); **Receipt** (y otros analizadores específicos) = valores asignados a campos con nombre. Desde código, `begin_analyze` es asíncrono y se obtiene el resultado con `poller.result()`."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/06a-content-understanding.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada analizador probado en el laboratorio con lo que aporta.",
+          "pairs": [
+            [
+              "OCR (Read)",
+              "Extrae el texto sin interpretar estructura ni significado"
+            ],
+            [
+              "Layout",
+              "Añade estructura y jerarquía: párrafos y tablas"
+            ],
+            [
+              "Receipt",
+              "Asigna valores a campos como comercio, fecha o total"
+            ]
+          ],
+          "explain": "Los tres analizadores van de menos a más capacidad: texto, estructura y campos específicos del tipo de documento.",
+          "obj": "B4"
+        },
+        {
+          "type": "mc",
+          "q": "Quieres digitalizar el texto impreso en fotos de placas de circuito para buscar los componentes. ¿Qué analizador del laboratorio es suficiente?",
+          "options": [
+            "Receipt",
+            "OCR (Read)",
+            "Un modelo de texto a imagen",
+            "Layout con extracción de campos personalizada"
+          ],
+          "answer": 1,
+          "explain": "Solo hace falta leer el texto de la imagen; el analizador Read (OCR) lo hace sin necesidad de campos ni estructura.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "En el playground, la pestaña Fields muestra una versión legible de los mismos datos que una aplicación cliente recibe en formato JSON en la pestaña Result.",
+          "answer": true,
+          "explain": "Fields es una presentación amigable; Result contiene el JSON bruto que devuelve el servicio.",
+          "obj": "B4"
+        },
+        {
+          "type": "order",
+          "q": "Ordena las operaciones del script de Python que analiza un recibo.",
+          "items": [
+            "Crear las credenciales (clave o DefaultAzureCredential)",
+            "Crear el ContentUnderstandingClient con el endpoint",
+            "Llamar a begin_analyze con prebuilt-receipt y la URL del archivo",
+            "Esperar el resultado con poller.result()",
+            "Mostrar el resultado como JSON"
+          ],
+          "explain": "El análisis es asíncrono: se crea el cliente autenticado, se lanza la operación y se espera al poller antes de leer el JSON.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m13u5",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/5-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Ventaja sobre el OCR**: Content Understanding entiende la estructura del documento y asigna los datos a un esquema definido (el OCR no entiende relaciones).",
+            "**Analizador**: define cómo se procesa el contenido y qué datos estructurados se devuelven.",
+            "**SDK de Python**: tras enviar el contenido, el análisis es asíncrono; hay que sondear hasta que termine (el poller lo hace por ti).",
+            "**Flujo común**: ingerir → analizar con IA → devolver JSON estructurado."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué ocurre después de enviar contenido a analizar con el SDK de Content Understanding?",
+          "options": [
+            "Los resultados llegan de inmediato en la misma respuesta",
+            "El analizador se reentrena con el contenido",
+            "Se inicia una operación de larga duración cuyo estado hay que sondear hasta que termine",
+            "El contenido se borra automáticamente"
+          ],
+          "answer": 2,
+          "explain": "begin_analyze inicia una operación asíncrona; poller.result() espera sondeando hasta obtener el resultado.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "El OCR básico extrae la relación entre las palabras de un texto, y Content Understanding solo extrae texto.",
+          "answer": false,
+          "explain": "Es al revés: el OCR solo lee texto; Content Understanding entiende estructura y relaciones mediante esquemas.",
+          "obj": "B4"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué formato de salida devuelve normalmente Content Understanding?",
+          "options": [
+            "JSON estructurado",
+            "Un archivo MP4",
+            "Una imagen PNG",
+            "Un archivo de audio"
+          ],
+          "answer": 0,
+          "explain": "Los resultados son JSON predecible conforme al esquema del analizador.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m13u6",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-information-extraction/6-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Azure Content Understanding en Microsoft Foundry extrae datos estructurados de documentos, audio y vídeo mediante **analizadores** con IA. Automatiza el procesamiento de contenido no estructurado (facturas, formularios, llamadas, vídeos de reuniones) convirtiéndolo en salida legible por máquina, normalmente **JSON**, fácil de guardar, buscar o integrar."
+        },
+        {
+          "type": "p",
+          "text": "En todos los tipos de contenido el flujo es el mismo: **ingerir → analizar con modelos de IA → devolver resultados estructurados**. Puedes experimentar en el nuevo portal de Foundry o crear aplicaciones cliente con la **API REST** o el **SDK de Python** de Content Understanding, que gestiona el análisis asíncrono y el sondeo."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena el flujo común de Content Understanding.",
+          "items": [
+            "Ingerir el contenido",
+            "Analizarlo con modelos de IA",
+            "Devolver resultados estructurados en JSON"
+          ],
+          "explain": "El mismo flujo se aplica a documentos, audio y vídeo.",
+          "obj": "B4"
+        },
+        {
+          "type": "multi",
+          "q": "¿Con qué herramientas puedes usar Content Understanding? (elige 3)",
+          "options": [
+            "El nuevo portal de Foundry",
+            "La API REST",
+            "El SDK de Python",
+            "Solo con una hoja de cálculo"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "Se puede probar en el portal y automatizar con REST o con el SDK de Python.",
+          "obj": "B4"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Una empresa recibe facturas de cientos de proveedores con etiquetas distintas para el mismo dato. ¿Qué característica de Content Understanding lo resuelve?",
+      "options": [
+        "La transcripción de voz",
+        "La generación de imágenes",
+        "La corrección de inclinación manual",
+        "La aplicación semántica de esquemas"
+      ],
+      "answer": 3,
+      "explain": "Los esquemas se aplican por significado, así que los campos se extraen aunque las etiquetas cambien o falten.",
+      "obj": "B4"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada analizador prediseñado con su contenido.",
+      "pairs": [
+        [
+          "prebuilt-invoice",
+          "Facturas"
+        ],
+        [
+          "prebuilt-imageSearch",
+          "Imágenes"
+        ],
+        [
+          "prebuilt-audioSearch",
+          "Grabaciones de audio"
+        ],
+        [
+          "prebuilt-videoSearch",
+          "Archivos de vídeo"
+        ]
+      ],
+      "explain": "Content Understanding ofrece analizadores prediseñados para escenarios comunes y permite crear personalizados.",
+      "obj": "B4"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué técnicas de IA combina Content Understanding al analizar contenido? (elige 3)",
+      "options": [
+        "OCR",
+        "Reconocimiento de voz",
+        "Comprensión del lenguaje natural",
+        "Minería de criptomonedas"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explain": "Combina OCR, reconocimiento de voz, comprensión del lenguaje natural y modelos multimodales.",
+      "obj": "B4"
+    },
+    {
+      "type": "tf",
+      "q": "Un esquema de Content Understanding solo admite campos de texto planos, sin colecciones ni campos anidados.",
+      "answer": false,
+      "explain": "Los esquemas admiten campos estructurados y anidados, como la colección Items con sus subcampos.",
+      "obj": "B4"
+    },
+    {
+      "type": "mc",
+      "q": "En el JSON de resultado, CustomerName tiene confidence = 0.95. ¿Qué indica ese valor?",
+      "options": [
+        "La seguridad del modelo sobre el valor extraído",
+        "El porcentaje del documento procesado",
+        "El precio del análisis",
+        "La versión de la API"
+      ],
+      "answer": 0,
+      "explain": "La puntuación de confianza refleja cuán seguro está el servicio del valor; puede usarse para decidir si se requiere revisión humana.",
+      "obj": "B4"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué método del SDK de Python inicia el análisis de un contenido?",
+      "options": [
+        "client.responses.create",
+        "client.begin_analyze",
+        "client.images.generate",
+        "client.transcribe"
+      ],
+      "answer": 1,
+      "explain": "begin_analyze(analyzer_id, inputs) inicia la operación de larga duración y devuelve un poller.",
+      "obj": "B4"
+    },
+    {
+      "type": "order",
+      "q": "Ordena el funcionamiento de un analizador a alto nivel.",
+      "items": [
+        "Elegir o crear un analizador",
+        "Definir en él un esquema con campos y estructura",
+        "Enviar contenido para su análisis",
+        "El servicio aplica el esquema",
+        "Recibir JSON estructurado conforme al esquema"
+      ],
+      "explain": "Así describe el módulo el ciclo de un analizador.",
+      "obj": "B4"
+    },
+    {
+      "type": "mc",
+      "q": "Una organización turística quiere estimar el número de visitantes a partir de grabaciones de cámaras. ¿Qué solución propone el módulo?",
+      "options": [
+        "Usar un modelo de imagen GPT-Image",
+        "Generar vídeos con Sora",
+        "Traducir las grabaciones",
+        "Analizar el vídeo con Content Understanding y un esquema de recuento"
+      ],
+      "answer": 3,
+      "explain": "La planificación de capacidad mediante análisis de vídeo e imágenes es uno de los escenarios de Content Understanding.",
+      "obj": "B4"
+    },
+    {
+      "type": "tf",
+      "q": "Con el SDK de Python no necesitas escribir el bucle de sondeo, porque poller.result() espera a que la operación termine.",
+      "answer": true,
+      "explain": "El SDK gestiona el sondeo de la operación asíncrona; con REST tendrías que consultar tú la URL Operation-Location.",
+      "obj": "B4"
+    },
+    {
+      "type": "mc",
+      "q": "Las facturas procesadas contienen datos personales de clientes. ¿Qué principio de IA responsable exige proteger el acceso a esos datos y a los resultados extraídos?",
+      "options": [
+        "Privacidad y seguridad",
+        "Inclusión",
+        "Transparencia",
+        "Equidad"
+      ],
+      "answer": 0,
+      "explain": "El tratamiento de datos personales debe protegerse según el principio de privacidad y seguridad.",
+      "obj": "A1"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Azure Content Understanding",
+      "en": "Azure Content Understanding",
+      "def": "Servicio de Foundry Tools que extrae información estructurada de documentos, imágenes, audio y vídeo."
+    },
+    {
+      "es": "Esquema",
+      "en": "Schema",
+      "def": "Definición de qué campos extraer y cómo estructurarlos, incluidos campos anidados."
+    },
+    {
+      "es": "Analizador",
+      "en": "Analyzer",
+      "def": "Unidad que recibe contenido, aplica IA con un esquema y devuelve resultados estructurados consistentes."
+    },
+    {
+      "es": "Analizador prediseñado",
+      "en": "Prebuilt analyzer",
+      "def": "Analizador listo para usar, como prebuilt-invoice o prebuilt-audioSearch."
+    },
+    {
+      "es": "Analizador personalizado",
+      "en": "Custom analyzer",
+      "def": "Analizador creado por ti con un esquema adaptado a tus necesidades."
+    },
+    {
+      "es": "Campo anidado",
+      "en": "Nested field",
+      "def": "Campo que contiene subcampos o colecciones, como las líneas de una factura."
+    },
+    {
+      "es": "JSON",
+      "en": "JavaScript Object Notation",
+      "def": "Formato de texto para almacenar e intercambiar datos estructurados."
+    },
+    {
+      "es": "Operación de larga duración",
+      "en": "Long-running operation (LRO)",
+      "def": "Operación asíncrona cuyo resultado se obtiene más tarde sondeando su estado."
+    },
+    {
+      "es": "Sondeo",
+      "en": "Polling",
+      "def": "Consultar repetidamente una URL (Operation-Location) hasta que el análisis termina."
+    },
+    {
+      "es": "Transcripción",
+      "en": "Transcription",
+      "def": "Texto escrito obtenido de una grabación de audio."
+    },
+    {
+      "es": "Puntuación de confianza",
+      "en": "Confidence score",
+      "def": "Valor entre 0 y 1 que indica la seguridad del servicio sobre un campo extraído."
+    },
+    {
+      "es": "Aplicación cliente",
+      "en": "Client application",
+      "def": "Programa que solicita servicios a un servidor mediante una API y recibe respuestas estructuradas."
+    }
+  ]
+}

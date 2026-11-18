@@ -1,0 +1,1265 @@
+{
+  "id": "m09",
+  "path": 2,
+  "order": 2,
+  "title": "Introducción a la IA generativa y los agentes en Azure",
+  "titleEn": "Get started with generative AI and agents in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/",
+  "summary": "Recorre el ciclo de vida de una solución generativa en Microsoft Foundry: descubrir y comparar modelos en el catálogo, desplegarlos, probarlos en el playground, llamarlos desde código con la Responses API y empaquetarlos como agentes con instrucciones, herramientas y conocimiento.",
+  "objectives": [
+    "Descubrir, filtrar y comparar modelos en el catálogo de modelos de Foundry",
+    "Evaluar modelos con benchmarks, tablas de clasificación, métricas y evaluadores",
+    "Desplegar un modelo y entender el tipo de despliegue, la versión y el límite de TPM",
+    "Configurar parámetros en el playground y crear un cliente de chat ligero en Python",
+    "Diferenciar modelos y agentes, y crear y llamar a un agente con la Project API"
+  ],
+  "units": [
+    {
+      "id": "m09u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{IA generativa|generative AI}} es la rama de la inteligencia artificial centrada en **crear contenido nuevo**. En pocos años ha cambiado la forma de trabajar y avanza tan rápido que cuesta seguirle el ritmo incluso a desarrolladores con experiencia."
+        },
+        {
+          "type": "h",
+          "text": "Casos de uso actuales"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Caso de uso",
+            "Ejemplo"
+          ],
+          "rows": [
+            [
+              "Creación de contenido de marketing",
+              "Microsoft Copilot redacta descripciones de producto, artículos de blog y publicaciones en redes con coherencia de marca."
+            ],
+            [
+              "Atención al cliente",
+              "{{Agentes virtuales|virtual agents}} que entienden y responden en lenguaje natural 24/7, aliviando la carga de los agentes humanos."
+            ],
+            [
+              "Generación de código",
+              "GitHub Copilot sugiere fragmentos, funciones o módulos enteros a partir de instrucciones en lenguaje natural."
+            ],
+            [
+              "Generación de imágenes y vídeo",
+              "Diseñadores usan modelos del catálogo de Foundry para crear visuales, storyboards o arte conceptual desde un texto."
+            ],
+            [
+              "Aprendizaje personalizado",
+              "Plataformas educativas generan cuestionarios, explicaciones y guías adaptadas al estilo y progreso del estudiante."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Qué verás en el módulo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El {{catálogo de modelos|model catalog}} de Microsoft Foundry: cómo descubrir, evaluar y desplegar un modelo adecuado.",
+            "Cómo probar y configurar el modelo desplegado en el {{área de pruebas|playground}} de Foundry.",
+            "Cómo llamarlo desde código con la Responses API compatible con OpenAI.",
+            "Cómo los {{agentes|agents}} encapsulan un modelo, sus instrucciones y herramientas opcionales para reutilizarlos de forma coherente en el playground y en código mediante la Project API."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada herramienta o solución con su caso de uso de IA generativa.",
+          "pairs": [
+            [
+              "GitHub Copilot",
+              "Generar código a partir de lenguaje natural"
+            ],
+            [
+              "Agente virtual de soporte",
+              "Atender consultas de clientes 24/7"
+            ],
+            [
+              "Modelo de imagen del catálogo de Foundry",
+              "Crear arte conceptual desde una descripción"
+            ]
+          ],
+          "explain": "Cada ejemplo corresponde a uno de los casos de uso presentados en la introducción.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La IA generativa es el subconjunto de la IA que se centra en crear contenido nuevo.",
+          "answer": true,
+          "explain": "Esa es su definición: produce texto, código, imágenes u otro contenido nuevo.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m09u2",
+      "title": "Modelos de IA generativa",
+      "titleEn": "Generative AI models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/2-generative-ai-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las soluciones generativas y agénticas se basan en {{modelos de lenguaje|language models}}; los {{modelos de lenguaje grandes|large language models (LLMs)}} son su base. Hay modelos para necesidades distintas: una app ligera de móvil puede funcionar mejor con un {{modelo de lenguaje pequeño|small language model (SLM)}}, y una aplicación gubernamental puede requerir un modelo especializado en su dominio."
+        },
+        {
+          "type": "p",
+          "text": "Microsoft Foundry es un entorno integrado para **descubrir, evaluar, desplegar y operar** modelos generativos. Reúne un catálogo amplio, opciones de despliegue flexibles y gobernanza integrada para crear copilotos, agentes y aplicaciones con confianza empresarial."
+        },
+        {
+          "type": "tip",
+          "text": "Para usar Foundry necesitas una **suscripción de Azure**; el primer paso es crear un **proyecto** en Foundry."
+        },
+        {
+          "type": "h",
+          "text": "Descubrir modelos en el catálogo"
+        },
+        {
+          "type": "p",
+          "text": "El catálogo de modelos es el punto central para encontrar modelos de muchos proveedores. Permite filtrar por origen, capacidades, {{tareas de inferencia|inference tasks}} y más, y comparar modelos para crear soluciones escalables, seguras y responsables."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Categoría",
+            "Características"
+          ],
+          "rows": [
+            [
+              "Modelos vendidos directamente por Azure",
+              "Alojados por Microsoft bajo los Microsoft Product Terms. Alta integración con Azure, {{acuerdos de nivel de servicio|service level agreements (SLAs)}} empresariales, seguridad preconfigurada y alineación con cumplimiento normativo."
+            ],
+            [
+              "Modelos de socios y de la comunidad",
+              "Modelos de código abierto o alojados por el proveedor, integrados en el catálogo. Favorecen la experimentación y la innovación rápida; suelen servir para tareas especializadas o de dominio."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Cada ficha de modelo suele incluir:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Descripción y capacidades (generación de texto, razonamiento, código, multimodal, incrustaciones…).",
+            "Resultados de {{pruebas comparativas|benchmarks}} y comparativas de rendimiento.",
+            "Tareas de inferencia admitidas y opciones de {{ajuste fino|fine-tuning}}.",
+            "Documentación de IA responsable: {{fichas de modelo|model cards}}, restricciones y advertencias."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Familias de modelos habituales"
+        },
+        {
+          "type": "p",
+          "text": "Entre los más de mil modelos del catálogo, muchos se agrupan en {{familias de modelos|model families}}: modelos relacionados que comparten arquitectura o linaje pero difieren en tamaño, capacidad, especialización o versión."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Familia",
+            "Puntos fuertes"
+          ],
+          "rows": [
+            [
+              "GPT-5.x",
+              "Razonamiento de varios pasos, lógica estructurada, planificación y flujos agénticos; contexto largo (informes técnicos, análisis de código, orquestar agentes con varias herramientas). Permite ajustar «niveles de pensamiento» para cambiar velocidad por precisión."
+            ],
+            [
+              "Claude Opus 4.5 (Anthropic)",
+              "Modelo de frontera para agentes sofisticados, razonamiento complejo sobre código y tareas de uso del ordenador en varios pasos; ventanas de contexto y salida grandes (especificaciones largas, diffs de muchos archivos)."
+            ],
+            [
+              "Mistral Large 3 (Mistral AI)",
+              "Modelo generalista de alta calidad con buen rendimiento: redacción multilingüe, informes de negocio estructurados, tareas de agente de latencia media equilibrando coste y rendimiento."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La familia GPT-5 requiere actualmente registro, lo que limita su disponibilidad. Cualquier usuario de Foundry puede usar **GPT-4.1**, ideal para chat en tiempo real, soporte al cliente y aplicaciones interactivas: está optimizado para velocidad y baja latencia, por lo que supera a los modelos de razonamiento intensivo en cargas de producción de gran volumen."
+        },
+        {
+          "type": "p",
+          "text": "Los {{modelos fundacionales|foundation models}} son modelos grandes y preentrenados (GPT, Claude, Mistral…) con capacidades generales de lenguaje, razonamiento o multimodales listas para usar. Se pueden desplegar de inmediato o personalizar mediante ajuste fino, y son la capa base de las aplicaciones de IA."
+        },
+        {
+          "type": "h",
+          "text": "Elegir un modelo según la tarea"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tarea",
+            "Tipos de modelo recomendados",
+            "Detalles"
+          ],
+          "rows": [
+            [
+              "Chat",
+              "GPT-5.x chat, Claude Sonnet/Opus, Mistral Large 3, DeepSeek V3.1, SLM como Phi-4 o Llama",
+              "Buen razonamiento, ajustados a conversación, seguridad"
+            ],
+            [
+              "Código",
+              "GPT-5.1-codex, Claude Sonnet",
+              "Soportan flujos de agente complejos"
+            ],
+            [
+              "Resumen",
+              "Modelos de razonamiento GPT-5.x, Claude Opus/Sonnet",
+              "Contexto largo y compresión de alta calidad"
+            ],
+            [
+              "Incrustaciones",
+              "text-embedding-3-small u otros modelos de incrustaciones",
+              "Diseñados para representaciones vectoriales semánticas"
+            ],
+            [
+              "Multimodal",
+              "Phi-4-multimodal-instruct, GPT-5.x chat multimodal, Mistral Large 3",
+              "Imágenes, audio y vídeo en las conversaciones"
+            ],
+            [
+              "Sector o dominio",
+              "Modelos ajustados a un dominio del catálogo",
+              "Finanzas, sanidad, legal…"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Si el caso de uso está bien definido (por ejemplo, extraer texto o traducir), en lugar de un modelo del catálogo puedes elegir una **herramienta de Foundry** (Foundry tools): usan modelos precompilados con rendimiento predecible, cumplimiento integrado y valor rápido sin modelado a medida."
+        },
+        {
+          "type": "h",
+          "text": "Puntuar y comparar modelos"
+        },
+        {
+          "type": "p",
+          "text": "El catálogo muestra resultados de benchmarks sobre conjuntos de datos estándar, con criterios homogéneos que simplifican la elección. En el portal también tienes:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Tablas de clasificación|Leaderboards}}: ordenan modelos por calidad, seguridad y {{rendimiento de procesamiento|throughput}} para tareas como razonamiento, resumen o generación de código.",
+            "Comparaciones y filtros: comparación lado a lado por calidad y precisión, coste, seguridad y cumplimiento, y métricas de rendimiento; filtros por sector, caso de uso, tipo de modelo, licencia, etc."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Una forma habitual de evaluar: en el catálogo eliges un modelo y vas a **Benchmarks → Try with your own data** para probar tus prompts y ver si las respuestas son las esperadas."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo de métrica",
+            "Ejemplos"
+          ],
+          "rows": [
+            [
+              "Métricas clásicas de {{procesamiento de lenguaje natural|natural language processing (NLP)}}",
+              "{{Exactitud|accuracy}}, {{precisión|precision}}, {{exhaustividad|recall}}, F1"
+            ],
+            [
+              "Métricas asistidas por IA",
+              "Fundamentación (groundedness), relevancia, coherencia y fluidez, similitud GPT. Útiles para una puntuación cualitativa más allá de las métricas tradicionales."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los {{evaluadores|evaluators}} de Foundry miden la calidad, seguridad y eficacia de las salidas de modelos o agentes. Los evaluadores de seguridad buscan contenido dañino, sesgo e injusticia, violencia, autolesiones o daños a grupos protegidos. La {{biblioteca de evaluadores|Evaluator Library}} ofrece evaluadores reutilizables de calidad, seguridad y más."
+        },
+        {
+          "type": "tip",
+          "text": "Ojo en el examen: los evaluadores **detectan, analizan y puntúan** problemas, pero **no los corrigen** por sí solos."
+        },
+        {
+          "type": "h",
+          "text": "Desplegar modelos"
+        },
+        {
+          "type": "p",
+          "text": "{{Desplegar|Deploy}} un modelo lo pone a disposición en producción mediante un {{punto de conexión|endpoint}} estable, escalable y seguro: el modelo se convierte en un servicio que las aplicaciones llaman, normalmente por API. Así se garantiza un rendimiento coherente y se evita el uso no autorizado o inseguro."
+        },
+        {
+          "type": "p",
+          "text": "Parámetros de despliegue personalizables:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Tipo de despliegue|Deployment type}}**: por ejemplo estándar, lote global (global batch) o {{rendimiento aprovisionado|provisioned throughput}} regional. Determina dónde y cómo se procesa la inferencia y está ligado a requisitos de rendimiento y de procesamiento de datos.",
+            "**Versión del modelo**.",
+            "**Límite de {{tokens por minuto|tokens per minute (TPM)}}**."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Un {{token|token}} es la unidad mínima de texto o datos que procesa un modelo generativo: palabras, subpalabras, caracteres o signos de puntuación."
+        },
+        {
+          "type": "p",
+          "text": "La asignación de TPM fija la velocidad y escala con que la implementación procesa entradas, así como los límites derivados como las {{solicitudes por minuto|requests per minute (RPM)}}. Más TPM = más capacidad de tráfico de tokens; menos TPM = consumo más lento permitido. Los límites varían por familia: los modelos de razonamiento grandes (DeepSeek R1, Grok, Llama grandes) pueden tener techos de TPM altos, mientras que los modelos especializados o de imagen suelen funcionar con **unidades de capacidad** en lugar de TPM."
+        },
+        {
+          "type": "p",
+          "text": "La {{limitación|throttling}} consiste en frenar o restringir a propósito el trabajo de cómputo cuando un sistema se acerca a su límite, para que siga estable y receptivo. Las cuotas del despliegue marcan cuántos tokens o solicitudes se procesan antes de limitar. Los prompts grandes y un máximo de tokens de salida alto consumen más TPM y pueden provocar errores de límite de tasa."
+        },
+        {
+          "type": "tip",
+          "text": "Si aparece throttling: **reduce el máximo de tokens de salida o el número de solicitudes simultáneas** en tu código (o asigna más TPM)."
+        },
+        {
+          "type": "p",
+          "text": "Al desplegar un modelo en Foundry ocurre lo siguiente:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Se **asignan recursos de cómputo**: CPU, GPU, memoria, red y reglas de escalado.",
+            "Se **crea un punto de conexión de API** para invocar el modelo de forma segura mediante la OpenAI Responses API.",
+            "Se **fija la configuración**: versión del modelo, estilo de respuesta, ajustes de seguridad.",
+            "Se **activan la supervisión y el registro**: uso, rendimiento, latencia, errores y costes."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Una empresa necesita un modelo con SLA empresarial, seguridad preconfigurada y alineación con cumplimiento normativo. ¿Qué categoría del catálogo debe priorizar?",
+          "options": [
+            "Modelos de la comunidad de código abierto",
+            "Modelos vendidos directamente por Azure",
+            "Modelos de imagen con unidades de capacidad",
+            "Cualquier modelo sin desplegar"
+          ],
+          "answer": 1,
+          "explain": "Los modelos vendidos directamente por Azure están alojados por Microsoft con SLA, seguridad y cumplimiento integrados.",
+          "obj": "A2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada tarea con un modelo adecuado según la guía de Foundry.",
+          "pairs": [
+            [
+              "Incrustaciones para búsqueda semántica",
+              "text-embedding-3-small"
+            ],
+            [
+              "Generación de código",
+              "GPT-5.1-codex"
+            ],
+            [
+              "Chat con imágenes y audio",
+              "Phi-4-multimodal-instruct"
+            ],
+            [
+              "Chat en tiempo real de gran volumen y baja latencia",
+              "GPT-4.1"
+            ]
+          ],
+          "explain": "Cada tarea tiene modelos recomendados: incrustaciones, código, multimodal y chat rápido de producción.",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "Una app de chat desplegada devuelve errores de límite de tasa en horas punta. ¿Qué acción ayuda directamente?",
+          "options": [
+            "Aumentar el máximo de tokens de salida",
+            "Reducir el máximo de tokens de salida o las solicitudes simultáneas",
+            "Cambiar el prompt del sistema",
+            "Añadir más evaluadores de seguridad"
+          ],
+          "answer": 1,
+          "explain": "El throttling aparece al superar la cuota de TPM; menos tokens por respuesta o menos concurrencia reduce el consumo.",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "Los evaluadores de seguridad de Foundry detectan contenido dañino y lo corrigen automáticamente en la respuesta.",
+          "answer": false,
+          "explain": "Los evaluadores detectan, analizan y puntúan problemas, pero no los resuelven por sí solos.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m09u3",
+      "title": "Usar un modelo de IA generativa",
+      "titleEn": "Using a generative AI model",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/3-using-generative-ai-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La forma más sencilla de interactuar con un modelo desplegado es el **playground** del portal de Foundry: permite probar prompts, comparar modelos y guardar una configuración que funciona **antes de escribir código**."
+        },
+        {
+          "type": "h",
+          "text": "Parámetros de configuración clave"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Parámetro",
+            "Qué controla"
+          ],
+          "rows": [
+            [
+              "{{Temperatura|Temperature}}",
+              "Equilibrio entre creatividad y determinismo de las respuestas."
+            ],
+            [
+              "{{Máximo de tokens de salida|Max output tokens}}",
+              "Limita la longitud de la respuesta; afecta al consumo de tokens y al throttling."
+            ],
+            [
+              "{{Instrucciones del sistema|System instructions}}",
+              "Definen el comportamiento y el rol del modelo."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El {{prompt de usuario|user prompt}} es la petición o pregunta del usuario final (por ejemplo, «¿Adónde puedo viajar?»). El {{prompt del sistema|system prompt}} fija el comportamiento, el tono, las herramientas y las {{barreras de protección|guardrails}} del asistente. Ejemplo: «Eres un tutor amable que explica paso a paso. Cita tus fuentes. No des consejos médicos»."
+        },
+        {
+          "type": "p",
+          "text": "El playground hace de puente hacia el código: tras probar prompts representativos, reutilizas los mismos prompts y parámetros en tu aplicación. El portal ofrece **código de ejemplo** que llama a tu despliegue mediante la Responses API compatible con OpenAI; es básicamente lo que se ejecuta cuando usas el chat del playground, y sirve como punto de partida para tu propio cliente."
+        },
+        {
+          "type": "h",
+          "text": "Cliente de chat ligero con el SDK de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "Un {{cliente ligero|lightweight client}} es una app mínima cuya tarea principal es recoger la entrada del usuario, llamar a un servicio remoto y mostrar el resultado, sin frameworks pesados ni lógica compleja. Normalmente:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Se ejecuta como {{interfaz de línea de comandos|command-line interface (CLI)}}, pequeña utilidad de escritorio o página web sencilla.",
+            "Mantiene el estado y el cómputo en el servidor (el modelo corre en remoto).",
+            "Tiene poco código y configuración mínima (variables de entorno y un script corto).",
+            "Es fácil de prototipar, ejecutar en local y ampliar."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "En Foundry suele ser un único archivo Python que conecta con el endpoint del proyecto y envía mensajes a un modelo desplegado. El SDK de Foundry expone un **cliente de proyecto** (operaciones propias de Foundry) y un **cliente compatible con OpenAI** para llamar a modelos con la Responses API; la mayoría de apps usan ambos."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "# pip install azure-ai-projects azure-identity openai\nimport os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    base_url=f\"{os.environ['AZURE_OPENAI_ENDPOINT']}/openai\",\n    api_key=os.environ[\"AZURE_OPENAI_API_KEY\"]\n)\n\nresponse = client.responses.create(\n    model=os.environ[\"DEPLOYMENT_NAME\"],   # nombre del despliegue\n    input=[\n        {\"role\": \"system\", \"content\": \"Eres un asistente útil.\"},\n        {\"role\": \"user\", \"content\": \"Resume en 3 viñetas las notas de la versión.\"}\n    ],\n    max_output_tokens=300,\n    temperature=0.7\n)\n\nprint(response.output_text)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`base_url` y `api_key` se leen de variables de entorno para autenticarse contra el endpoint.",
+            "`model` recibe el **nombre del despliegue**, no solo el nombre genérico del modelo.",
+            "`input` es una lista de mensajes con roles `system` y `user`.",
+            "`max_output_tokens` y `temperature` son los mismos parámetros que probaste en el playground.",
+            "`response.output_text` contiene el texto generado."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Modelos frente a agentes"
+        },
+        {
+          "type": "p",
+          "text": "En Foundry, modelos y agentes están relacionados pero cumplen funciones distintas: **modelos = inteligencia en bruto**; **agentes = trabajadores empaquetados y orientados a tareas** construidos sobre esa inteligencia. Usas un modelo por sí solo cuando quieres inferencia pura («toma este prompt y genera una salida»), cuando experimentas en el playground o cuando lo llamas directamente con la Responses API."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada elemento con su función.",
+          "pairs": [
+            [
+              "Temperatura",
+              "Creatividad frente a determinismo"
+            ],
+            [
+              "Máximo de tokens de salida",
+              "Limita la longitud de la respuesta"
+            ],
+            [
+              "Prompt del sistema",
+              "Fija rol, tono y barreras del asistente"
+            ],
+            [
+              "Prompt de usuario",
+              "Pregunta concreta del usuario final"
+            ]
+          ],
+          "explain": "Son los parámetros y tipos de prompt que se configuran en el playground y luego en el código.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "En `client.responses.create(...)`, ¿qué valor se pasa en el parámetro `model`?",
+          "options": [
+            "La clave de API",
+            "El nombre del despliegue del modelo",
+            "El identificador del agente",
+            "La URL del portal de Foundry"
+          ],
+          "answer": 1,
+          "explain": "El código lee DEPLOYMENT_NAME: se llama al despliegue concreto creado en el proyecto.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "El playground de Foundry despliega el modelo automáticamente y elimina la necesidad de usar una API en tu aplicación.",
+          "answer": false,
+          "explain": "El playground sirve para probar prompts y parámetros; tu aplicación sigue llamando al despliegue mediante la API, usando el código de ejemplo como base.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué características tiene un cliente de chat ligero? (elige 2)",
+          "options": [
+            "Ejecuta el modelo localmente en el equipo del usuario",
+            "Tiene poco código y configuración mínima",
+            "Mantiene el cómputo en el servidor remoto",
+            "Requiere un framework de interfaz complejo"
+          ],
+          "answers": [
+            1,
+            2
+          ],
+          "explain": "Un cliente ligero recoge la entrada, llama al servicio remoto y muestra el resultado; el modelo corre en el servidor.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m09u4",
+      "title": "Crear un agente",
+      "titleEn": "Creating an agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/4-creating-an-agent",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los agentes son aplicaciones construidas con modelos generativos. La {{IA agéntica|agentic AI}} va más allá de los prompts puntuales: define un comportamiento coherente, como un flujo de trabajo, reutilizable en varias aplicaciones y servicios."
+        },
+        {
+          "type": "p",
+          "text": "Un agente en Microsoft Foundry es un componente empaquetado y reutilizable que reúne tres cosas:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Componente",
+            "Qué aporta"
+          ],
+          "rows": [
+            [
+              "Modelo",
+              "El modelo generativo que usa para razonar (por ejemplo, GPT-4.1)."
+            ],
+            [
+              "{{Instrucciones|Instructions}}",
+              "El prompt del sistema: rol, comportamiento, estilo, restricciones y reglas de salida."
+            ],
+            [
+              "{{Herramientas|Tools}}",
+              "Las acciones que el agente puede realizar."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los agentes pueden: llamar automáticamente a herramientas externas (API, funciones, recuperación); dividir objetivos en pasos estructurados; mantener una {{memoria de trabajo|working memory}} durante la conversación; y procesar la entrada, decidir acciones y generar salidas estructuradas."
+        },
+        {
+          "type": "h",
+          "text": "Crear un agente en el portal de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Elegir el modelo que usará el agente.",
+            "Escribir las instrucciones del sistema, por ejemplo: «Eres un asistente de agenda que responde con viñetas concisas»."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Al principio se parece a probar un modelo en el playground. Lo que diferencia al agente es añadir **herramientas** (que le permiten actuar) y **conocimiento** (que fundamenta sus respuestas con información)."
+        },
+        {
+          "type": "tip",
+          "text": "Regla mnemotécnica del módulo: **Herramientas = acciones. Conocimiento = contexto.**"
+        },
+        {
+          "type": "h",
+          "text": "Añadir herramientas"
+        },
+        {
+          "type": "p",
+          "text": "Las herramientas permiten al modelo actuar llamando a sistemas externos: buscar en la web, consultar una base de datos o usar un servidor {{Protocolo de contexto de modelo|Model Context Protocol (MCP)}}. Cuando están habilitadas, el modelo inspecciona las disponibles y las invoca cuando son útiles para la petición. Ejemplos:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Intérprete de código|Code Interpreter}}: análisis de datos y manejo de archivos.",
+            "Uso de fuentes de conocimiento.",
+            "Funciones o API personalizadas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Con herramientas el modelo puede realizar acciones reales (leer o escribir archivos, buscar, actualizar sistemas), ejecutar flujos de trabajo e integrarse en sistemas empresariales. Se configuran de forma centralizada en el {{catálogo de herramientas|Tool Catalog}} de Foundry."
+        },
+        {
+          "type": "h",
+          "text": "Añadir conocimiento"
+        },
+        {
+          "type": "p",
+          "text": "El {{conocimiento|knowledge}} da acceso a contenido externo (tus documentos, conjuntos de datos, sitios internos) mediante {{generación aumentada por recuperación|retrieval-augmented generation (RAG)}}. Puede incluir PDF internos, contenido de SharePoint, archivos de Azure Storage y bases de conocimiento multifuente."
+        },
+        {
+          "type": "p",
+          "text": "En el playground, Foundry usa canales de recuperación para: ingerir e indexar el contenido; buscar y fundamentar respuestas; y hacer las respuestas más precisas, trazables y específicas del dominio. Cuando se usa conocimiento, la respuesta incluye una **cita** del almacén de conocimiento utilizado. Permite preguntas y respuestas basadas en documentos, asistencia rica en contexto y recuperación segura para la empresa."
+        },
+        {
+          "type": "p",
+          "text": "En el portal puedes **guardar** el modelo, las instrucciones y las herramientas como un agente, y seguir probándolo y refinándolo en el playground."
+        },
+        {
+          "type": "h",
+          "text": "Usar un agente desde código"
+        },
+        {
+          "type": "p",
+          "text": "Desde una aplicación cliente se usa el SDK Foundry Projects para conectarse al proyecto y llamar al agente con la {{API de proyecto|Project API}}, que permite: integrar agentes en webs, bots o flujos backend; orquestar tareas de varios pasos; pasar entradas estructuradas o llamadas a herramientas; y ejecutar agentes a escala con tus despliegues."
+        },
+        {
+          "type": "p",
+          "text": "Necesitas el identificador del agente: está en la vista del agente en el playground, en la vista de código, dentro de las variables `.env`."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "# pip install --pre \"azure-ai-projects>=2.0.0b1\" azure-identity\nfrom azure.identity import DefaultAzureCredential\nfrom azure.ai.projects import AIProjectClient\n\nendpoint = \"https://<recurso>.services.ai.azure.com/api/projects/<proyecto>\"\nproject_client = AIProjectClient(endpoint=endpoint,\n                                 credential=DefaultAzureCredential())\n\n# Obtener un agente existente por su nombre\nagent = project_client.agents.get(agent_name=\"learning-agent\")\n\n# Cliente compatible con OpenAI a partir del proyecto\nopenai_client = project_client.get_openai_client()\n\n# Llamar al AGENTE (no al despliegue) mediante agent_reference\nresponse = openai_client.responses.create(\n    input=[{\"role\": \"user\", \"content\": \"¿En qué me puedes ayudar?\"}],\n    extra_body={\"agent\": {\"name\": agent.name, \"type\": \"agent_reference\"} },\n)\nprint(response.output_text)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`AIProjectClient` con `DefaultAzureCredential` autentica con Microsoft Entra ID contra el endpoint del proyecto (no usa clave de API).",
+            "`project_client.agents.get(...)` recupera el agente guardado.",
+            "`get_openai_client()` devuelve un cliente OpenAI asociado al proyecto.",
+            "La llamada `responses.create` con `extra_body={\"agent\": {..., \"type\": \"agent_reference\"} }` es la que dirige la petición al agente en lugar de a un despliegue de modelo."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Diferencia clave en código: llamar a un modelo usa `model=<despliegue>`; llamar a un agente usa la referencia `agent_reference` en `extra_body`, y el agente aporta su propio modelo, instrucciones y herramientas."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Qué tres elementos empaqueta un agente de Microsoft Foundry? (elige 3)",
+          "options": [
+            "Un modelo generativo",
+            "Instrucciones (prompt del sistema)",
+            "Una suscripción de Azure dedicada",
+            "Herramientas",
+            "Un conjunto de datos de entrenamiento"
+          ],
+          "answers": [
+            0,
+            1,
+            3
+          ],
+          "explain": "Un agente combina modelo, instrucciones y herramientas; opcionalmente añade conocimiento.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada capacidad del agente con lo que aporta.",
+          "pairs": [
+            [
+              "Herramientas",
+              "Acciones (llamar API, ejecutar código)"
+            ],
+            [
+              "Conocimiento",
+              "Contexto recuperado de tus documentos"
+            ],
+            [
+              "Instrucciones",
+              "Rol, estilo y reglas de salida"
+            ]
+          ],
+          "explain": "Herramientas = acciones; conocimiento = contexto; instrucciones = comportamiento.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Un desarrollador quiere que su agente analice un CSV que sube el usuario y genere un gráfico. ¿Qué herramienta debe añadir?",
+          "options": [
+            "Code Interpreter",
+            "Una fuente de conocimiento de SharePoint",
+            "Un evaluador de seguridad",
+            "Un límite de TPM más alto"
+          ],
+          "answer": 0,
+          "explain": "Code Interpreter permite análisis de datos y manejo de archivos.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "En el código que usa la Project API, ¿qué instrucción hace que la respuesta la genere el agente y no un despliegue de modelo?",
+          "options": [
+            "project_client.agents.get(agent_name=...)",
+            "project_client.get_openai_client()",
+            "AIProjectClient(endpoint=..., credential=...)",
+            "openai_client.responses.create(..., extra_body={\"agent\": {\"name\": ..., \"type\": \"agent_reference\"} })"
+          ],
+          "answer": 3,
+          "explain": "La referencia agent_reference en extra_body dirige la llamada al agente; las demás líneas solo conectan o recuperan objetos.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m09u5",
+      "title": "Ejercicio: IA generativa y agentes en Microsoft Foundry",
+      "titleEn": "Exercise - Get started with generative AI and agents in Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/6-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Objetivo"
+        },
+        {
+          "type": "p",
+          "text": "Desplegar un {{modelo de lenguaje grande|large language model (LLM)}} en Microsoft Foundry, chatear con él en el playground, guiarlo con un {{prompt del sistema|system prompt}}, darle una herramienta de búsqueda web y guardarlo como {{agente|agent}} para usarlo desde una web de vista previa y desde código. Duración aproximada: 35 minutos."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Una suscripción de Azure con permisos para crear recursos.",
+            "Acceso al portal de Microsoft Foundry (https://ai.azure.com) con la opción **New Foundry** activada.",
+            "Cuota en la región elegida para desplegar un modelo GPT de chat (por ejemplo `gpt-5.4-mini`)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 1: crear un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abre https://ai.azure.com, inicia sesión con tu cuenta de Azure y activa **New Foundry** en la barra superior si no lo está.",
+            "Crea un {{proyecto|project}} con nombre único y despliega **Advanced options** para indicar: nombre del {{recurso de Foundry|Foundry resource}}, suscripción, {{grupo de recursos|resource group}} (nuevo o existente) y una región recomendada.",
+            "Si tus permisos son limitados, desmarca la opción de crear los recursos recomendados.",
+            "Pulsa **Create** y espera unos minutos a que el proyecto esté listo (también puedes reutilizar uno existente)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 2: desplegar un modelo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Catalog > Models** busca `gpt-5.4-mini` y revisa su ficha (capacidades y características).",
+            "Pulsa **Deploy** con la configuración por defecto (si falla, prueba la personalizada o usa otro modelo GPT de chat con cuota disponible).",
+            "Al terminar se abre el playground del modelo."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 3: chatear con el modelo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Pregunta «Who was Ada Lovelace?» y luego «Tell me more about her work with Charles Babbage.»: el historial permite entender «her».",
+            "Pulsa **New chat** para borrar el historial y pide «List three facts about Ada Lovelace.»: la respuesta sigue las instrucciones explícitas del prompt."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Resultado**: las respuestas de un LLM se generan dinámicamente, no se consultan en una base de datos; por eso son flexibles pero no necesariamente están {{fundamentadas|grounded}} en hechos verificados."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 4: especificar instrucciones"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Con un chat nuevo, escribe en **Instructions** un prompt del sistema que convierta al modelo en experto en historia de la informática y le prohíba hablar de otros temas.",
+            "Pregunta por ELIZA y compárala con los LLM modernos.",
+            "Haz una pregunta fuera de tema («What's the capital of Spain?») y comprueba que el modelo la rechaza."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 5: añadir la herramienta web_search"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la sección **Tools** (bajo las instrucciones), en **Add**, activa **Web search**.",
+            "Inicia un chat nuevo y pide «Find a vintage computer store near Seattle»: el modelo busca en la web información actual."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Las {{herramientas|tools}} dan al modelo acceso a datos externos y le permiten realizar tareas; sin ellas solo responde con lo aprendido en el entrenamiento."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 6: guardar la configuración como agente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Pulsa **Save as agent** y llama al agente `computing-historian`; se abre el playground de agentes.",
+            "En la pestaña **YAML** revisa la definición: modelo, parámetros, instrucciones y herramientas.",
+            "En la pestaña **Chat** pregunta «Who are you?»: el agente conoce su papel de historiador."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "yaml",
+          "text": "definition:\n  kind: prompt\n  model: gpt-5.4-mini\n  instructions: You are an expert in the history of computing and AI...\n  tools:\n    - type: mcp\n      server_label: computing-historian-toolbox"
+        },
+        {
+          "type": "p",
+          "text": "Encapsular modelo + instrucciones + herramientas en un agente permite que las apps cliente se conecten a su endpoint sin tener que enviar el prompt del sistema ni implementar su propia lógica de RAG."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 7: vista previa y código cliente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Publish**, elige **Preview web app** y pregunta, por ejemplo, por el Altair 8800 en la web de prueba.",
+            "Pulsa **</> Continue in code** para ver el código de ejemplo que consume el agente."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "from azure.identity import DefaultAzureCredential\nfrom azure.ai.projects import AIProjectClient\n\nproject_client = AIProjectClient(endpoint=endpoint,\n                                 credential=DefaultAzureCredential())\nopenai_client = project_client.get_openai_client()\n\nresponse = openai_client.responses.create(\n    input=[{\"role\": \"user\", \"content\": \"Tell me what you can help with.\"}],\n    extra_body={\n        \"agent_reference\": {\n            \"name\": \"computing-historian\",\n            \"version\": \"1\",\n            \"type\": \"agent_reference\",\n        }\n    },\n)\nprint(response.output_text)"
+        },
+        {
+          "type": "p",
+          "text": "El código usa la biblioteca `azure-ai-projects` para crear un `AIProjectClient` conectado al proyecto. Como un proyecto puede contener recursos privilegiados, **no admite autenticación por clave**: hay que usar una identidad de Microsoft Entra ID (`DefaultAzureCredential`). Después, `get_openai_client()` devuelve un cliente OpenAI que envía prompts con la {{API de respuestas|Responses API}}, indicando el agente y su versión en `extra_body`."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: system prompt = rol, formato y límites; herramientas = datos externos y acciones; agente = modelo + instrucciones + herramientas versionados en el proyecto. Para conectarse a un agente del proyecto se usa **Entra ID**, no una clave de API."
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Para no generar costes, abre el portal de Azure (https://portal.azure.com), entra en el grupo de recursos usado en el laboratorio, pulsa **Delete resource group** y confirma escribiendo su nombre."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio (Microsoft Learning): https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/02a-generative-ai.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las tareas del laboratorio para crear el agente computing-historian.",
+          "items": [
+            "Desplegar el modelo gpt-5.4-mini",
+            "Escribir el system prompt en Instructions",
+            "Añadir la herramienta Web search",
+            "Pulsar Save as agent",
+            "Consumir el agente desde código con AIProjectClient"
+          ],
+          "explain": "El agente se construye sobre un modelo desplegado, al que se añaden instrucciones y herramientas antes de guardarlo y consumirlo.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "En el código de ejemplo para consumir el agente, ¿cómo se indica qué agente debe responder?",
+          "options": [
+            "Con el parámetro model del despliegue",
+            "Con agent_reference (nombre y versión) dentro de extra_body",
+            "Cambiando el endpoint por el del agente",
+            "Incluyendo el YAML del agente en el prompt"
+          ],
+          "answer": 1,
+          "explain": "Como un proyecto puede tener varios agentes y modelos, el agente se identifica en extra_body con agent_reference.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "El AIProjectClient del laboratorio puede autenticarse con la clave de API del proyecto igual que una app de chat sencilla.",
+          "answer": false,
+          "explain": "Al conectarse a un proyecto, que puede tener recursos privilegiados, no se admite autenticación por clave: se usa Entra ID (DefaultAzureCredential).",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Tras configurar el system prompt de historiador, preguntas «What's the capital of Spain?». ¿Qué ocurre?",
+          "options": [
+            "El modelo responde «Madrid» sin más",
+            "El modelo declina responder porque el tema no es historia de la informática",
+            "La herramienta web_search se activa sola",
+            "El playground muestra un error de cuota"
+          ],
+          "answer": 1,
+          "explain": "Las instrucciones restringen al modelo a temas de historia de la informática, así que rechaza preguntas fuera de tema.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m09u6",
+      "title": "Comprobación de conocimientos",
+      "titleEn": "Knowledge check",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/7-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Catálogo de modelos: centro para descubrir, filtrar, comparar y probar modelos de muchos proveedores (no solo de Microsoft, y no sustituye a la suscripción de Azure).",
+            "Modelo fundacional: modelo grande y preentrenado con capacidades generales, utilizable de inmediato o personalizable con ajuste fino.",
+            "Playground: probar prompts, comparar modelos y capturar ajustes que luego reutilizas en código; no elimina la API ni escribe por ti el prompt del sistema.",
+            "{{Publicar un agente|Publish an agent}}: lo convierte en un recurso de Azure administrado con un endpoint estable, que puedes compartir e integrar sin exponer tu proyecto de Foundry ni tu código. No lo hace gratis (siguen costando los tokens, herramientas y datos) ni impide usar la Project API.",
+            "Llamada a un agente en Python: la que usa `extra_body` con `agent_reference`."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué consigues al publicar un agente en Microsoft Foundry?",
+          "options": [
+            "Que el agente funcione sin consumir tokens",
+            "Un recurso de Azure administrado con un endpoint estable que puedes integrar sin exponer tu proyecto",
+            "Que solo pueda usarse desde la interfaz del portal",
+            "Que el modelo se reentrene con cada conversación"
+          ],
+          "answer": 1,
+          "explain": "Publicar crea un recurso administrado con endpoint estable para compartir e integrar el agente.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Un modelo fundacional es un modelo pequeño que debe ajustarse antes de poder hacer cualquier tarea útil.",
+          "answer": false,
+          "explain": "Es un modelo grande y preentrenado que puede usarse de inmediato o personalizarse con ajuste fino.",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué describe mejor el catálogo de modelos de Foundry?",
+          "options": [
+            "Un listado exclusivo de modelos de Microsoft",
+            "Una herramienta que sustituye a la suscripción de Azure",
+            "Un evaluador de seguridad de contenido",
+            "Un centro para descubrir, filtrar, comparar y probar modelos de varios proveedores"
+          ],
+          "answer": 3,
+          "explain": "El catálogo reúne modelos de Azure, socios y la comunidad, con filtros, benchmarks y comparativas.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m09u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/8-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Microsoft Foundry cubre el ciclo de vida completo de las soluciones generativas y agénticas, con herramientas y gobernanza para usar los modelos de forma eficaz y responsable."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Catálogo de modelos**: entorno central para descubrir y comparar modelos fundacionales de Microsoft, socios y comunidades de código abierto.",
+            "**Despliegue**: convierte el modelo en un endpoint de API estable y escalable.",
+            "**Cliente ligero**: un script Python mínimo se autentica en el proyecto, envía prompts y recibe respuestas mediante el SDK de Foundry.",
+            "**Agentes**: empaquetan modelo, instrucciones, herramientas y conocimiento opcional para un comportamiento repetible orientado a flujos de trabajo; se configuran y prueban en el playground y se **publican** como recursos de Azure con endpoints estables."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena el ciclo de vida típico de una solución en Foundry.",
+          "items": [
+            "Descubrir y comparar modelos en el catálogo",
+            "Desplegar el modelo como endpoint",
+            "Probar prompts y parámetros en el playground",
+            "Crear y probar un agente",
+            "Publicar el agente con un endpoint estable"
+          ],
+          "explain": "Del descubrimiento al despliegue, la prueba, la construcción del agente y su publicación.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Un agente puede incluir fuentes de conocimiento opcionales además del modelo, las instrucciones y las herramientas.",
+          "answer": true,
+          "explain": "El conocimiento es opcional y aporta contexto mediante RAG.",
+          "obj": "B1"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Un banco quiere un asistente de chat para miles de clientes simultáneos que responda rápido. No tiene acceso registrado a GPT-5. ¿Qué modelo encaja mejor?",
+      "options": [
+        "GPT-4.1",
+        "text-embedding-3-small",
+        "Un modelo de imagen",
+        "DeepSeek R1 para razonamiento intensivo"
+      ],
+      "answer": 0,
+      "explain": "GPT-4.1 está disponible para todos y optimizado para chat en tiempo real, baja latencia y gran volumen.",
+      "obj": "A2"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada parámetro de despliegue o concepto con su descripción.",
+      "pairs": [
+        [
+          "Tipo de despliegue",
+          "Dónde y cómo se procesa la inferencia (estándar, lote global, aprovisionado)"
+        ],
+        [
+          "Tokens por minuto (TPM)",
+          "Capacidad de tráfico de tokens del despliegue"
+        ],
+        [
+          "Throttling",
+          "Limitación temporal al acercarse a la cuota"
+        ],
+        [
+          "Token",
+          "Unidad mínima de texto que procesa el modelo"
+        ]
+      ],
+      "explain": "Son los conceptos que gobiernan la capacidad y el rendimiento de un despliegue.",
+      "obj": "A2"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué ocurre al desplegar un modelo en Foundry? (elige 3)",
+      "options": [
+        "Se asignan recursos de cómputo",
+        "Se crea un endpoint de API",
+        "El modelo se reentrena con tus datos",
+        "Se activan la supervisión y el registro",
+        "Se publica automáticamente un agente"
+      ],
+      "answers": [
+        0,
+        1,
+        3
+      ],
+      "explain": "El despliegue asigna cómputo, crea el endpoint, fija la configuración y activa la supervisión; no reentrena ni crea agentes.",
+      "obj": "A2"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada métrica con su tipo.",
+      "pairs": [
+        [
+          "F1",
+          "Métrica clásica de NLP"
+        ],
+        [
+          "Recall",
+          "Métrica clásica de NLP"
+        ],
+        [
+          "Groundedness",
+          "Métrica asistida por IA"
+        ],
+        [
+          "Coherencia y fluidez",
+          "Métrica asistida por IA"
+        ]
+      ],
+      "explain": "Exactitud, precisión, recall y F1 son clásicas; fundamentación, relevancia, coherencia/fluidez y similitud GPT son asistidas por IA.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "Un equipo quiere que el asistente responda siempre en tono formal, en español y sin dar asesoramiento legal. ¿Dónde debe definirlo?",
+      "options": [
+        "En el prompt de usuario",
+        "En el límite de TPM",
+        "En las instrucciones del sistema",
+        "En la temperatura"
+      ],
+      "answer": 2,
+      "explain": "El prompt del sistema fija comportamiento, tono y barreras del asistente.",
+      "obj": "B1"
+    },
+    {
+      "type": "tf",
+      "q": "Una temperatura baja produce respuestas más deterministas y una temperatura alta, más creativas.",
+      "answer": true,
+      "explain": "La temperatura regula el equilibrio entre creatividad y determinismo.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Cuándo es preferible una herramienta de Foundry (Foundry tools) frente a elegir un modelo del catálogo?",
+      "options": [
+        "Cuando necesitas experimentar con modelos de código abierto",
+        "Cuando el caso de uso está bien definido y buscas rendimiento predecible y valor rápido",
+        "Cuando quieres entrenar un modelo desde cero",
+        "Nunca; siempre se elige un modelo del catálogo"
+      ],
+      "answer": 1,
+      "explain": "Las herramientas de Foundry usan modelos precompilados con rendimiento predecible y cumplimiento integrado para casos bien definidos.",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué distingue a un agente de usar un modelo directamente? (elige 2)",
+      "options": [
+        "El agente puede llamar a herramientas para realizar acciones",
+        "El agente no necesita ningún modelo",
+        "El agente puede usar conocimiento para fundamentar sus respuestas con citas",
+        "El agente solo funciona en el portal"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "Un agente añade herramientas (acciones) y conocimiento (contexto) sobre el modelo; se puede usar desde código con la Project API.",
+      "obj": "B1"
+    },
+    {
+      "type": "order",
+      "q": "Ordena las instrucciones del código Python para llamar a un agente existente.",
+      "items": [
+        "Crear AIProjectClient con el endpoint y DefaultAzureCredential",
+        "Obtener el agente con project_client.agents.get",
+        "Obtener el cliente OpenAI con get_openai_client",
+        "Llamar a responses.create con agent_reference en extra_body",
+        "Mostrar response.output_text"
+      ],
+      "explain": "Primero conectar al proyecto, luego recuperar el agente y el cliente, llamar y mostrar el resultado.",
+      "obj": "B1"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Catálogo de modelos",
+      "en": "Model catalog",
+      "def": "Centro de Foundry para descubrir, filtrar, comparar y probar modelos de muchos proveedores."
+    },
+    {
+      "es": "Modelo fundacional",
+      "en": "Foundation model",
+      "def": "Modelo grande y preentrenado con capacidades generales, usable directamente o personalizable."
+    },
+    {
+      "es": "Familia de modelos",
+      "en": "Model family",
+      "def": "Grupo de modelos con la misma arquitectura o linaje que difieren en tamaño, versión o especialización."
+    },
+    {
+      "es": "Modelo de lenguaje pequeño",
+      "en": "Small language model (SLM)",
+      "def": "Modelo compacto (como Phi-4) adecuado para escenarios ligeros o con recursos limitados."
+    },
+    {
+      "es": "Tabla de clasificación",
+      "en": "Leaderboard",
+      "def": "Ranking de modelos por calidad, seguridad y rendimiento en distintas tareas."
+    },
+    {
+      "es": "Evaluador",
+      "en": "Evaluator",
+      "def": "Componente que mide calidad, seguridad y eficacia de las salidas; detecta pero no corrige."
+    },
+    {
+      "es": "Despliegue",
+      "en": "Deployment",
+      "def": "Publicación de un modelo configurado como servicio con un endpoint estable y seguro."
+    },
+    {
+      "es": "Tokens por minuto",
+      "en": "Tokens per minute (TPM)",
+      "def": "Cuota que fija cuántos tokens puede procesar un despliegue por minuto."
+    },
+    {
+      "es": "Limitación",
+      "en": "Throttling",
+      "def": "Restricción temporal del procesamiento al acercarse a los límites para mantener la estabilidad."
+    },
+    {
+      "es": "Temperatura",
+      "en": "Temperature",
+      "def": "Parámetro que equilibra creatividad y determinismo en las respuestas."
+    },
+    {
+      "es": "Prompt del sistema",
+      "en": "System prompt",
+      "def": "Instrucciones que fijan rol, tono, herramientas y barreras del asistente."
+    },
+    {
+      "es": "Agente",
+      "en": "Agent",
+      "def": "Componente reutilizable que combina modelo, instrucciones, herramientas y conocimiento opcional."
+    },
+    {
+      "es": "API de proyecto",
+      "en": "Project API",
+      "def": "API del SDK de Foundry Projects para integrar y ejecutar agentes desde aplicaciones."
+    },
+    {
+      "es": "Responses API",
+      "en": "Responses API",
+      "def": "API compatible con OpenAI para enviar prompts a un despliegue o a un agente y obtener respuestas."
+    }
+  ]
+}

@@ -1,0 +1,1052 @@
+{
+  "id": "m11",
+  "path": 2,
+  "order": 4,
+  "title": "Introducción a la voz en Azure",
+  "titleEn": "Get started with speech in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/",
+  "summary": "Muestra cómo usar Azure Speech en Microsoft Foundry para reconocimiento de voz (voz a texto), síntesis de voz (texto a voz) y conversaciones de voz a voz en tiempo real con Voice Live, tanto en el playground como con los SDK de Python.",
+  "objectives": [
+    "Comprender el reconocimiento de voz (speech-to-text) y sus modelos acústico y de lenguaje",
+    "Usar el SDK de voz a texto de Azure Speech en una aplicación y distinguir transcripción en tiempo real y por lotes",
+    "Comprender la síntesis de voz (text-to-speech) y las voces neuronales",
+    "Usar el SDK de texto a voz de Azure Speech",
+    "Explicar la voz a voz (speech-to-speech) y el servicio Azure Speech Voice Live",
+    "Crear un agente con capacidad de voz en Microsoft Foundry"
+  ],
+  "units": [
+    {
+      "id": "m11u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las capacidades de voz de la IA permiten controlar sistemas con instrucciones habladas, obtener respuestas a preguntas orales, generar subtítulos a partir de audio y mucho más. Las interfaces de voz ofrecen una forma más natural de interactuar con el software de IA y aumentan la **accesibilidad** e **inclusión** de las aplicaciones y agentes."
+        },
+        {
+          "type": "p",
+          "text": "Para ello, un sistema de IA necesita al menos dos capacidades:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "{{Reconocimiento de voz|speech recognition}}: detectar e interpretar la entrada hablada.",
+            "{{Síntesis de voz|speech synthesis}}: generar salida hablada."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Ejemplos por sector"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Sector",
+            "Escenario"
+          ],
+          "rows": [
+            [
+              "Sanidad",
+              "Dictado clínico: el médico dicta notas del paciente y la app las convierte en texto médico preciso, ahorrando tecleo."
+            ],
+            [
+              "Atención al cliente",
+              "Transcripción de llamadas en tiempo real para revisar conversaciones, detectar problemas y analizar el sentimiento."
+            ],
+            [
+              "Medios y entretenimiento",
+              "Subtítulos automáticos en directo o grabados, que mejoran la accesibilidad y llegan a públicos multilingües."
+            ],
+            [
+              "Educación",
+              "Apps de idiomas que escuchan al alumno y le dan retroalimentación sobre su pronunciación."
+            ],
+            [
+              "Comercio y e-commerce",
+              "Asistentes de compra que entienden peticiones habladas y responden con voz sobre productos o pedidos."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Azure Speech** (dentro de Microsoft Foundry Tools) ofrece {{voz a texto|speech-to-text}}, {{texto a voz|text-to-speech}} y {{traducción de voz|speech translation}}. Incluye modelos precompilados y personalizados para tareas como transcribir audio con alta precisión, identificar hablantes en una conversación o crear voces personalizadas."
+        },
+        {
+          "type": "tip",
+          "text": "Reconocimiento = entrada hablada → texto (STT). Síntesis = texto → salida hablada (TTS). El examen suele plantear un escenario y preguntar cuál de las dos se necesita."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Una plataforma de vídeo quiere generar automáticamente subtítulos para sus retransmisiones en directo. ¿Qué capacidad necesita?",
+          "options": [
+            "Síntesis de voz",
+            "Reconocimiento de voz",
+            "Generación de imágenes",
+            "Clasificación de imágenes"
+          ],
+          "answer": 1,
+          "explain": "Convertir el audio hablado en texto (subtítulos) es {{reconocimiento de voz|speech recognition}}.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada escenario con la capacidad de voz principal.",
+          "pairs": [
+            [
+              "Un médico dicta notas clínicas",
+              "Voz a texto"
+            ],
+            [
+              "Un asistente lee en voz alta el estado de un pedido",
+              "Texto a voz"
+            ],
+            [
+              "Un viajero habla en español y oye la respuesta en inglés",
+              "Traducción de voz"
+            ]
+          ],
+          "explain": "El dictado es reconocimiento, la lectura en voz alta es síntesis y hablar en un idioma para oír otro es traducción de voz.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Las interfaces de voz pueden mejorar la accesibilidad y la inclusión de una aplicación.",
+          "answer": true,
+          "explain": "Interactuar mediante la voz ofrece una vía más natural y accesible para muchas personas.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m11u2",
+      "title": "Reconocimiento de voz",
+      "titleEn": "Speech recognition",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/2-speech-recognition",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El reconocimiento de voz, también llamado {{voz a texto|speech-to-text (STT)}}, permite que apps y agentes respondan a la voz: convierte la palabra hablada en datos, normalmente texto. Suele combinar varios modelos:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Un {{modelo acústico|acoustic model}} que convierte el audio en {{fonemas|phonemes}} (representaciones de sonidos concretos).",
+            "Un {{modelo de lenguaje|language model}} que asigna esos fonemas a palabras."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El texto obtenido sirve para subtítulos, transcripciones de llamadas, dictado de notas, etc."
+        },
+        {
+          "type": "h",
+          "text": "Azure Speech: voz a texto en el playground"
+        },
+        {
+          "type": "p",
+          "text": "Azure Speech incluye una {{API|application programming interface}} de voz a texto que procesa voz de un micrófono o de un archivo de audio. Una API es un conjunto de reglas y puntos de conexión que permite a una aplicación usar la funcionalidad o los datos de otra. **Microsoft Foundry** es la plataforma de Microsoft que reúne modelos, herramientas, datos y servicios para crear, probar y desplegar aplicaciones y agentes de IA."
+        },
+        {
+          "type": "p",
+          "text": "En el nuevo portal de Foundry se llega al playground así: página **Build** → **Models** → pestaña **AI services** → **Azure Speech - Speech to Text**. Allí puedes **subir un archivo de audio o grabarte** hablando y ver la transcripción, para hacerte una idea de cómo respondería tu aplicación."
+        },
+        {
+          "type": "h",
+          "text": "El SDK de voz a texto"
+        },
+        {
+          "type": "p",
+          "text": "Para usarlo en una aplicación hay que escribir código. El SDK de Azure Speech para voz a texto es una {{biblioteca cliente|client library}} (código ya preparado para comunicarse con un servicio). Permite:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Capturar o enviar audio desde un micrófono, un archivo o un flujo de audio.",
+            "Enviar ese audio de forma segura a Azure Speech.",
+            "Recibir el texto transcrito casi en tiempo real o cuando termine el procesamiento."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El SDK se ocupa de la red, la **autenticación**, el streaming de audio y el análisis de la respuesta, de modo que el desarrollador se centra en la lógica de la aplicación. Se usa en la capa cliente o de servicio y actúa como puente entre tu código y Azure Speech."
+        },
+        {
+          "type": "h",
+          "text": "Preparar el entorno"
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "pip install azure-cognitiveservices-speech"
+        },
+        {
+          "type": "p",
+          "text": "El paquete se instala desde la terminal integrada del editor (por ejemplo, Visual Studio Code). También necesitas crear un **recurso de Foundry**: su **endpoint** y su **clave** se usan en el código para autenticar la conexión (alternativamente, Microsoft Entra ID)."
+        },
+        {
+          "type": "h",
+          "text": "Qué ocurre al ejecutar el programa"
+        },
+        {
+          "type": "list",
+          "items": [
+            "La app inicializa el SDK con el endpoint y la autenticación (clave o Microsoft Entra ID).",
+            "Se captura o carga el audio (micrófono, archivo o flujo).",
+            "El SDK envía el audio a Azure Speech de forma segura.",
+            "El reconocimiento se ejecuta en la nube con los modelos de Azure.",
+            "La app recibe el texto reconocido y metadatos opcionales."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import azure.cognitiveservices.speech as speechsdk\n\nspeech_config = speechsdk.SpeechConfig(subscription=\"FOUNDRY_KEY\", endpoint=\"ENDPOINT\")\naudio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)\nrecognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)\n\n# Eventos: 'recognizing' = resultados parciales, 'recognized' = frase final\nrecognizer.recognizing.connect(lambda e: print(\"Parcial:\", e.result.text))\nrecognizer.recognized.connect(lambda e: print(\"Final:\", e.result.text))\n\nrecognizer.start_continuous_recognition()\ninput(\"Pulsa Enter para parar...\")\nrecognizer.stop_continuous_recognition()"
+        },
+        {
+          "type": "p",
+          "text": "Claves del código: `SpeechConfig` (clave + endpoint), `AudioConfig` (origen del audio, aquí el micrófono predeterminado), `SpeechRecognizer` (realiza el reconocimiento), los eventos `recognizing` (texto provisional mientras se habla) y `recognized` (resultado final), y `start_continuous_recognition()` / `stop_continuous_recognition()`."
+        },
+        {
+          "type": "example",
+          "text": "App de transcripción de buzón de voz: en el proyecto hay un archivo de audio con el mensaje y un archivo Python. Se indican endpoint, clave y el audio de origen, se usa un objeto `SpeechRecognizer` para transcribir y se muestra el texto en la terminal."
+        },
+        {
+          "type": "h",
+          "text": "Opciones de procesamiento de audio"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Modo",
+            "Cuándo usarlo",
+            "Cómo funciona"
+          ],
+          "rows": [
+            [
+              "{{Transcripción en tiempo real|real-time transcription}}",
+              "Presentaciones, demos o cualquier situación en la que alguien está hablando",
+              "La app escucha el micrófono u otra fuente y transmite el audio al servicio, que devuelve el texto"
+            ],
+            [
+              "{{Transcripción por lotes|batch transcription}}",
+              "Grabaciones ya almacenadas en un recurso compartido, servidor remoto o Azure Storage",
+              "Se apunta a los archivos con un URI {{SAS|shared access signature}} y se reciben los resultados de forma asíncrona"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La transcripción por lotes debe ejecutarse de forma **asíncrona**, porque los trabajos se programan según disponibilidad ({{mejor esfuerzo|best-effort}}): normalmente empiezan en minutos, pero no hay una estimación garantizada de cuándo pasan a ejecutarse."
+        },
+        {
+          "type": "tip",
+          "text": "Audio almacenado en masa + URI SAS + resultados asíncronos = **transcripción por lotes**. Micrófono en directo = **tiempo real**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena lo que ocurre cuando una aplicación usa el SDK de voz a texto.",
+          "items": [
+            "La app inicializa el SDK con endpoint y autenticación",
+            "Se captura o carga el audio",
+            "El SDK envía el audio a Azure Speech",
+            "Los modelos de Azure reconocen la voz en la nube",
+            "La app recibe el texto reconocido"
+          ],
+          "explain": "Es el flujo descrito en la unidad: configuración, audio, envío, reconocimiento en la nube y resultado.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "Un call center tiene miles de grabaciones antiguas en Azure Storage y quiere transcribirlas. ¿Qué opción es la adecuada?",
+          "options": [
+            "Transcripción en tiempo real con micrófono",
+            "Síntesis de voz con voces neuronales",
+            "Voice Live con interacción proactiva",
+            "Transcripción por lotes usando URI SAS y resultados asíncronos"
+          ],
+          "answer": 3,
+          "explain": "Para audio almacenado se usa la {{transcripción por lotes|batch transcription}}, que referencia los archivos con un URI SAS y devuelve resultados de forma asíncrona.",
+          "obj": "B2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada elemento del SDK de voz a texto con su función.",
+          "pairs": [
+            [
+              "SpeechConfig",
+              "Contiene la clave y el endpoint del recurso"
+            ],
+            [
+              "AudioConfig",
+              "Define el origen del audio (micrófono o archivo)"
+            ],
+            [
+              "SpeechRecognizer",
+              "Realiza el reconocimiento de voz"
+            ],
+            [
+              "Evento recognized",
+              "Entrega el texto final de una frase"
+            ]
+          ],
+          "explain": "Estos objetos y eventos forman la estructura básica de una app de reconocimiento con el SDK de Python.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos modelos suele combinar un sistema de voz a texto? (Elige dos.)",
+          "options": [
+            "Un modelo acústico que convierte audio en fonemas",
+            "Un modelo de difusión que elimina ruido",
+            "Un modelo de lenguaje que convierte fonemas en palabras",
+            "Un modelo de clasificación de imágenes"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "El modelo acústico obtiene fonemas y el de lenguaje los transforma en palabras.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m11u3",
+      "title": "Síntesis de voz",
+      "titleEn": "Speech synthesis",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/3-speech-synthesis",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La síntesis de voz, también llamada {{texto a voz|text-to-speech (TTS)}}, consiste en vocalizar datos, normalmente convirtiendo texto en habla audible. Una solución de TTS necesita como mínimo:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El **texto** que se va a decir.",
+            "La **voz** con la que se va a pronunciar."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cómo se sintetiza el habla"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Se {{tokeniza|tokenize}} el texto para dividirlo en palabras individuales.",
+            "Se asignan sonidos fonéticos a cada palabra.",
+            "La transcripción fonética se divide en {{unidades prosódicas|prosodic units}} (frases, oraciones, cláusulas).",
+            "A partir de esas unidades se crean fonemas.",
+            "Los fonemas se sintetizan como audio con una voz, una velocidad, un {{tono|pitch}} y un volumen concretos."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Usos habituales: generar respuestas habladas a lo que dice el usuario, leer mensajes en voz alta y emitir anuncios."
+        },
+        {
+          "type": "h",
+          "text": "Azure Speech: texto a voz"
+        },
+        {
+          "type": "p",
+          "text": "La API de texto a voz convierte texto en habla que puede **reproducirse por el altavoz o guardarse en un archivo de audio**. Incluye muchas voces predefinidas con soporte para varios idiomas y pronunciaciones regionales, entre ellas {{voces neuronales|neural voices}}, que usan redes neuronales para superar limitaciones típicas como una entonación poco natural. También puedes crear **voces personalizadas**."
+        },
+        {
+          "type": "p",
+          "text": "En el playground **Azure Speech - Text to Speech** de Foundry eliges una voz sintética y ajustas parámetros de la locución como la **velocidad** y el **tono**; el audio se genera a partir del texto."
+        },
+        {
+          "type": "h",
+          "text": "El SDK de texto a voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Envía texto a Azure Speech.",
+            "Genera audio hablado con voces neuronales.",
+            "Reproduce el audio por los altavoces o lo guarda en un archivo."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El SDK gestiona la autenticación, la comunicación de red, el formato del audio y la reproducción. Se usa en **aplicaciones cliente** (convertir y reproducir al momento, p. ej. una app de escritorio o móvil) y en **servicios de backend** (generar archivos de audio para reproducirlos después)."
+        },
+        {
+          "type": "list",
+          "items": [
+            "La app inicializa el SDK con endpoint y autenticación (clave o Microsoft Entra ID).",
+            "Se proporciona el texto.",
+            "El SDK envía el texto a Azure Speech.",
+            "Los modelos neuronales generan el audio en la nube.",
+            "La app recibe el audio y lo reproduce, lo transmite o lo guarda."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os\nimport azure.cognitiveservices.speech as speechsdk\n\nspeech_config = speechsdk.SpeechConfig(subscription=os.environ.get('FOUNDRY_KEY'),\n                                       endpoint=os.environ.get('ENDPOINT'))\naudio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)\n\n# Voz neuronal multilingüe\nspeech_config.speech_synthesis_voice_name = 'en-US-Ava:DragonHDLatestNeural'\nsynth = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)\n\nresult = synth.speak_text_async(input(\"Texto > \")).get()\nif result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:\n    print(\"Audio sintetizado\")\nelif result.reason == speechsdk.ResultReason.Canceled:\n    print(\"Cancelado:\", result.cancellation_details.reason)"
+        },
+        {
+          "type": "p",
+          "text": "Claves: la voz se elige con `speech_synthesis_voice_name`; `AudioOutputConfig(use_default_speaker=True)` envía el audio al altavoz; `SpeechSynthesizer` y `speak_text_async()` generan el habla; el resultado se comprueba con `ResultReason.SynthesizingAudioCompleted` o `Canceled` (con detalles del error si faltan la clave o el endpoint). Las credenciales se leen de variables de entorno."
+        },
+        {
+          "type": "example",
+          "text": "App que lee mensajes en voz alta: se conecta al endpoint de Azure Speech, crea un `SpeechSynthesizer`, procesa un archivo de texto con el mensaje y genera la salida hablada."
+        },
+        {
+          "type": "tip",
+          "text": "Una voz que suena poco natural o con mala entonación se mejora usando **voces neuronales**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué dos datos necesita como mínimo una solución de texto a voz?",
+          "options": [
+            "El texto y la voz",
+            "El audio y el idioma",
+            "La imagen y el prompt",
+            "El micrófono y el altavoz"
+          ],
+          "answer": 0,
+          "explain": "La síntesis requiere el texto a pronunciar y la voz con la que vocalizarlo.",
+          "obj": "B2"
+        },
+        {
+          "type": "order",
+          "q": "Ordena el proceso interno de síntesis de voz.",
+          "items": [
+            "Tokenizar el texto en palabras",
+            "Asignar sonidos fonéticos a cada palabra",
+            "Dividir la transcripción fonética en unidades prosódicas",
+            "Crear fonemas a partir de las unidades prosódicas",
+            "Sintetizar los fonemas como audio con voz, velocidad, tono y volumen"
+          ],
+          "explain": "La TTS pasa de texto a palabras, fonética, prosodia, fonemas y finalmente audio.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "En el SDK de Python, ¿qué propiedad de `SpeechConfig` determina la voz que se usará?",
+          "options": [
+            "`endpoint`",
+            "`use_default_speaker`",
+            "`speech_synthesis_voice_name`",
+            "`start_continuous_recognition`"
+          ],
+          "answer": 2,
+          "explain": "`speech_synthesis_voice_name` selecciona la voz (por ejemplo, una voz neuronal multilingüe).",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "El audio generado por el SDK de texto a voz solo puede reproducirse en el momento; no se puede guardar en un archivo.",
+          "answer": false,
+          "explain": "El audio puede reproducirse por el altavoz o escribirse en un archivo, por ejemplo desde un servicio de backend.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m11u4",
+      "title": "Voz a voz con Voice Live",
+      "titleEn": "Speech-to-speech with Voice Live",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/4-voice-live",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los {{agentes de IA|AI agents}} son programas que entienden información, toman decisiones y realizan acciones por sí mismos para ayudar a los usuarios a lograr objetivos. Un objetivo habitual es mantener conversaciones habladas en tiempo real, como con una persona."
+        },
+        {
+          "type": "h",
+          "text": "Voz a voz"
+        },
+        {
+          "type": "p",
+          "text": "La {{voz a voz|speech-to-speech}} permite que una aplicación reciba audio hablado y responda con audio hablado, sin que el usuario lea ni escriba. El sistema escucha, entiende o transforma lo dicho y responde con voz sintética. Se construye como una **canalización**:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Voz a texto**: convierte el audio del usuario en texto.",
+            "**Procesamiento o razonamiento**: analiza, traduce o resume el texto, o un agente decide qué decir.",
+            "**Texto a voz**: convierte la respuesta en audio."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios comunes"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Asistentes de voz y agentes de IA que responden hablando.",
+            "Traducción de voz: hablas en un idioma y oyes la respuesta en otro.",
+            "Aplicaciones manos libres: navegación, quioscos o herramientas industriales donde no se puede teclear.",
+            "Accesibilidad para quien prefiere o necesita entrada y salida de audio.",
+            "Bots de atención al cliente telefónica."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Azure Speech Voice Live"
+        },
+        {
+          "type": "p",
+          "text": "**Voice Live** es un servicio de Azure Speech que facilita crear agentes conversacionales: su API permite conversaciones de voz en **tiempo real**, con respuestas rápidas y naturales. En lugar de conectar por separado voz a texto, razonamiento de IA y texto a voz, **lo combina todo en un único servicio**."
+        },
+        {
+          "type": "p",
+          "text": "Es un servicio **totalmente administrado**: Azure gestiona los modelos y la infraestructura, así que no tienes que mantener el backend. Envías audio y recibes respuestas habladas; además puede devolver elementos visuales como {{avatares|avatars}} y desencadenar acciones."
+        },
+        {
+          "type": "p",
+          "text": "Una solución de voz a voz en Azure utiliza:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Azure Speech**, que aporta voz a texto y texto a voz.",
+            "**Agentes o lógica de aplicación**, que deciden las respuestas.",
+            "**Foundry Tools o servidores {{MCP|Model Context Protocol}}**, que exponen la voz como herramientas invocables para que los agentes no gestionen SDK ni API directamente."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Voice Live en el playground de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Incluye ejemplos de voz preconfigurados o puedes crear tu propia solución.",
+            "Al crearla, es importante **elegir un modelo de IA generativa** para el agente: Voice Live lo usa junto con sus propios modelos acústicos.",
+            "Puedes ajustar muchas opciones, como la {{interacción proactiva|proactive engagement}}, para que el agente inicie la conversación.",
+            "Puedes activar el **modo de voz** (Voice mode) en un agente de Foundry: la configuración de voz queda encapsulada en la definición del agente y se reduce el código cliente necesario."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Voice Live en una aplicación"
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "pip install azure-ai-voicelive\n# también se necesitan: pyaudio, python-dotenv y azure-identity"
+        },
+        {
+          "type": "p",
+          "text": "El portal de Foundry ofrece **código de ejemplo** de voz a voz que inicia la sesión, conecta micrófono y altavoces, procesa los flujos de audio entrantes y salientes y gestiona las **interrupciones**. Puedes llevarlo a tu editor, instalar los paquetes y ejecutarlo: el asistente transmite el audio del micrófono a Voice Live en tiempo real, recibe la respuesta hablada y la reproduce por los altavoces."
+        },
+        {
+          "type": "tip",
+          "text": "Si el enunciado pide una conversación de voz en tiempo real **sin encadenar** STT + LLM + TTS por separado y sin gestionar infraestructura, la respuesta es **Azure Speech Voice Live**. El paquete de Python es `azure-ai-voicelive`."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las etapas de una canalización de voz a voz.",
+          "items": [
+            "Voz a texto",
+            "Procesamiento o razonamiento (p. ej. un agente)",
+            "Texto a voz"
+          ],
+          "explain": "La voz a voz combina reconocimiento, razonamiento y síntesis en una experiencia conversacional.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "Quieres crear un agente de voz en tiempo real sin conectar tú mismo servicios separados de reconocimiento, LLM y síntesis, y sin mantener la infraestructura. ¿Qué usarías?",
+          "options": [
+            "Transcripción por lotes",
+            "Azure Speech Voice Live",
+            "Un filtro de Laplace",
+            "Solo el SDK de texto a voz"
+          ],
+          "answer": 1,
+          "explain": "Voice Live combina todo en un único servicio totalmente administrado para conversaciones en tiempo real.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos afirmaciones sobre Voice Live en el playground de Foundry son correctas? (Elige dos.)",
+          "options": [
+            "Hay que elegir un modelo de IA generativa para el agente",
+            "Funciona sin ningún modelo, solo con reglas fijas",
+            "Se puede activar la interacción proactiva para que el agente inicie la conversación",
+            "Solo admite entrada de texto escrito"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "Voice Live usa un modelo generativo junto con sus modelos acústicos y permite configurar opciones como la interacción proactiva.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Activar el modo de voz en un agente de Foundry encapsula la configuración de voz en la definición del agente y reduce el código cliente.",
+          "answer": true,
+          "explain": "Voice mode integra Voice Live en la definición del agente, por lo que el cliente necesita menos código.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m11u5",
+      "title": "Ejercicio: crear un agente con voz",
+      "titleEn": "Exercise - Create a speech-capable agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/5-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo:** usar Azure Speech en Microsoft Foundry Tools para convertir un agente de texto en un {{agente con voz|speech-capable agent}} gracias a **Azure Speech Voice Live**. Duración aproximada: 25 minutos."
+        },
+        {
+          "type": "p",
+          "text": "**Requisitos:** una suscripción de Azure, un navegador y, a ser posible, micrófono o auriculares en un entorno silencioso."
+        },
+        {
+          "type": "h",
+          "text": "1. Crear un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir el portal de Microsoft Foundry (https://ai.azure.com), activar la opción **New Foundry** y crear un {{proyecto|project}} con nombre único (o reutilizar uno existente). En **Advanced options** se indica el recurso de Foundry, la suscripción, el {{grupo de recursos|resource group}} y una región recomendada. Si faltan permisos, desmarcar la creación de recursos recomendados.",
+            "Tras crearlo, se abre la página de inicio del proyecto en el nuevo portal."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. Crear el agente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la página de inicio, en el mosaico **Build an agent**, elegir **Create an agent** (o en **Build** > pestaña **Agents**) y llamarlo `speech-agent`. Si se pide, el {{modo de interacción|interaction mode}} es **Text**.",
+            "El agente se abre en el {{área de pruebas de agentes|agent playground}}: comprobar que hay un modelo desplegado y seleccionado en la lista.",
+            "Darle unas {{instrucciones|instructions}} que lo definen como agente que informa sobre IA de forma concisa y precisa, y pulsar **Save**.",
+            "Probarlo en el panel de chat preguntando qué puede hacer; debe responder según sus instrucciones.",
+            "Si hay un error por cuota aún inicializándose, elegir **Browse more models** y desplegar otro modelo gpt-5 o posterior."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "You are an AI agent that provides information about AI and related topics.\nYou answer questions concisely and precisely."
+        },
+        {
+          "type": "h",
+          "text": "3. Configurar Azure Speech Voice Live"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En el panel izquierdo, bajo el selector de modelo, activar **Voice mode**: esto integra Voice Live en el agente.",
+            "En el panel **Configuration** (icono de engranaje si no se abre solo) revisar la configuración por defecto de entrada y salida de voz; se pueden previsualizar distintas voces y elegir una.",
+            "Cerrar el panel y guardar el agente con **Save**."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "4. Conversar por voz con el agente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En el chat, pulsar **Start** y permitir el acceso al micrófono: el agente abre una sesión de voz y se pone a escuchar.",
+            "Con el estado **Listening…**, preguntar en voz alta, por ejemplo, cómo funciona el reconocimiento de voz.",
+            "Cuando el estado pasa a **Speaking…**, la respuesta del modelo se reproduce con {{síntesis de voz|text-to-speech}}. El botón **cc** muestra la pregunta y la respuesta como texto.",
+            "Seguir la conversación con otra pregunta (por ejemplo, cómo funciona la síntesis de voz).",
+            "Terminar con el icono **X**: se muestra la {{transcripción|transcript}} de la conversación."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "5. Ver el código cliente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Pulsar **Call agent** en la parte superior del chat para ver código de ejemplo de un cliente.",
+            "El código usa el SDK de Voice Live y se ocupa de: conectarse al proyecto para acceder al agente, transmitir el audio de entrada y salida en {{streaming|streaming}}, y manejar dispositivos de audio (micrófono y altavoces)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Al terminar, en el portal de Azure (https://portal.azure.com) se abre el grupo de recursos usado y se elige **Delete resource group**, escribiendo su nombre para confirmar; así no se generan costes."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: en Foundry, activar **Voice mode** en un agente es lo que añade Azure Speech Voice Live; el ciclo es escuchar (voz a texto), razonar con el modelo generativo y responder hablando (texto a voz). Para llevarlo a una app propia se usa el SDK de Voice Live con audio en streaming."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/04a-speech.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los pasos del laboratorio para crear el agente con voz.",
+          "items": [
+            "Crear o seleccionar un proyecto en el nuevo portal de Foundry",
+            "Crear el agente speech-agent con un modelo y unas instrucciones",
+            "Activar Voice mode y elegir la voz en el panel Configuration",
+            "Pulsar Start y hablar con el agente cuando indique Listening…",
+            "Revisar el código cliente con Call agent"
+          ],
+          "explain": "Primero se crea el agente de texto, luego se le añade la voz con Voice Live, se prueba hablando y finalmente se revisa el código para una app propia.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "En el agent playground, ¿qué acción añade capacidades de voz al agente mediante Azure Speech Voice Live?",
+          "options": [
+            "Cambiar el modelo por uno de transcripción",
+            "Activar Voice mode bajo el selector de modelo",
+            "Desplegar un recurso independiente de Azure Speech desde el portal de Azure",
+            "Subir un archivo de audio como fuente de conocimiento"
+          ],
+          "answer": 1,
+          "explain": "Al activar Voice mode en el agente, Foundry integra Voice Live y permite configurar la entrada y salida de voz.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Durante la sesión de voz, cuando el estado es Speaking…, la respuesta del modelo se está reproduciendo mediante síntesis de voz (text-to-speech).",
+          "answer": true,
+          "explain": "Listening… indica que el agente escucha la pregunta; Speaking… indica que vocaliza la respuesta con síntesis de voz.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "Según el código de ejemplo que muestra Call agent, ¿qué gestiona un cliente de Voice Live? (elige 3)",
+          "options": [
+            "La conexión con el proyecto para acceder al agente",
+            "El streaming de audio de entrada y salida",
+            "El uso de micrófono y altavoces",
+            "El reentrenamiento del modelo con la voz del usuario",
+            "La creación del grupo de recursos"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "El cliente conecta con el proyecto, transmite audio en ambos sentidos y maneja los dispositivos; no entrena modelos ni crea infraestructura.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m11u6",
+      "title": "Comprobación de conocimientos",
+      "titleEn": "Knowledge check",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de ideas clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El playground sirve para experimentar; el **SDK** permite integrar el reconocimiento de voz **dentro del código** de una aplicación.",
+            "El SDK de texto a voz se ocupa de la **autenticación, la comunicación de red y la generación de audio**; no almacena el audio de forma permanente.",
+            "El SDK de Voice Live (`azure-ai-voicelive`) **abre una conexión en tiempo real**, transmite audio, gestiona las respuestas habladas y las interrupciones; no sustituye al micrófono ni a los altavoces."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un equipo ha probado la transcripción en el playground de Foundry y ahora quiere que su app móvil transcriba notas de voz. ¿Qué deben usar?",
+          "options": [
+            "Seguir subiendo audios manualmente al playground",
+            "Un modelo de difusión",
+            "El SDK de texto a voz",
+            "El SDK de voz a texto de Azure Speech en el código de la app"
+          ],
+          "answer": 3,
+          "explain": "El SDK permite añadir el reconocimiento de voz directamente al código de la aplicación.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "El SDK de texto a voz guarda automáticamente todo el audio sintetizado de forma permanente en Azure Storage.",
+          "answer": false,
+          "explain": "El SDK gestiona autenticación, red y generación de audio; reproducir o guardar el audio lo decide la aplicación.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué hace el SDK `azure-ai-voicelive` en un agente con voz?",
+          "options": [
+            "Reemplaza el micrófono y los altavoces del usuario",
+            "Abre una conexión en tiempo real, transmite el audio y gestiona respuestas e interrupciones",
+            "Archiva grabaciones en Azure Storage",
+            "Entrena voces personalizadas"
+          ],
+          "answer": 1,
+          "explain": "El SDK de Voice Live mantiene la sesión en tiempo real, envía y recibe audio y maneja las interrupciones.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m11u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-speech-azure/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "list",
+          "items": [
+            "**Reconocimiento de voz (voz a texto)**: base de las apps con voz. El audio de un micrófono o archivo se convierte en texto con Azure Speech, en una app cliente o en un servicio de backend. Escenarios: transcripción en directo, subtítulos, buzón de voz o texto de entrada para agentes.",
+            "**Síntesis de voz (texto a voz)**: genera audio natural a partir de texto con voces neuronales que controlan pronunciación, tono, velocidad y altura; el audio se reproduce al momento o se guarda. Mejora la accesibilidad, la interacción manos libres y la experiencia.",
+            "**Voz a voz con Voice Live**: combina voz a texto, razonamiento de IA y texto a voz en un único servicio totalmente administrado para conversaciones en tiempo real, sin tener que unir varios componentes."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Más información: documentación de Azure Speech, de sus SDK y de Azure Speech - Voice Live."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada capacidad con su descripción.",
+          "pairs": [
+            [
+              "Voz a texto",
+              "Convierte audio hablado en texto"
+            ],
+            [
+              "Texto a voz",
+              "Genera audio hablado a partir de texto"
+            ],
+            [
+              "Voice Live",
+              "Conversación de voz en tiempo real en un servicio administrado"
+            ]
+          ],
+          "explain": "Son las tres capacidades centrales del módulo.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Voice Live obliga al desarrollador a encadenar manualmente un servicio de reconocimiento, un LLM y un servicio de síntesis.",
+          "answer": false,
+          "explain": "Precisamente Voice Live integra todo en un único servicio para no tener que unir componentes por separado.",
+          "obj": "B2"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Una app de idiomas escucha al alumno leer una frase y le indica qué palabras pronunció mal. ¿Qué capacidad es imprescindible?",
+      "options": [
+        "Síntesis de voz",
+        "Detección de objetos",
+        "Generación de imágenes",
+        "Reconocimiento de voz"
+      ],
+      "answer": 3,
+      "explain": "Para evaluar lo que dice el alumno hay que interpretar su voz: {{reconocimiento de voz|speech recognition}}.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Un aeropuerto quiere generar avisos de embarque hablados a partir de textos con una voz natural. ¿Qué usarías?",
+      "options": [
+        "Texto a voz con una voz neuronal",
+        "Transcripción por lotes",
+        "Voz a texto en tiempo real",
+        "Segmentación semántica"
+      ],
+      "answer": 0,
+      "explain": "Emitir anuncios a partir de texto es síntesis de voz; las voces neuronales suenan más naturales.",
+      "obj": "B2"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada paquete o elemento con su uso.",
+      "pairs": [
+        [
+          "azure-cognitiveservices-speech",
+          "SDK de Python para voz a texto y texto a voz"
+        ],
+        [
+          "azure-ai-voicelive",
+          "SDK de Python para conversaciones en tiempo real con Voice Live"
+        ],
+        [
+          "URI SAS",
+          "Referenciar archivos de audio en una transcripción por lotes"
+        ],
+        [
+          "Endpoint y clave del recurso de Foundry",
+          "Autenticar la conexión con Azure Speech"
+        ]
+      ],
+      "explain": "Cada elemento corresponde a una parte distinta de las soluciones de voz del módulo.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "La transcripción por lotes es síncrona y garantiza que el trabajo empiece a ejecutarse en un plazo fijo.",
+      "answer": false,
+      "explain": "Se ejecuta de forma asíncrona y con base en el mejor esfuerzo; no hay una estimación garantizada de inicio.",
+      "obj": "B2"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué tres componentes forman parte de una solución de voz a voz en Azure? (Elige tres.)",
+      "options": [
+        "Azure Speech para voz a texto y texto a voz",
+        "Agentes o lógica de aplicación que deciden la respuesta",
+        "Foundry Tools o servidores MCP que exponen la voz como herramientas",
+        "Un modelo de difusión para generar el audio",
+        "Una red convolucional para clasificar fotos"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explain": "La unidad de Voice Live enumera Azure Speech, agentes o lógica de aplicación y Foundry Tools o servidores MCP.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "En el SDK de reconocimiento, ¿qué evento muestra resultados provisionales mientras el usuario todavía está hablando?",
+      "options": [
+        "recognized",
+        "recognizing",
+        "canceled",
+        "SynthesizingAudioCompleted"
+      ],
+      "answer": 1,
+      "explain": "`recognizing` devuelve texto parcial; `recognized` entrega el resultado final de cada frase.",
+      "obj": "B2"
+    },
+    {
+      "type": "order",
+      "q": "Ordena cómo se llega al playground de voz a texto en el nuevo portal de Foundry.",
+      "items": [
+        "Página Build",
+        "Models",
+        "Pestaña AI services",
+        "Azure Speech - Speech to Text"
+      ],
+      "explain": "La ruta es Build → Models → AI services → Azure Speech - Speech to Text.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "Voice Live, además de responder con audio, puede devolver elementos visuales como avatares y desencadenar acciones.",
+      "answer": true,
+      "explain": "La unidad indica que Voice Live puede devolver avatares y desencadenar acciones cuando hace falta.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "Una aplicación de síntesis devuelve `ResultReason.Canceled` con un error de autenticación. ¿Qué es lo más probable?",
+      "options": [
+        "La voz elegida no admite el idioma",
+        "El texto era demasiado corto",
+        "El altavoz está apagado",
+        "No se configuraron correctamente la clave o el endpoint del recurso"
+      ],
+      "answer": 3,
+      "explain": "El ejemplo del SDK sugiere revisar la clave y el endpoint cuando la síntesis se cancela por error.",
+      "obj": "B2"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Reconocimiento de voz",
+      "en": "Speech recognition / speech-to-text (STT)",
+      "def": "Convertir la voz hablada en texto."
+    },
+    {
+      "es": "Síntesis de voz",
+      "en": "Speech synthesis / text-to-speech (TTS)",
+      "def": "Generar audio hablado a partir de texto."
+    },
+    {
+      "es": "Modelo acústico",
+      "en": "Acoustic model",
+      "def": "Modelo que convierte el audio en fonemas."
+    },
+    {
+      "es": "Fonema",
+      "en": "Phoneme",
+      "def": "Representación de un sonido concreto del habla."
+    },
+    {
+      "es": "Unidad prosódica",
+      "en": "Prosodic unit",
+      "def": "Fragmento (frase, oración, cláusula) usado para dar ritmo y entonación en la síntesis."
+    },
+    {
+      "es": "Voz neuronal",
+      "en": "Neural voice",
+      "def": "Voz sintética generada con redes neuronales, con entonación más natural."
+    },
+    {
+      "es": "Transcripción en tiempo real",
+      "en": "Real-time transcription",
+      "def": "Transcribir un flujo de audio mientras se habla."
+    },
+    {
+      "es": "Transcripción por lotes",
+      "en": "Batch transcription",
+      "def": "Transcribir de forma asíncrona archivos de audio almacenados, referenciados con un URI SAS."
+    },
+    {
+      "es": "Biblioteca cliente (SDK)",
+      "en": "Client library (SDK)",
+      "def": "Código preparado que facilita a una app comunicarse con un servicio o API."
+    },
+    {
+      "es": "Voz a voz",
+      "en": "Speech-to-speech",
+      "def": "Canalización que recibe voz y responde con voz: STT, razonamiento y TTS."
+    },
+    {
+      "es": "Voice Live",
+      "en": "Azure Speech Voice Live",
+      "def": "Servicio administrado de Azure Speech para conversaciones de voz en tiempo real con agentes."
+    },
+    {
+      "es": "Interacción proactiva",
+      "en": "Proactive engagement",
+      "def": "Opción que permite que el agente de voz inicie la conversación."
+    }
+  ]
+}

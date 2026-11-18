@@ -1,0 +1,1089 @@
+{
+  "id": "m03",
+  "path": 1,
+  "order": 3,
+  "title": "Introducción a los conceptos de procesamiento del lenguaje natural",
+  "titleEn": "Introduction to natural language processing concepts",
+  "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/",
+  "summary": "El procesamiento del lenguaje natural (NLP) permite a las aplicaciones analizar texto para deducir su significado. Este módulo recorre la tokenización, las técnicas estadísticas clásicas (frecuencia, TF-IDF, bolsa de palabras, TextRank) y los modelos semánticos basados en vectores (embeddings).",
+  "objectives": [
+    "Describir los casos de uso habituales del análisis de texto",
+    "Explicar la tokenización y las técnicas de preprocesamiento del texto",
+    "Describir técnicas estadísticas: análisis de frecuencia, TF-IDF, bolsa de palabras y TextRank",
+    "Explicar cómo los modelos semánticos representan el texto como vectores (embeddings) y para qué se usan"
+  ],
+  "units": [
+    {
+      "id": "m03u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "¿Qué es el análisis de texto?"
+        },
+        {
+          "type": "p",
+          "text": "Dentro de la IA, el {{análisis de texto|text analysis}} es una parte del {{procesamiento del lenguaje natural|natural language processing (NLP)}} cuyo objetivo es que una máquina obtenga significado, estructura y conclusiones útiles a partir de {{texto no estructurado|unstructured text}}. Las organizaciones lo usan para convertir opiniones de clientes, incidencias de soporte, contratos o publicaciones en redes sociales en información sobre la que se puede actuar."
+        },
+        {
+          "type": "p",
+          "text": "Las técnicas para procesar texto han evolucionado durante años: desde simples cálculos estadísticos basados en la **frecuencia de los términos** hasta modelos de lenguaje basados en **vectores** que capturan el significado semántico."
+        },
+        {
+          "type": "h",
+          "text": "Casos de uso habituales"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tarea",
+            "Qué hace",
+            "Ejemplo"
+          ],
+          "rows": [
+            [
+              "{{Detección de idioma|Language detection}}",
+              "Determina en qué idioma (o idiomas) está escrito un texto. Suele ser el primer paso de un flujo de procesamiento de varias etapas.",
+              "Saber si un correo está en español o en francés antes de enviarlo a otro proceso."
+            ],
+            [
+              "{{Extracción de términos clave|Key term extraction}}",
+              "Identifica las palabras y frases importantes para deducir los temas que trata el texto.",
+              "Sacar «precio», «entrega» y «atención al cliente» de una reseña."
+            ],
+            [
+              "{{Detección de entidades|Entity detection}}",
+              "Reconoce entidades con nombre mencionadas en el texto: lugares, personas, fechas, organizaciones…",
+              "Detectar «Madrid», «Ana López» y «3 de mayo»."
+            ],
+            [
+              "{{Detección de información de identificación personal|Personally identifiable information (PII) detection}}",
+              "Identifica y oculta (redacta) datos personales: nombres, direcciones, teléfonos, datos de cuentas financieras y otra información sensible.",
+              "Sustituir un número de teléfono por asteriscos."
+            ],
+            [
+              "{{Clasificación de texto|Text classification}}",
+              "Asigna documentos a categorías según su contenido.",
+              "Filtrar correos como spam / no spam."
+            ],
+            [
+              "{{Análisis de sentimiento|Sentiment analysis}}",
+              "Forma particular de clasificación que predice el sentimiento del texto.",
+              "Etiquetar publicaciones como positivas, neutras o negativas."
+            ],
+            [
+              "{{Resumen de texto|Text summarization}}",
+              "Reduce el volumen del texto conservando sus puntos principales.",
+              "Generar un párrafo a partir de un documento de varias páginas."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El análisis de texto es difícil porque el lenguaje es complejo y a los ordenadores les cuesta entenderlo. En el fondo, todas las técnicas persiguen lo mismo: **extraer significado** de texto en lenguaje natural."
+        },
+        {
+          "type": "tip",
+          "text": "En el examen, fíjate en el verbo del escenario: «¿en qué idioma está?» → detección de idioma; «ocultar teléfonos y nombres» → PII; «positivo o negativo» → sentimiento; «personas, lugares, fechas» → entidades; «temas principales» → frases/términos clave."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada necesidad con la tarea de análisis de texto adecuada.",
+          "pairs": [
+            [
+              "Ocultar números de cuenta y direcciones en transcripciones",
+              "Detección de PII"
+            ],
+            [
+              "Saber si una reseña es favorable o desfavorable",
+              "Análisis de sentimiento"
+            ],
+            [
+              "Averiguar en qué lengua está escrito un ticket",
+              "Detección de idioma"
+            ],
+            [
+              "Encontrar personas, organizaciones y fechas citadas",
+              "Detección de entidades"
+            ]
+          ],
+          "explain": "Cada tarea responde a una pregunta distinta: PII protege datos personales, sentimiento mide la opinión, la detección de idioma identifica la lengua y la de entidades localiza elementos con nombre.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Una empresa recibe tickets en muchos idiomas y quiere enviarlos al equipo correcto antes de cualquier otro análisis. ¿Qué tarea suele ser el primer paso?",
+          "options": [
+            "Resumen de texto",
+            "Detección de idioma",
+            "Análisis de sentimiento",
+            "Extracción de términos clave"
+          ],
+          "answer": 1,
+          "explain": "La detección de idioma suele ser la primera etapa en flujos de varios pasos, porque determina cómo se procesará el resto del texto.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "El análisis de sentimiento es un tipo particular de clasificación de texto.",
+          "answer": true,
+          "explain": "Clasifica el texto en categorías de sentimiento (positivo, neutro, negativo), por lo que es una forma especializada de clasificación.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m03u2",
+      "title": "Tokenización",
+      "titleEn": "Tokenization",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/2-how-it-works",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Dividir el texto en tokens"
+        },
+        {
+          "type": "p",
+          "text": "Al conjunto de texto que se quiere analizar se le llama {{corpus|corpus}}. El primer paso para analizarlo es la {{tokenización|tokenization}}: descomponerlo en {{tokens|tokens}}. Para simplificar, puedes imaginar que cada palabra distinta es un token, aunque en la práctica un token puede ser un fragmento de palabra o una combinación de palabras y signos de puntuación."
+        },
+        {
+          "type": "example",
+          "text": "La frase «We choose to go to the moon» se divide en tokens con un identificador numérico: 1 We, 2 choose, 3 to, 4 go, 5 the, 6 moon. El token «to» (número 3) aparece dos veces, así que la frase completa puede representarse como la secuencia [1, 2, 3, 4, 3, 5, 6]."
+        },
+        {
+          "type": "p",
+          "text": "Como cada token tiene un valor discreto, es sencillo contar cuántas veces aparece y averiguar los términos más usados, lo que puede indicar el tema principal del texto."
+        },
+        {
+          "type": "h",
+          "text": "Técnicas de preprocesamiento"
+        },
+        {
+          "type": "p",
+          "text": "Según el problema que se quiera resolver, antes o durante la tokenización se pueden aplicar varias técnicas:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Técnica",
+            "En qué consiste"
+          ],
+          "rows": [
+            [
+              "{{Normalización del texto|Text normalization}}",
+              "Quitar la puntuación y pasar todo a minúsculas antes de generar tokens. Mejora el rendimiento cuando el análisis se basa solo en frecuencias, pero puede perder significado: en «Mr Banks has worked in many banks.» quizá quieras distinguir a la persona «Banks» de los «banks» (bancos), o tratar «banks.» como token distinto porque el punto indica final de frase."
+            ],
+            [
+              "{{Eliminación de palabras vacías|Stop word removal}}",
+              "Excluir palabras como «the», «a» o «it» (en español «el», «un», «lo»), que facilitan la lectura humana pero aportan poco significado. Así destacan las palabras importantes."
+            ],
+            [
+              "{{Extracción de n-gramas|N-gram extraction}}",
+              "Encontrar frases de varios términos, como «artificial intelligence». Una palabra es un {{unigrama|unigram}}, dos un {{bigrama|bigram}}, tres un {{trigrama|trigram}}, etc. Tratar como grupo las secuencias frecuentes ayuda a entender mejor el texto."
+            ],
+            [
+              "{{Lematización por raíz (stemming)|Stemming}}",
+              "Recortar terminaciones como «s», «ing» o «ed» antes de contar, para que palabras con la misma raíz («powering», «powered», «powerful») cuenten como el mismo token («power»). Solo corta; el resultado no tiene por qué ser una palabra real."
+            ],
+            [
+              "{{Lematización|Lemmatization}}",
+              "Reducir cada palabra a su forma base o de diccionario, llamada {{lema|lemma}}. A diferencia del stemming, usa reglas lingüísticas y vocabulario para que el resultado sea una palabra válida (por ejemplo «running» → «run»)."
+            ],
+            [
+              "{{Etiquetado gramatical|Parts of speech (POS) tagging}}",
+              "Etiquetar cada token con su categoría gramatical (sustantivo, verbo, adjetivo, adverbio…). Usa reglas lingüísticas y, a menudo, modelos estadísticos que tienen en cuenta el token y su contexto en la frase."
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Diferencia típica de examen: el **stemming** corta terminaciones de forma mecánica; la **lematización** devuelve una palabra de diccionario válida usando reglas lingüísticas."
+        },
+        {
+          "type": "tip",
+          "text": "La tokenización sirve para **dividir el texto en unidades más pequeñas** que se pueden analizar; no traduce ni resume."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál es el propósito principal de la tokenización en NLP?",
+          "options": [
+            "Traducir el texto a un idioma intermedio",
+            "Dividir el texto en unidades más pequeñas que se puedan analizar",
+            "Eliminar automáticamente la información personal",
+            "Generar un resumen abstractivo del documento"
+          ],
+          "answer": 1,
+          "explain": "La tokenización descompone el corpus en tokens (palabras, partes de palabras o combinaciones con puntuación) que después se cuentan o se convierten en vectores.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada técnica de preprocesamiento con su descripción.",
+          "pairs": [
+            [
+              "Eliminación de palabras vacías",
+              "Descarta palabras como «the» o «a» que aportan poco significado"
+            ],
+            [
+              "Stemming",
+              "Recorta terminaciones para agrupar palabras con la misma raíz"
+            ],
+            [
+              "Lematización",
+              "Reduce la palabra a su forma de diccionario válida"
+            ],
+            [
+              "Extracción de n-gramas",
+              "Detecta frases de varias palabras como «natural language processing»"
+            ],
+            [
+              "Etiquetado gramatical (POS)",
+              "Marca cada token como sustantivo, verbo, adjetivo…"
+            ]
+          ],
+          "explain": "Cada técnica prepara los tokens de una manera diferente según el objetivo del análisis.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Normalizar el texto (minúsculas y sin puntuación) nunca hace perder información semántica.",
+          "answer": false,
+          "explain": "Puede perderla: al pasar a minúsculas no se distingue el apellido «Banks» de la palabra «banks», y al quitar el punto se pierde que la palabra cerraba la frase.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Una frase de tres palabras tratada como una sola unidad se denomina…",
+          "options": [
+            "Bigrama",
+            "Lema",
+            "Trigrama",
+            "Unigrama"
+          ],
+          "answer": 2,
+          "explain": "Unigrama = 1 palabra, bigrama = 2, trigrama = 3.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m03u3",
+      "title": "Análisis estadístico de texto",
+      "titleEn": "Statistical text analysis",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/3-statistical-techniques",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Una vez tokenizado y preparado el corpus, se pueden aplicar técnicas estadísticas clásicas para deducir el significado del texto."
+        },
+        {
+          "type": "h",
+          "text": "Análisis de frecuencia"
+        },
+        {
+          "type": "p",
+          "text": "El {{análisis de frecuencia|frequency analysis}} consiste en contar cuántas veces aparece cada token normalizado. La idea es que los términos más usados en un documento indican sus temas: si sabes qué palabras se repiten más, sueles hacerte una idea de qué trata."
+        },
+        {
+          "type": "example",
+          "text": "Un texto sobre los beneficios de la IA para las empresas, tras tokenizar, normalizar y lematizar, da frecuencias como: ai 4, business 3, benefit 2, customer 2, decision 2, market 2, ability 1, accuracy 1… Los términos más frecuentes indican que habla de la IA y sus beneficios para el negocio."
+        },
+        {
+          "type": "h",
+          "text": "TF-IDF"
+        },
+        {
+          "type": "p",
+          "text": "Contar ocurrencias funciona para un único documento, pero no sirve para **diferenciar documentos** dentro de un mismo corpus. Por ejemplo, dos textos sobre agentes de IA (uno sobre crear agentes declarativos con Microsoft Copilot Studio y otro sobre desarrollarlos con código en Microsoft Foundry) tienen las mismas palabras más frecuentes: «agent», «microsoft» y «ai». Eso dice que comparten tema general, pero no qué tiene de particular cada uno."
+        },
+        {
+          "type": "p",
+          "text": "{{Frecuencia de término – frecuencia inversa de documento|Term Frequency - Inverse Document Frequency (TF-IDF)}} puntúa cada término según lo a menudo que aparece en un documento comparado con su frecuencia general en toda la colección. Se considera muy relevante una palabra que aparece mucho en un documento concreto pero poco en el resto."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**1. Frecuencia del término (TF):** cuántas veces aparece la palabra en el documento. Si «agent» aparece 6 veces, tf(agent) = 6.",
+            "**2. Frecuencia inversa de documento (IDF):** mide lo común o raro que es el término en todos los documentos: `idf(t) = log(N / df(t))`, donde N es el número total de documentos y df(t) el número de documentos que contienen t. Si una palabra aparece en todos, no es especial.",
+            "**3. Combinar:** se multiplican: `tfidf(t, d) = tf(t, d) * log(N / df(t))`."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Una puntuación TF-IDF alta indica que la palabra es frecuente en ese documento y rara en los demás; una baja, que es común en muchos documentos. En el ejemplo de los dos textos (N = 2), «ai», «microsoft» y «agent» aparecen en ambos (df = 2), así que su IDF es log(2/2) = 0 y no aportan capacidad de discriminación. Los términos con mayor TF-IDF pasan a ser «copilot», «studio» y «declarative» en el primero, y «code», «develop» y «foundry» en el segundo, lo que deja claro de qué trata cada uno."
+        },
+        {
+          "type": "h",
+          "text": "Técnicas de aprendizaje automático con bolsa de palabras"
+        },
+        {
+          "type": "p",
+          "text": "La {{bolsa de palabras|bag-of-words}} es una técnica de {{extracción de características|feature extraction}} que representa los tokens como un vector de frecuencias u ocurrencias de palabras, **ignorando la gramática y el orden**. Ese vector sirve de entrada para algoritmos de aprendizaje automático como {{Naive Bayes|Naive Bayes}}, un clasificador probabilístico que aplica el teorema de Bayes para predecir la clase más probable de un documento a partir de la frecuencia de sus palabras."
+        },
+        {
+          "type": "example",
+          "text": "Filtro de spam: expresiones como «miracle cure», «lose weight fast» o «anti-aging» aparecen más en correos fraudulentos sobre productos de salud que en el correo normal; un modelo entrenado con bolsa de palabras marcaría como posible spam los mensajes que las contienen."
+        },
+        {
+          "type": "p",
+          "text": "El mismo método sirve para el **análisis de sentimiento**: la bolsa de palabras aporta las características y el modelo estima probabilidades para asignar etiquetas como «positivo» o «negativo»."
+        },
+        {
+          "type": "h",
+          "text": "TextRank"
+        },
+        {
+          "type": "p",
+          "text": "{{TextRank|TextRank}} es un algoritmo **no supervisado basado en grafos** que modela el texto como una red de nodos conectados. Por ejemplo, cada frase es un nodo y las conexiones (aristas) se puntúan según la similitud de sus palabras. Se usa sobre todo para **resumir**, eligiendo el subconjunto de frases que mejor representa el tema. Aplica la misma idea que el algoritmo PageRank de Google (que ordena páginas web por sus enlaces): una frase es importante si se parece a muchas otras frases importantes."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Construir el grafo:** cada frase es un nodo; las aristas se ponderan por similitud (solapamiento de palabras o similitud del coseno entre vectores de frase).",
+            "**Calcular rangos de forma iterativa:** la puntuación de cada nodo depende de la de sus vecinos: `TextRank(Si) = (1-d) + d * Σ(wji / Σwjk) * TextRank(Sj)`, donde d es un factor de amortiguación (normalmente 0,85) y wji el peso de la arista de la frase j a la i.",
+            "**Extraer las frases mejor puntuadas:** tras converger, las frases con mayor puntuación forman el resumen."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Un documento de 5 frases sobre computación en la nube: las frases 1 («Cloud computing provides on-demand access…»), 3 («Azure is Microsoft's cloud computing platform») y 5 («Cloud computing enables scalability…») comparten mucho vocabulario con las demás (pesos como 0,6 o 0,7), obtienen las puntuaciones más altas y forman el resumen."
+        },
+        {
+          "type": "p",
+          "text": "Elegir las frases más relevantes del original es {{resumen extractivo|extractive summarization}}: no se genera texto nuevo. Los modelos semánticos modernos permiten además el {{resumen abstractivo|abstractive summarization}}, que redacta texto nuevo con los temas clave."
+        },
+        {
+          "type": "p",
+          "text": "TextRank también puede trabajar a nivel de palabra para la **extracción de palabras clave**: las palabras son nodos, las aristas representan que coaparecen dentro de una ventana fija, y las mejor puntuadas son los términos clave."
+        },
+        {
+          "type": "tip",
+          "text": "Si el enunciado habla de «importancia de una palabra en un documento dentro de una colección», la respuesta es **TF-IDF**. Si habla de grafos y frases para resumir, **TextRank**. Si habla de clasificar (spam, sentimiento) con frecuencias sin orden, **bolsa de palabras + Naive Bayes**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Tienes miles de artículos técnicos que comparten mucho vocabulario. ¿Qué técnica identifica los términos que distinguen a cada artículo del resto?",
+          "options": [
+            "Análisis de frecuencia simple",
+            "Normalización del texto",
+            "Etiquetado gramatical",
+            "TF-IDF"
+          ],
+          "answer": 3,
+          "explain": "TF-IDF pondera la frecuencia en un documento frente a lo común que es el término en toda la colección, de modo que destaca las palabras propias de cada documento.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Si un término aparece en todos los documentos de la colección, su IDF es 0 y su TF-IDF también es 0.",
+          "answer": true,
+          "explain": "IDF = log(N/df) = log(N/N) = log(1) = 0, y al multiplicar por TF el resultado es 0: el término no discrimina entre documentos.",
+          "obj": "A3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos afirmaciones describen correctamente la técnica de bolsa de palabras? (Elige 2)",
+          "options": [
+            "Tiene en cuenta el orden exacto de las palabras",
+            "Representa el texto como un vector de frecuencias u ocurrencias",
+            "Puede alimentar un clasificador Naive Bayes para detectar spam",
+            "Genera texto nuevo para resumir documentos",
+            "Construye un grafo de frases conectadas"
+          ],
+          "answers": [
+            1,
+            2
+          ],
+          "explain": "La bolsa de palabras ignora gramática y orden, y su vector de frecuencias se usa como características para clasificadores como Naive Bayes.",
+          "obj": "A3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos del algoritmo TextRank para resumir un documento.",
+          "items": [
+            "Dividir el documento en frases",
+            "Crear un grafo con aristas ponderadas por similitud",
+            "Calcular iterativamente la puntuación de cada frase",
+            "Seleccionar las frases con mayor puntuación como resumen"
+          ],
+          "explain": "TextRank parte las frases, las conecta en un grafo, calcula los rangos hasta converger y extrae las mejores (resumen extractivo).",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m03u4",
+      "title": "Modelos de lenguaje semánticos",
+      "titleEn": "Semantic language models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/4-semantic-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "De la estadística a los vectores"
+        },
+        {
+          "type": "p",
+          "text": "Con el avance del NLP se pudieron entrenar modelos que capturan la **relación semántica** entre tokens, lo que dio lugar a potentes modelos de lenguaje de aprendizaje profundo. Su núcleo es codificar los tokens como vectores (matrices de números de varios valores) llamados {{incrustaciones|embeddings}}."
+        },
+        {
+          "type": "p",
+          "text": "Este enfoque se popularizó con técnicas como {{Word2Vec|Word2Vec}} y {{GloVe|GloVe}}, que representan los tokens como {{vectores densos|dense vectors}} de varias dimensiones. Durante el entrenamiento, los valores de cada dimensión se ajustan para reflejar características semánticas según cómo se usa el token en el texto. Las relaciones matemáticas entre vectores permiten realizar tareas de análisis de forma más eficaz que las técnicas puramente estadísticas."
+        },
+        {
+          "type": "p",
+          "text": "Un avance posterior es la técnica de {{atención|attention}}, que considera cada token en su contexto y calcula la influencia de los tokens que lo rodean. Las {{incrustaciones contextualizadas|contextualized embeddings}} resultantes, como las de la familia de modelos GPT, son la base de la IA generativa moderna."
+        },
+        {
+          "type": "h",
+          "text": "Representar el texto como vectores"
+        },
+        {
+          "type": "p",
+          "text": "Un vector es un punto en un espacio multidimensional definido por sus coordenadas en varios ejes; describe una dirección y una distancia desde el origen. Los tokens con significado parecido deberían tener vectores con **orientación similar** (que apuntan en direcciones parecidas)."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Palabra",
+            "Vector (3 dimensiones)"
+          ],
+          "rows": [
+            [
+              "dog (perro)",
+              "[0.8, 0.6, 0.1]"
+            ],
+            [
+              "puppy (cachorro)",
+              "[0.9, 0.7, 0.4]"
+            ],
+            [
+              "cat (gato)",
+              "[0.7, 0.5, 0.2]"
+            ],
+            [
+              "kitten (gatito)",
+              "[0.8, 0.6, 0.5]"
+            ],
+            [
+              "young (joven)",
+              "[0.1, 0.1, 0.3]"
+            ],
+            [
+              "ball (pelota)",
+              "[0.3, 0.9, 0.1]"
+            ],
+            [
+              "tree (árbol)",
+              "[0.2, 0.1, 0.9]"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "«dog» y «cat» tienen vectores parecidos (animales domésticos), igual que «puppy» y «kitten» (crías). «tree», «young» y «ball» apuntan en direcciones claramente distintas, reflejando significados diferentes."
+        },
+        {
+          "type": "h",
+          "text": "Encontrar términos relacionados: similitud del coseno"
+        },
+        {
+          "type": "p",
+          "text": "Como la orientación depende de los valores de cada dimensión, se puede usar la {{similitud del coseno|cosine similarity}} para comparar palabras: `cosine_similarity(A, B) = (A · B) / (||A|| * ||B||)`, donde A · B es el {{producto escalar|dot product}} y ||A|| la magnitud (longitud) del vector A."
+        },
+        {
+          "type": "example",
+          "text": "¿Cuál sobra entre dog, cat y tree? dog·cat = 0.56+0.30+0.02 = 0.88; |dog| ≈ 1.005, |cat| ≈ 0.883 → similitud ≈ 0.992 (muy alta). dog·tree = 0.31, |tree| ≈ 0.927 → ≈ 0.333 (baja). cat·tree = 0.37 → ≈ 0.452 (baja). Por tanto «tree» es el intruso."
+        },
+        {
+          "type": "h",
+          "text": "Traslación de vectores: suma y resta"
+        },
+        {
+          "type": "p",
+          "text": "Se pueden sumar o restar vectores y buscar el token cuyo vector coincide con el resultado. Esto permite una lógica aritmética basada en relaciones lingüísticas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "dog + young = [0.9, 0.7, 0.4] = puppy",
+            "cat + young = [0.8, 0.6, 0.5] = kitten",
+            "puppy − young = [0.8, 0.6, 0.1] = dog",
+            "kitten − young = [0.7, 0.5, 0.2] = cat"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Funciona porque el vector «young» codifica la transformación semántica de animal adulto a cría. En la práctica la aritmética casi nunca da una coincidencia exacta: se busca la palabra cuyo vector es **el más cercano** (más similar) al resultado."
+        },
+        {
+          "type": "h",
+          "text": "Razonamiento por analogía"
+        },
+        {
+          "type": "p",
+          "text": "La aritmética de vectores responde analogías como «puppy es a dog lo que kitten es a ?»: se calcula kitten − puppy + dog = [0.8,0.6,0.5] − [0.9,0.7,0.4] + [0.8,0.6,0.1] = [0.7, 0.5, 0.2] = **cat**."
+        },
+        {
+          "type": "h",
+          "text": "Usos de los modelos semánticos en análisis de texto"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tarea",
+            "Cómo ayudan los embeddings"
+          ],
+          "rows": [
+            [
+              "Resumen de texto",
+              "Cada frase se codifica como vector (a menudo promediando o agrupando los embeddings de sus palabras); las frases más centrales respecto al significado del documento se extraen como resumen (extractivo)."
+            ],
+            [
+              "Extracción de palabras clave",
+              "Se compara el embedding de cada palabra con la representación semántica global del documento; las más similares o centrales son los términos clave."
+            ],
+            [
+              "{{Reconocimiento de entidades con nombre|Named entity recognition (NER)}}",
+              "Los modelos se ajustan ({{ajuste fino|fine-tuning}}) para que los tipos de entidad similares (personas, organizaciones, lugares) queden agrupados; en inferencia se examina el embedding de cada token y su contexto para decidir si es entidad y de qué tipo."
+            ],
+            [
+              "Clasificación de texto",
+              "Cada documento se representa con un vector agregado (por ejemplo la media de los embeddings de sus palabras) que se usa como característica de un clasificador o se compara con vectores prototipo de cada clase. Los documentos similares tienen orientaciones similares."
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Idea clave para el examen: los **embeddings** capturan relaciones semánticas entre tokens en múltiples dimensiones; palabras de significado parecido tienen vectores cercanos (alta similitud del coseno)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué describe mejor la función de los vectores de incrustación (embeddings) en NLP?",
+          "options": [
+            "Capturan relaciones semánticas entre tokens en varias dimensiones",
+            "Contienen la lista de palabras vacías que se deben ignorar",
+            "Guardan la traducción de cada token a varios idiomas",
+            "Cuentan cuántas veces aparece cada palabra en un documento"
+          ],
+          "answer": 0,
+          "explain": "Un embedding es un vector denso cuyas dimensiones reflejan características semánticas; tokens con significado parecido tienen vectores con orientación similar.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Una similitud del coseno cercana a 1 entre dos vectores de palabras indica que sus significados son muy distintos.",
+          "answer": false,
+          "explain": "Un valor cercano a 1 indica que los vectores apuntan en la misma dirección, es decir, significados muy parecidos (como dog y cat ≈ 0,992).",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Con embeddings bien entrenados, ¿qué resultado esperarías de la operación «rey − hombre + mujer»?",
+          "options": [
+            "Un vector cercano a «hombre»",
+            "Un vector nulo",
+            "Un vector cercano a «reina»",
+            "Un vector cercano a «corona»"
+          ],
+          "answer": 2,
+          "explain": "Es el mismo razonamiento por analogía que kitten − puppy + dog = cat: la resta y suma trasladan la relación semántica y se busca el vector más cercano.",
+          "obj": "A3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos técnicas o modelos se basan en representar tokens como vectores densos? (Elige 2)",
+          "options": [
+            "Word2Vec",
+            "TF-IDF",
+            "Stemming",
+            "GloVe",
+            "Eliminación de palabras vacías"
+          ],
+          "answers": [
+            0,
+            3
+          ],
+          "explain": "Word2Vec y GloVe popularizaron los embeddings densos; TF-IDF es una puntuación estadística y stemming/stop words son preprocesamiento.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m03u5",
+      "title": "Ejercicio: explorar el análisis de texto",
+      "titleEn": "Exercise - Explore text analytics",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/4b-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo**: probar aplicaciones habituales del {{análisis de texto|text analysis}}: primero resumir con un modelo generativo y después usar una herramienta especializada para {{detectar el idioma|language detection}} y localizar {{información de identificación personal|personally identifiable information (PII)}} (unos 15 minutos). Las apps imitan los playgrounds de chat y de lenguaje del portal de Microsoft Foundry."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "p",
+          "text": "Navegador moderno (Chrome, Edge o Firefox recientes, con WASM SIMD; {{WebGPU|WebGPU}} recomendado), CPU de 64 bits y 8 núcleos, 8 GB de RAM o más (16 GB recomendados), GPU recomendada y espacio para cachear entre 300 y 800 MB de modelos. Micrófono y altavoces si se usa la voz. No hace falta suscripción de Azure. Con un **modo básico** de respaldo."
+        },
+        {
+          "type": "h",
+          "text": "1. Resumir texto con un modelo generativo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir **Chat Playground** en `https://aka.ms/chat-playground` y esperar a que cargue Phi 3.5 Mini.",
+            "Cambiar las **Instructions** del panel izquierdo por un rol de analista de texto.",
+            "Pegar la reseña de una revista de los 80 sobre el **Commodore 64** con la orden de resumirla en un párrafo corto (Ctrl+Enter para nueva línea).",
+            "El modelo genera un {{resumen|summary}} del artículo."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "You are an AI assistant that analyzes and summarizes text."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "Summarize this review as a single short paragraph:\n<texto de la reseña del Commodore 64>"
+        },
+        {
+          "type": "h",
+          "text": "2. Usar una herramienta de análisis especializada"
+        },
+        {
+          "type": "p",
+          "text": "Un LLM generalista suele analizar bien el texto, pero una herramienta especializada da resultados **más predecibles**, y un agente puede usarla como herramienta."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Ir a **Language Playground** en `https://aka.ms/language-app` y esperar a que esté listo (usa el mismo Phi 3.5 Mini, con un modo básico que aplica técnicas estadísticas)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2a. Detectar el idioma"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Seleccionar el analizador **Language detection**, escoger un ejemplo en **Input text** y pulsar **Detect**.",
+            "Pulsar **Edit** para volver a editar: se puede elegir otro ejemplo, escribir texto propio o subir un archivo.",
+            "Probar con la etiqueta de un ordenador antiguo (Schneider CPC 464, «Hergestellt in Korea»…): debe detectarse alemán.",
+            "Idiomas soportados por la app: inglés, francés, español, portugués, alemán, italiano, chino simplificado, japonés, hindi, árabe y ruso."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Detectar el idioma suele ser el **primer paso** de un flujo de análisis, para enviar el texto al modelo o agente adecuado."
+        },
+        {
+          "type": "h",
+          "text": "2b. Identificar PII"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Seleccionar el analizador **Text PII extraction**, escoger un ejemplo y pulsar **Detect**.",
+            "Con **Edit**, introducir una factura de 1984 de un ZX Spectrum: deben aparecer el nombre de la clienta, la dirección y el teléfono.",
+            "Tipos de PII que reconoce la app: nombres de personas, correos electrónicos, teléfonos y direcciones postales."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Las organizaciones detectan y {{anonimizan|redact}} la PII para cumplir políticas y leyes de privacidad. La app combina IA generativa, análisis estadístico y {{expresiones regulares|regular expressions}}; no es de producción y puede dar falsos positivos u omitir datos."
+        },
+        {
+          "type": "h",
+          "text": "Resultado"
+        },
+        {
+          "type": "p",
+          "text": "Se obtienen un resumen, el idioma detectado y la lista de PII. Para hacerlo con calidad y a escala se usa Microsoft Foundry: sus modelos generativos y **Azure Language** en Foundry Tools, que ofrece APIs especializadas para estas tareas."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: resumen, detección de idioma, PII, entidades y sentimiento son tareas de análisis de texto. Un LLM puede hacerlas con un buen prompt; Azure Language da resultados más predecibles y estructurados. Detectar el idioma va primero para enrutar el texto."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: `https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/03-language.html`"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "En el laboratorio, ¿qué analizador del Language Playground usarías para encontrar el teléfono y la dirección de la clienta en una factura antigua?",
+          "options": [
+            "Language detection",
+            "Text PII extraction",
+            "Summarization",
+            "Sentiment analysis"
+          ],
+          "answer": 1,
+          "explain": "Teléfonos, direcciones, nombres y correos son información de identificación personal (PII), que detecta el analizador Text PII extraction.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Según el laboratorio, detectar el idioma suele ser el primer paso de un flujo de análisis para enviar el texto al modelo o agente adecuado.",
+          "answer": true,
+          "explain": "Si el texto puede venir en varios idiomas, conocer el idioma principal permite enrutarlo correctamente antes de seguir procesándolo.",
+          "obj": "A3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos para resumir la reseña del Commodore 64 en el Chat Playground.",
+          "items": [
+            "Abrir el Chat Playground y esperar a que cargue el modelo",
+            "Cambiar las instrucciones a un asistente que analiza y resume texto",
+            "Pegar la reseña con la orden de resumirla en un párrafo",
+            "Revisar el resumen generado"
+          ],
+          "explain": "Primero se carga el modelo, se ajusta el prompt del sistema, se envía el texto con la petición y se revisa el resultado.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "¿Por qué el laboratorio pasa del modelo generativo a una herramienta de análisis especializada?",
+          "options": [
+            "Porque los LLM no pueden analizar texto",
+            "Porque la herramienta especializada da resultados más predecibles",
+            "Porque la herramienta especializada no necesita texto de entrada",
+            "Porque así se evita usar Microsoft Foundry"
+          ],
+          "answer": 1,
+          "explain": "Un LLM generalista puede analizar texto, pero un servicio especializado ofrece resultados más consistentes, útiles cuando un agente los usa como herramienta.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m03u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/5-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Tokenización:** dividir el texto en unidades más pequeñas (tokens) para poder analizarlo.",
+            "**TF-IDF:** mide la importancia de una palabra en un documento concreto dentro de una colección mayor.",
+            "**Naive Bayes:** clasificador probabilístico que usa características de bolsa de palabras (spam, sentimiento).",
+            "**Word2Vec / embeddings:** vectores que capturan relaciones semánticas entre tokens en múltiples dimensiones.",
+            "**Palabras vacías:** palabras frecuentes con poco significado que se eliminan en el preprocesamiento (no son lo que definen los embeddings)."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada técnica con su finalidad.",
+          "pairs": [
+            [
+              "Tokenización",
+              "Descomponer el texto en unidades analizables"
+            ],
+            [
+              "TF-IDF",
+              "Ponderar la relevancia de un término en un documento frente a la colección"
+            ],
+            [
+              "Naive Bayes",
+              "Clasificar documentos de forma probabilística"
+            ],
+            [
+              "Embeddings",
+              "Representar el significado de los tokens como vectores"
+            ]
+          ],
+          "explain": "Son las cuatro piezas fundamentales del módulo: preparar, ponderar, clasificar y representar semánticamente.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un analista quiere saber qué palabras caracterizan un informe concreto frente a otros 500 informes de la empresa. ¿Qué usaría?",
+          "options": [
+            "Naive Bayes",
+            "Word2Vec",
+            "TF-IDF",
+            "Normalización del texto"
+          ],
+          "answer": 2,
+          "explain": "TF-IDF destaca los términos frecuentes en ese informe pero poco frecuentes en el resto de la colección.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Los embeddings son listas de palabras vacías que el modelo debe ignorar.",
+          "answer": false,
+          "explain": "Los embeddings son vectores numéricos que codifican el significado; las palabras vacías son un concepto de preprocesamiento.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m03u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/6-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "En este módulo has visto los conceptos básicos del análisis de texto: tokenización y preprocesamiento, análisis de frecuencia, TF-IDF, clasificación de texto con bolsa de palabras y TextRank. También has conocido los modelos de lenguaje semánticos, que codifican los tokens como vectores para agrupar palabras relacionadas y razonar sobre su significado."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Técnicas estadísticas: se basan en contar y ponderar términos; no entienden el contexto.",
+            "Técnicas semánticas: se basan en embeddings; capturan el significado y son la base de la IA generativa (atención, GPT).",
+            "Para profundizar: «What is natural language processing (NLP)?» y la documentación de Azure Language in Foundry Tools."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "El servicio de Azure que aplica estas técnicas de forma gestionada es Azure Language in Foundry Tools (lo verás en el módulo de análisis de texto en Azure)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "tf",
+          "q": "Las incrustaciones contextualizadas, calculadas mediante atención, son la base de los modelos generativos modernos como GPT.",
+          "answer": true,
+          "explain": "La atención tiene en cuenta los tokens que rodean a cada token y produce embeddings contextualizados, base de la IA generativa.",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué enfoque es puramente estadístico y NO captura el significado semántico de las palabras?",
+          "options": [
+            "Embeddings contextualizados",
+            "Análisis de frecuencia",
+            "Word2Vec",
+            "Modelos GPT"
+          ],
+          "answer": 1,
+          "explain": "El análisis de frecuencia solo cuenta apariciones de tokens; los demás representan el significado mediante vectores.",
+          "obj": "A3"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Una tienda online quiere marcar automáticamente las reseñas como positivas, neutras o negativas. ¿Qué tarea de NLP necesita?",
+      "options": [
+        "Detección de entidades",
+        "Detección de idioma",
+        "Resumen de texto",
+        "Análisis de sentimiento"
+      ],
+      "answer": 3,
+      "explain": "El análisis de sentimiento clasifica el texto según la opinión expresada.",
+      "obj": "A3"
+    },
+    {
+      "type": "order",
+      "q": "Ordena los pasos para calcular TF-IDF de un término en un documento.",
+      "items": [
+        "Contar cuántas veces aparece el término en el documento (TF)",
+        "Contar en cuántos documentos de la colección aparece (df)",
+        "Calcular IDF = log(N / df)",
+        "Multiplicar TF × IDF"
+      ],
+      "explain": "TF-IDF combina la frecuencia local con la rareza global del término en la colección.",
+      "obj": "A3"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada técnica con su categoría.",
+      "pairs": [
+        [
+          "Lematización",
+          "Preprocesamiento de tokens"
+        ],
+        [
+          "TextRank",
+          "Resumen extractivo basado en grafos"
+        ],
+        [
+          "Naive Bayes con bolsa de palabras",
+          "Clasificación de texto"
+        ],
+        [
+          "Similitud del coseno entre embeddings",
+          "Comparación semántica de palabras"
+        ]
+      ],
+      "explain": "Cada técnica pertenece a una fase distinta del análisis de texto.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "El stemming siempre produce una palabra válida de diccionario.",
+      "answer": false,
+      "explain": "El stemming solo recorta terminaciones; es la lematización la que garantiza una forma de diccionario válida (lema).",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos afirmaciones sobre TextRank son correctas? (Elige 2)",
+      "options": [
+        "Es un algoritmo supervisado que necesita datos etiquetados",
+        "Aplica a frases o palabras la misma idea que PageRank aplica a páginas web",
+        "Genera frases nuevas que no estaban en el texto",
+        "Puede usarse para extraer palabras clave tomando las palabras como nodos",
+        "Ignora la similitud entre frases"
+      ],
+      "answers": [
+        1,
+        3
+      ],
+      "explain": "TextRank es no supervisado, basado en grafos como PageRank, y puede trabajar a nivel de frase (resumen extractivo) o de palabra (palabras clave).",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Dados los vectores dog [0.8, 0.6, 0.1], cat [0.7, 0.5, 0.2] y tree [0.2, 0.1, 0.9], ¿qué par tendrá mayor similitud del coseno?",
+      "options": [
+        "dog y tree",
+        "dog y cat",
+        "cat y tree",
+        "Todos tienen la misma"
+      ],
+      "answer": 1,
+      "explain": "dog y cat apuntan en direcciones casi iguales (≈ 0,99), mientras que tree apunta hacia otra dimensión.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué mecanismo permite a los modelos modernos calcular la influencia de los tokens cercanos sobre cada token para producir embeddings contextualizados?",
+      "options": [
+        "Atención",
+        "Stemming",
+        "Bolsa de palabras",
+        "Frecuencia inversa de documento"
+      ],
+      "answer": 0,
+      "explain": "La atención considera cada token en su contexto; es la base de modelos como GPT.",
+      "obj": "A2"
+    },
+    {
+      "type": "tf",
+      "q": "En un resumen abstractivo se genera texto nuevo que resume los temas clave del documento.",
+      "answer": true,
+      "explain": "A diferencia del extractivo (que copia frases del original), el abstractivo redacta lenguaje nuevo; lo permiten los modelos semánticos.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Antes de contar frecuencias, quieres que «powering», «powered» y «powerful» cuenten como el mismo token recortando sus terminaciones. ¿Qué técnica aplicas?",
+      "options": [
+        "Etiquetado gramatical",
+        "Extracción de n-gramas",
+        "Stemming",
+        "Eliminación de palabras vacías"
+      ],
+      "answer": 2,
+      "explain": "El stemming elimina sufijos para agrupar palabras con la misma raíz («power»).",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Procesamiento del lenguaje natural",
+      "en": "Natural language processing (NLP)",
+      "def": "Área de la IA que permite a las máquinas analizar, entender y generar lenguaje humano."
+    },
+    {
+      "es": "Corpus",
+      "en": "Corpus",
+      "def": "Conjunto de texto que se analiza."
+    },
+    {
+      "es": "Tokenización",
+      "en": "Tokenization",
+      "def": "Dividir el texto en unidades (tokens) para analizarlo."
+    },
+    {
+      "es": "Palabras vacías",
+      "en": "Stop words",
+      "def": "Palabras muy comunes con poco significado que suelen excluirse del análisis."
+    },
+    {
+      "es": "Stemming",
+      "en": "Stemming",
+      "def": "Recortar terminaciones de palabras para agrupar las que comparten raíz."
+    },
+    {
+      "es": "Lematización",
+      "en": "Lemmatization",
+      "def": "Reducir una palabra a su forma de diccionario (lema) usando reglas lingüísticas."
+    },
+    {
+      "es": "N-grama",
+      "en": "N-gram",
+      "def": "Secuencia de n palabras tratada como unidad (unigrama, bigrama, trigrama…)."
+    },
+    {
+      "es": "TF-IDF",
+      "en": "Term Frequency - Inverse Document Frequency",
+      "def": "Puntuación que mide lo relevante que es un término en un documento respecto a una colección."
+    },
+    {
+      "es": "Bolsa de palabras",
+      "en": "Bag-of-words",
+      "def": "Representación del texto como vector de frecuencias que ignora el orden y la gramática."
+    },
+    {
+      "es": "Naive Bayes",
+      "en": "Naive Bayes",
+      "def": "Clasificador probabilístico basado en el teorema de Bayes, usado en spam y sentimiento."
+    },
+    {
+      "es": "TextRank",
+      "en": "TextRank",
+      "def": "Algoritmo no supervisado basado en grafos que ordena frases o palabras para resumir o extraer palabras clave."
+    },
+    {
+      "es": "Incrustación",
+      "en": "Embedding",
+      "def": "Vector numérico que representa el significado semántico de un token."
+    },
+    {
+      "es": "Similitud del coseno",
+      "en": "Cosine similarity",
+      "def": "Medida de lo parecida que es la orientación de dos vectores; cercana a 1 indica significado similar."
+    },
+    {
+      "es": "Atención",
+      "en": "Attention",
+      "def": "Mecanismo que pondera la influencia de los tokens del contexto para generar embeddings contextualizados."
+    }
+  ]
+}

@@ -1,0 +1,1299 @@
+{
+  "id": "m01",
+  "path": 1,
+  "order": 1,
+  "title": "Introducción a los conceptos de IA",
+  "titleEn": "Introduction to AI concepts",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/",
+  "summary": "Visión general, sin código, de las grandes capacidades de la IA: IA generativa y agentes, procesamiento del lenguaje natural, voz, visión por computador, extracción de información y los principios de la IA responsable.",
+  "objectives": [
+    "Describir qué es la IA generativa y qué es un agente de IA",
+    "Reconocer escenarios de procesamiento del lenguaje natural y análisis de texto",
+    "Distinguir reconocimiento de voz y síntesis de voz",
+    "Identificar los tipos de modelos de visión por computador",
+    "Explicar cómo funciona la extracción de información (OCR + modelo analítico)",
+    "Enumerar y aplicar los seis principios de la IA responsable"
+  ],
+  "units": [
+    {
+      "id": "m01u1",
+      "title": "Introducción a la IA",
+      "titleEn": "Introduction to AI",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Este módulo ofrece un panorama general de las capacidades principales de la {{inteligencia artificial|artificial intelligence (AI)}} y una intuición de cómo funcionan. No es un módulo técnico: no se escribe código ni se entra en las matemáticas de los {{modelos de aprendizaje automático|machine learning models}} sobre los que se construye la IA."
+        },
+        {
+          "type": "p",
+          "text": "El objetivo es entender **qué tipo de cosas puede hacer la IA** y los principios básicos en los que se apoya. Va dirigido tanto a quien siente curiosidad por la IA que ve en los medios como a quien va a adoptarla en el trabajo o en los estudios."
+        },
+        {
+          "type": "h",
+          "text": "Formato y recursos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El módulo se puede seguir en vídeo o como texto con imágenes; el texto contiene más detalle que los vídeos.",
+            "**Ask Anton** es una aplicación de IA de ejemplo para preguntar sobre los temas de la formación. Tiene dos variantes: una basada en Azure (usa un {{modelo de lenguaje grande|large language model (LLM)}} desplegado en Azure y herramientas que extraen información de la documentación; requiere una suscripción de Azure en la que crear un proyecto de Microsoft Foundry y desplegar un modelo) y otra basada en el navegador (asistente básico con modelos que se ejecutan localmente en el navegador).",
+            "Ask Anton no es un producto soportado de Microsoft: es solo un ejemplo de agente de IA para explorar."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "A lo largo del módulo se usa un ejemplo recurrente: un **sitio web sobre historia de la informática** al que se le van añadiendo capacidades de IA (chat generativo, análisis de texto, voz, visión, extracción de información y filtros de contenido)."
+        },
+        {
+          "type": "tip",
+          "text": "El examen AI-901 empieza por saber reconocer **cargas de trabajo de IA** ({{cargas de trabajo|workloads}}): generativa/agentes, texto, voz, visión y extracción de información. Este módulo es el mapa de todas ellas."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "tf",
+          "q": "El módulo «Introduction to AI concepts» requiere escribir código y conocer las matemáticas de los modelos de aprendizaje automático.",
+          "answer": false,
+          "explain": "Es un módulo conceptual de alto nivel: se centra en qué puede hacer la IA y sus principios básicos, sin código ni matemáticas.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué necesitas para usar la variante de Ask Anton basada en Azure?",
+          "options": [
+            "Nada, se ejecuta siempre en el navegador sin conexión",
+            "Una suscripción de Azure en la que puedas crear un proyecto de Microsoft Foundry y desplegar un modelo",
+            "Una licencia de Microsoft 365 Copilot",
+            "Un ordenador con GPU dedicada"
+          ],
+          "answer": 1,
+          "explain": "La versión Azure usa un LLM desplegado en Azure, así que necesitas una suscripción donde crear un proyecto de Foundry y desplegar un modelo.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m01u2",
+      "title": "IA generativa y agentes",
+      "titleEn": "Generative AI and agents",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/2-generative-ai",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{IA generativa|generative AI}} es la rama de la IA que permite a las aplicaciones **crear contenido nuevo**: con frecuencia diálogos en lenguaje natural, pero también imágenes, vídeo, código y otros formatos."
+        },
+        {
+          "type": "example",
+          "text": "El sitio de historia de la informática añade una interfaz de chat donde el usuario pregunta por personajes, tecnologías o acontecimientos clave, y la IA genera respuestas originales. Esto crea una experiencia interactiva atractiva."
+        },
+        {
+          "type": "h",
+          "text": "¿Cómo funciona la IA generativa?"
+        },
+        {
+          "type": "list",
+          "items": [
+            "La capacidad de generar se basa en un {{modelo de lenguaje|language model}} entrenado con enormes volúmenes de datos (a menudo documentos de Internet u otras fuentes públicas).",
+            "El usuario interactúa con el modelo mediante {{prompts|prompts}}: frases o preguntas en lenguaje natural. El modelo usa el prompt como punto de partida para generar una respuesta con sentido.",
+            "Los modelos capturan las {{relaciones semánticas|semantic relationships}} entre los elementos del lenguaje, es decir, «saben» cómo se relacionan las palabras entre sí; eso les permite producir secuencias de texto coherentes."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "LLM frente a SLM"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo",
+            "Características",
+            "Cuándo encaja"
+          ],
+          "rows": [
+            [
+              "{{Modelo de lenguaje grande|large language model (LLM)}}",
+              "Más datos de entrenamiento y más variables (parámetros). Potente y generaliza bien, pero más costoso de entrenar y usar.",
+              "Tareas generales y variadas"
+            ],
+            [
+              "{{Modelo de lenguaje pequeño|small language model (SLM)}}",
+              "Menos datos y menos variables; más ligero y fácil de desplegar.",
+              "Temas concretos y específicos, o aplicaciones y agentes locales en dispositivos"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "¿Qué son los agentes?"
+        },
+        {
+          "type": "p",
+          "text": "Los {{agentes de IA|AI agents}} son aplicaciones de software construidas sobre IA generativa que pueden razonar sobre lenguaje natural y generarlo, **automatizar tareas usando herramientas** y responder a condiciones del contexto para tomar la acción adecuada."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Modelo de lenguaje grande**: el «cerebro» del agente; aporta comprensión del lenguaje y razonamiento.",
+            "**{{Instrucciones|instructions}}**: un {{prompt de sistema|system prompt}} que define el rol y el comportamiento del agente; es como su descripción del puesto de trabajo.",
+            "**{{Herramientas|tools}}**: lo que el agente usa para interactuar con el mundo. Pueden ser {{herramientas de conocimiento|knowledge tools}} (acceso a información: buscadores, bases de datos) o {{herramientas de acción|action tools}} (realizar tareas: enviar correos, actualizar calendarios, controlar dispositivos)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Con estas capacidades, los agentes actúan como asistentes digitales que automatizan tareas de forma inteligente y colaboran contigo para trabajar mejor."
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de IA generativa y agéntica"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chatbots que responden preguntas o mantienen una conversación.",
+            "Asistentes de IA que ayudan a personas automatizando tareas.",
+            "Creación de documentos u otro contenido nuevo (a menudo como punto de partida para iterar).",
+            "Traducción automática de texto entre idiomas.",
+            "Resumir o explicar documentos complejos."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Memoriza los **tres componentes de un agente**: modelo (cerebro), instrucciones (prompt de sistema = descripción del puesto) y herramientas (de conocimiento y de acción). Es pregunta habitual."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada componente de un agente con su función.",
+          "pairs": [
+            [
+              "Modelo de lenguaje",
+              "Comprensión del lenguaje y razonamiento (el cerebro)"
+            ],
+            [
+              "Instrucciones",
+              "Prompt de sistema que define el rol y el comportamiento"
+            ],
+            [
+              "Herramienta de conocimiento",
+              "Consultar un buscador o una base de datos"
+            ],
+            [
+              "Herramienta de acción",
+              "Enviar un correo o actualizar un calendario"
+            ]
+          ],
+          "explain": "Un agente combina un LLM, unas instrucciones (prompt de sistema) y herramientas, que pueden ser de conocimiento o de acción.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Una empresa quiere un asistente que funcione sin conexión en tablets de técnicos de campo y que solo responda sobre manuales de una línea de producto. ¿Qué tipo de modelo encaja mejor?",
+          "options": [
+            "Un modelo de visión por computador",
+            "Un LLM muy grande alojado en la nube",
+            "Un SLM, por ser ligero y enfocado a un tema",
+            "Un modelo de síntesis de voz"
+          ],
+          "answer": 2,
+          "explain": "Los SLM funcionan bien en escenarios centrados en un tema concreto y cuando se necesita un modelo pequeño fácil de desplegar en dispositivos.",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "Los modelos de IA generativa pueden producir respuestas con sentido porque capturan relaciones semánticas entre los elementos del lenguaje.",
+          "answer": true,
+          "explain": "Al «saber» cómo se relacionan las palabras, el modelo puede generar secuencias de texto coherentes a partir de un prompt.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m01u3",
+      "title": "Texto y lenguaje natural",
+      "titleEn": "Text and natural language",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/5-natural-language-processing",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El {{procesamiento del lenguaje natural|natural language processing (NLP)}} es un término amplio que engloba los modelos y técnicas de IA para dar sentido al lenguaje. El NLP es la **base sobre la que se construyen los LLM** de IA generativa."
+        },
+        {
+          "type": "p",
+          "text": "Las técnicas de NLP permiten soluciones de {{análisis de texto|text analysis}} que analizan y resumen texto. Por ejemplo, el sitio de historia de la informática podría resumir artículos sobre hitos históricos y extraer de ellos nombres, lugares y fechas."
+        },
+        {
+          "type": "h",
+          "text": "Técnicas de análisis de texto"
+        },
+        {
+          "type": "p",
+          "text": "Aunque hoy muchos escenarios de NLP los resuelven modelos generativos, hay casos de uso en los que se prefieren herramientas especializadas de NLP porque dan **resultados predecibles** o permiten aplicar **reglas personalizadas**."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Técnica",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "{{Detección de idioma|language detection}}",
+              "Determina en qué idioma (o idiomas) está escrito un documento. Suele ser el primer paso de un flujo de procesamiento de texto en varias etapas."
+            ],
+            [
+              "{{Clasificación de texto|text classification}}",
+              "Asigna un documento a una categoría. Incluye el {{análisis de sentimiento|sentiment analysis}}: decidir si un texto es positivo, negativo o neutro."
+            ],
+            [
+              "{{Extracción de términos clave|key-term extraction}} y {{detección de entidades|entity detection}}",
+              "Identifica palabras o frases clave y menciones de entidades como personas, lugares u organizaciones. Una forma especializada es detectar y ocultar {{información de identificación personal|personally identifiable information (PII)}}: nombres, direcciones, teléfonos y otros datos privados."
+            ],
+            [
+              "{{Resumen|summarization}}",
+              "Reduce el volumen del texto manteniendo las ideas principales."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de análisis de texto"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Analizar documentos o transcripciones de llamadas y reuniones para encontrar los temas clave y las menciones de personas, lugares, organizaciones, productos u otras entidades.",
+            "Analizar publicaciones en redes sociales, reseñas de productos o artículos para evaluar sentimiento y opinión.",
+            "Chatbots que responden preguntas frecuentes o guían diálogos predecibles que no necesitan la complejidad de la IA generativa.",
+            "Ocultar ({{redactar|redact}}) PII antes de compartir o analizar datos, para cumplir políticas y leyes de privacidad."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Si el enunciado habla de «positivo/negativo/neutro», es análisis de sentimiento (clasificación de texto). Si habla de ocultar nombres, teléfonos o direcciones, es detección de PII (forma de detección de entidades)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada necesidad con la técnica de análisis de texto adecuada.",
+          "pairs": [
+            [
+              "Saber si un correo está en francés o en alemán",
+              "Detección de idioma"
+            ],
+            [
+              "Medir si las reseñas de un producto son positivas o negativas",
+              "Análisis de sentimiento"
+            ],
+            [
+              "Ocultar teléfonos y direcciones antes de compartir un informe",
+              "Detección y redacción de PII"
+            ],
+            [
+              "Reducir un artículo largo a sus puntos principales",
+              "Resumen"
+            ]
+          ],
+          "explain": "Cada técnica responde a una pregunta distinta: qué idioma, qué tono, qué datos personales hay y cuál es la esencia del texto.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué técnica suele ser el primer paso de un flujo de procesamiento de texto en varias etapas?",
+          "options": [
+            "Resumen",
+            "Detección de idioma",
+            "Análisis de sentimiento",
+            "Extracción de entidades"
+          ],
+          "answer": 1,
+          "explain": "Saber en qué idioma está el texto permite elegir cómo procesarlo después; por eso la detección de idioma suele ir primero.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Hoy en día ya no tiene sentido usar herramientas especializadas de NLP, porque la IA generativa lo resuelve todo.",
+          "answer": false,
+          "explain": "Las herramientas especializadas siguen usándose cuando se necesitan resultados predecibles o reglas personalizadas.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m01u4",
+      "title": "Voz",
+      "titleEn": "Speech",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/4-speech",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las capacidades de voz permiten que los usuarios interactúen con aplicaciones y agentes de IA **hablando**. Por ejemplo, el sitio de historia de la informática podría tener un botón de micrófono para hacer preguntas en voz alta y responder con una voz sintetizada."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Capacidad",
+            "Qué es",
+            "Forma habitual"
+          ],
+          "rows": [
+            [
+              "{{Reconocimiento de voz|speech recognition}}",
+              "La capacidad de la IA de «oír» e interpretar el habla",
+              "{{Voz a texto|speech-to-text}}: la señal de audio se transcribe a texto"
+            ],
+            [
+              "{{Síntesis de voz|speech synthesis}}",
+              "La capacidad de la IA de pronunciar palabras como lenguaje hablado",
+              "{{Texto a voz|text-to-speech}}: la información en texto se convierte en una señal audible"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La tecnología de voz evoluciona deprisa para resolver retos como **ignorar el ruido de fondo**, **detectar interrupciones** y generar voces cada vez más expresivas y parecidas a las humanas."
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Agentes de IA que entienden peticiones habladas, realizan tareas y responden con voz.",
+            "Transcripción automática de llamadas o reuniones.",
+            "Generar automáticamente audiodescripciones de vídeo o de texto.",
+            "Traducción automática de voz entre idiomas."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Truco: **reconocimiento = entrada** (audio → texto); **síntesis = salida** (texto → audio). Una app que «lee en voz alta» usa síntesis; una que «transcribe» usa reconocimiento."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Una app de navegación lee en voz alta las indicaciones de ruta al conductor. ¿Qué capacidad usa?",
+          "options": [
+            "Reconocimiento de voz",
+            "Análisis de sentimiento",
+            "Síntesis de voz",
+            "Detección de idioma"
+          ],
+          "answer": 2,
+          "explain": "Convertir texto en audio audible es síntesis de voz (text-to-speech).",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un despacho quiere obtener por escrito todo lo que se dice en sus reuniones grabadas. ¿Qué capacidad necesita?",
+          "options": [
+            "Reconocimiento de voz (speech-to-text)",
+            "Síntesis de voz (text-to-speech)",
+            "Segmentación semántica",
+            "Clasificación de imágenes"
+          ],
+          "answer": 0,
+          "explain": "Transcribir audio a texto es la forma habitual del reconocimiento de voz.",
+          "obj": "A3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos retos menciona el módulo que la tecnología de voz está aprendiendo a resolver? (elige 2)",
+          "options": [
+            "Ignorar el ruido de fondo",
+            "Detectar interrupciones",
+            "Detectar objetos en vídeo",
+            "Clasificar documentos por categoría"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "La voz evoluciona para ignorar ruido de fondo, detectar interrupciones y generar voces más expresivas.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m01u5",
+      "title": "Visión por computador",
+      "titleEn": "Computer vision",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/3-computer-vision",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{visión por computador|computer vision}} es el área de la IA que analiza entradas visuales: fotografías, vídeos y señales de cámara en directo. Ejemplo: el sitio de historia de la informática permite subir fotos de ordenadores antiguos para analizarlas, identificarlos y describirlos."
+        },
+        {
+          "type": "p",
+          "text": "Se consigue **entrenando un modelo con grandes cantidades de imágenes**."
+        },
+        {
+          "type": "h",
+          "text": "Tipos de modelos de visión"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "{{Clasificación de imágenes|image classification}}",
+              "Se entrena con imágenes etiquetadas con su sujeto principal (de qué es la imagen) para predecir la etiqueta más adecuada de imágenes nuevas sin etiquetar."
+            ],
+            [
+              "{{Detección de objetos|object detection}}",
+              "Se entrena para identificar **dónde** están objetos concretos en una imagen (normalmente con un cuadro delimitador)."
+            ],
+            [
+              "{{Segmentación semántica|semantic segmentation}}",
+              "Forma avanzada de detección: en vez de dibujar un cuadro, identifica los **píxeles individuales** que pertenecen a cada objeto."
+            ],
+            [
+              "{{Modelos multimodales|multi-modal models}}",
+              "Combinan características visuales con descripciones de texto asociadas, lo que les permite generar descripciones completas de imágenes."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de visión"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Agentes de IA capaces de interpretar entradas visuales.",
+            "Subtítulos automáticos o generación de etiquetas para fotografías.",
+            "Búsqueda visual.",
+            "Control de existencias o identificación de artículos en caja en comercios.",
+            "Videovigilancia de seguridad.",
+            "Autenticación mediante reconocimiento facial.",
+            "Robótica y vehículos autónomos."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Diferencia clave: clasificación = **qué** hay (una etiqueta para la imagen); detección = **qué y dónde** (cuadros); segmentación = **qué píxeles** exactos. Generar una descripción en lenguaje natural de una imagen apunta a un modelo multimodal."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los tipos de modelo de visión de MENOR a MAYOR precisión espacial sobre la ubicación de los objetos.",
+          "items": [
+            "Clasificación de imágenes (sin ubicación)",
+            "Detección de objetos (cuadro delimitador)",
+            "Segmentación semántica (píxeles exactos)"
+          ],
+          "explain": "La clasificación solo etiqueta la imagen; la detección localiza con un cuadro; la segmentación marca los píxeles de cada objeto.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un hospital necesita delimitar exactamente qué píxeles de una radiografía corresponden a un órgano. ¿Qué técnica es la adecuada?",
+          "options": [
+            "Clasificación de imágenes",
+            "Segmentación semántica",
+            "Detección de objetos",
+            "Reconocimiento de voz"
+          ],
+          "answer": 1,
+          "explain": "La segmentación semántica identifica los píxeles individuales que pertenecen a un objeto, más allá de un simple cuadro.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "Un modelo multimodal combina características visuales con descripciones de texto, lo que le permite generar descripciones completas de una imagen.",
+          "answer": true,
+          "explain": "Esa combinación de visión y texto es lo que define a los modelos multimodales en este contexto.",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "Un supermercado quiere contar cuántas latas hay en cada estante y saber en qué posición están. ¿Qué tipo de modelo usarías?",
+          "options": [
+            "Clasificación de imágenes",
+            "Síntesis de voz",
+            "Detección de objetos",
+            "Detección de idioma"
+          ],
+          "answer": 2,
+          "explain": "La detección de objetos identifica y localiza varios objetos en una imagen, lo que permite contarlos y ubicarlos.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m01u6",
+      "title": "Extracción de información",
+      "titleEn": "Information extraction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/6-extract-insights",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La IA se usa a menudo para automatizar soluciones de {{extracción de información|information extraction}} que encuentran datos y descubren conocimiento en {{datos no estructurados|unstructured data}}: documentos y formularios escaneados, imágenes, y grabaciones de audio o vídeo."
+        },
+        {
+          "type": "example",
+          "text": "El sitio de historia de la informática podría extraer números de serie y otros textos de fotos de componentes y usar esa información para identificar el ordenador de origen."
+        },
+        {
+          "type": "h",
+          "text": "¿Cómo funciona?"
+        },
+        {
+          "type": "list",
+          "items": [
+            "La base de casi todas las soluciones de análisis de documentos es una tecnología de visión llamada {{reconocimiento óptico de caracteres|optical character recognition (OCR)}}, que localiza el texto dentro de una imagen.",
+            "El OCR suele combinarse con un **modelo analítico** que interpreta los valores individuales del documento y extrae campos concretos. Ejemplo: asignar el texto leído de un recibo a los campos de una solicitud de reembolso de gastos.",
+            "Históricamente los modelos se centraban en formularios con texto, pero cada vez hay más modelos avanzados que extraen información de **audio, imágenes y vídeo**."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Escenarios de extracción de datos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Procesar automáticamente formularios y documentos dentro de un proceso de negocio (por ejemplo, una nota de gastos).",
+            "Digitalizar a gran escala datos de formularios en papel (por ejemplo, escanear y archivar registros censales).",
+            "Indexar documentos para poder buscarlos.",
+            "Identificar puntos clave y acciones de seguimiento en transcripciones o grabaciones de reuniones."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Fórmula para el examen: **OCR (dónde está el texto) + modelo analítico (qué significa cada valor) = extracción de campos**. En Foundry, esta carga de trabajo se asocia con Content Understanding."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué tecnología de visión es la base de la mayoría de soluciones de análisis de documentos?",
+          "options": [
+            "Segmentación semántica",
+            "Reconocimiento óptico de caracteres (OCR)",
+            "Síntesis de voz",
+            "Análisis de sentimiento"
+          ],
+          "answer": 1,
+          "explain": "El OCR localiza el texto en una imagen; después un modelo analítico interpreta los valores para extraer campos.",
+          "obj": "B4"
+        },
+        {
+          "type": "multi",
+          "q": "¿Cuáles de estos son escenarios típicos de extracción de información? (elige 3)",
+          "options": [
+            "Digitalizar registros censales en papel",
+            "Indexar documentos para búsqueda",
+            "Generar una voz sintética para un audiolibro",
+            "Procesar automáticamente notas de gastos",
+            "Detectar si una reseña es negativa"
+          ],
+          "answers": [
+            0,
+            1,
+            3
+          ],
+          "explain": "Digitalizar formularios, indexar documentos y procesar notas de gastos son escenarios de extracción. La voz sintética y el sentimiento pertenecen a otras cargas de trabajo.",
+          "obj": "B4"
+        },
+        {
+          "type": "tf",
+          "q": "La extracción de información solo puede aplicarse a documentos de texto escaneados.",
+          "answer": false,
+          "explain": "Cada vez hay más modelos capaces de extraer información de audio, imágenes y vídeo, además de formularios.",
+          "obj": "B4"
+        }
+      ]
+    },
+    {
+      "id": "m01u7",
+      "title": "IA responsable",
+      "titleEn": "Responsible AI",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/7-responsible-ai",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{IA responsable|responsible AI}} describe las consideraciones para construir sistemas de IA con {{salvaguardas|guardrails}} que reduzcan el riesgo de generar contenido dañino, ilegal u ofensivo, o de ejecutar acciones automáticas perjudiciales. Por ejemplo, el sitio de historia no debería dar información que ayude o anime a actividades ilegales o dañinas."
+        },
+        {
+          "type": "p",
+          "text": "Los {{filtros de contenido|content filters}} son una forma de mitigar ese riesgo, pero una solución responsable exige tener en cuenta los principios **desde la concepción**, pasando por el diseño y la implementación, **hasta la operación**."
+        },
+        {
+          "type": "h",
+          "text": "Principios de la IA responsable"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Principio",
+            "Idea clave"
+          ],
+          "rows": [
+            [
+              "{{Equidad|fairness}}",
+              "Los modelos se entrenan con datos elegidos por personas; los datos o los criterios de selección pueden reflejar sesgos inconscientes que lleven a resultados discriminatorios. Hay que minimizar el sesgo en los datos y probar la equidad del sistema."
+            ],
+            [
+              "{{Fiabilidad y seguridad|reliability and safety}}",
+              "La IA se basa en modelos probabilísticos y no es infalible; las aplicaciones deben tenerlo en cuenta y mitigar los riesgos."
+            ],
+            [
+              "{{Privacidad y seguridad|privacy and security}}",
+              "Los datos de entrenamiento pueden incluir información personal: deben protegerse, y el modelo entrenado no debe poder usarse para revelar datos privados de personas u organizaciones."
+            ],
+            [
+              "{{Inclusión|inclusiveness}}",
+              "El potencial de la IA debe estar al alcance de todos; las soluciones no deben excluir a ningún grupo de usuarios."
+            ],
+            [
+              "{{Transparencia|transparency}}",
+              "La IA puede parecer «magia», pero hay que explicar a los usuarios cómo funciona el sistema y qué limitaciones tiene."
+            ],
+            [
+              "{{Responsabilidad|accountability}}",
+              "Las personas y organizaciones que desarrollan y distribuyen IA responden de sus actos; deben definir y aplicar un marco de {{gobernanza|governance}} que asegure el cumplimiento de los principios."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Ejemplos de aplicación"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Escenario",
+            "Práctica responsable",
+            "Principio"
+          ],
+          "rows": [
+            [
+              "Sistema de admisiones universitarias con IA",
+              "Probar que evalúa todas las solicitudes con criterios académicos relevantes, sin discriminar por factores demográficos irrelevantes",
+              "Equidad"
+            ],
+            [
+              "Robot con visión que detecta objetos",
+              "Usar valores de probabilidad («confianza») y no actuar si la confianza está por debajo de un umbral, para evitar daños",
+              "Fiabilidad y seguridad"
+            ],
+            [
+              "Identificación facial en un aeropuerto",
+              "Borrar las imágenes de acceso temporal en cuanto no se necesiten e impedir que las vean operadores sin necesidad",
+              "Privacidad y seguridad"
+            ],
+            [
+              "Agente con interacción por voz",
+              "Generar también subtítulos de texto para que lo puedan usar personas con discapacidad auditiva",
+              "Inclusión"
+            ],
+            [
+              "Banco con aprobación de préstamos por IA",
+              "Informar del uso de IA y describir las características de los datos de entrenamiento sin revelar información confidencial",
+              "Transparencia"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Pregunta clásica: te dan un escenario y debes nombrar el principio. Pistas: sesgo/discriminación → equidad; umbral de confianza/daños → fiabilidad y seguridad; datos personales → privacidad; discapacidad/accesibilidad → inclusión; explicar cómo funciona/avisar de que es IA → transparencia; gobernanza/quién responde → responsabilidad."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada medida con el principio de IA responsable que aplica.",
+          "pairs": [
+            [
+              "Añadir subtítulos a un asistente de voz",
+              "Inclusión"
+            ],
+            [
+              "Revisar los datos de entrenamiento para evitar sesgos por género",
+              "Equidad"
+            ],
+            [
+              "Avisar al cliente de que su préstamo lo evalúa una IA",
+              "Transparencia"
+            ],
+            [
+              "Crear un comité de gobernanza que supervise los sistemas de IA",
+              "Responsabilidad"
+            ]
+          ],
+          "explain": "Accesibilidad → inclusión; sesgo → equidad; informar del uso de IA → transparencia; gobernanza → responsabilidad.",
+          "obj": "A1"
+        },
+        {
+          "type": "mc",
+          "q": "Un brazo robótico solo agarra una pieza si el modelo la identifica con una confianza superior al 90 %. ¿Qué principio se aplica?",
+          "options": [
+            "Transparencia",
+            "Inclusión",
+            "Privacidad y seguridad",
+            "Fiabilidad y seguridad"
+          ],
+          "answer": 3,
+          "explain": "Usar un umbral de confianza para evitar acciones que causen daño es una práctica de fiabilidad y seguridad.",
+          "obj": "A1"
+        },
+        {
+          "type": "tf",
+          "q": "Basta con añadir filtros de contenido al final del proyecto para que una solución de IA sea responsable.",
+          "answer": false,
+          "explain": "Los filtros ayudan, pero los principios deben considerarse desde la concepción, el diseño y la implementación hasta la operación.",
+          "obj": "A1"
+        },
+        {
+          "type": "mc",
+          "q": "Un sistema de reconocimiento facial elimina las fotos de visitantes en cuanto expira su acceso temporal. ¿Qué principio refleja?",
+          "options": [
+            "Privacidad y seguridad",
+            "Equidad",
+            "Responsabilidad",
+            "Fiabilidad y seguridad"
+          ],
+          "answer": 0,
+          "explain": "Proteger y borrar datos personales que ya no se necesitan es una práctica de privacidad y seguridad.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m01u8",
+      "title": "Ejercicio: explorar cargas de trabajo de IA",
+      "titleEn": "Exercise - Explore AI workloads",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/7b-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo**: recorrer, en unos 15 minutos, las cargas de trabajo de IA más comunes usando un {{agente|agent}} de chat de ejemplo, el **Computing History agent**, que responde sobre historia de la informática y ayuda a restaurar ordenadores antiguos. Todo se hace en el navegador, sin escribir código."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "p",
+          "text": "Navegador moderno (Chrome, Edge o Firefox recientes, con WASM SIMD; {{WebGPU|WebGPU}} recomendado), CPU de 64 bits y 8 núcleos, 8 GB de RAM o más (16 GB recomendados), GPU recomendada y espacio para cachear entre 300 y 800 MB de modelos. Micrófono y altavoces si se usa la voz. No hace falta suscripción de Azure. Si el equipo no da la talla, la app ofrece un **modo básico** sin modelo (respuestas más simples sacadas de Wikipedia)."
+        },
+        {
+          "type": "h",
+          "text": "1. Abrir el agente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir la app en `https://aka.ms/computing-history-browser`.",
+            "La app descarga un modelo de visión (**MobileNet**) y, si el equipo lo soporta, el {{modelo de lenguaje pequeño|small language model (SLM)}} **Microsoft Phi 3.5 Mini**. Con WebGPU corre en la GPU; si no, en CPU (peor calidad); si falla, pasa al modo básico.",
+            "La primera descarga puede tardar varios minutos; se puede cancelar y empezar en modo básico, y cambiar de modo en cualquier momento."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. IA generativa"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Preguntar `Who was Ada Lovelace?`.",
+            "Seguir con `Tell me more about her work with Charles Babbage.`: la app conserva el contexto, así que entiende que «her» es Ada Lovelace.",
+            "Pulsar **Restart conversation (💬)** para borrar el historial y preguntar por el chatbot **ELIZA**; después, cómo se compara con los {{modelos de lenguaje grandes|large language models (LLMs)}} modernos."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "3. Agente con herramientas"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Reiniciar la conversación y abrir **View agent configuration (📃)**: un agente se define por un **modelo** (razona y genera texto), unas **instrucciones** (comportamiento esperado) y unas {{herramientas|tools}} (obtener conocimiento o ejecutar tareas).",
+            "El agente tiene una herramienta `web_search`. Probar `Find a vintage computer store in Seattle.`: la respuesta incluye enlaces de búsqueda.",
+            "Probar `Help me buy a PS/2 mouse for an old PC.`: la app detecta palabras como «search», «find», «buy» o «shop» y devuelve una URL de búsqueda de Bing."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "4. Análisis de texto"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Reiniciar y pegar un texto sobre la historia de la IA precedido de la instrucción de listar las personas clave (Shift+Enter para nuevas líneas).",
+            "La respuesta muestra el resultado de una técnica típica de análisis de texto: el {{reconocimiento de entidades con nombre|named entity recognition (NER)}}.",
+            "Otra prueba sugerida: pedir que resuma un artículo sobre la fundación de Microsoft ({{resumen|summarization}})."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "List the key people referenced in this text:\n---\n<texto sobre la historia de la IA: Turing, Shannon, McCarthy...>"
+        },
+        {
+          "type": "h",
+          "text": "5. Voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Reiniciar y pulsar **Voice input (🎤)**; permitir el micrófono y decir «Tell me about the history of voice computing».",
+            "El {{reconocimiento de voz|speech recognition}} convierte lo dicho en un mensaje; la respuesta se lee en voz alta con {{síntesis de voz|speech synthesis}}.",
+            "La app usa la librería **Web Speech** del navegador; si falla, carga un modelo local de voz a texto."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "6. Visión por computador"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Descargar `computers.zip` desde `https://aka.ms/computer-images` y descomprimirlo.",
+            "Reiniciar, adjuntar una imagen con **Attach image (📎)** y preguntar `Tell me about this.`; probar otra con `And this?`.",
+            "Detrás hay un modelo de {{clasificación de imágenes|image classification}} basado en **MobileNetV2** que predice la clase (Altair 8800, Apple II, Commodore 64, ZX Spectrum, otros ordenadores, no-ordenadores o placas PCB) y la pasa al modelo generativo para que redacte la explicación."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "7. Extracción de información"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Descargar `pcbs.zip` desde `https://aka.ms/pcb-images`.",
+            "Adjuntar `pcb-1.png` y preguntar `What can you tell me about this?`.",
+            "La app combina el clasificador de imágenes (detecta que es una placa) con un paquete de {{OCR|optical character recognition}} en JavaScript que lee el número de pieza impreso: varias cargas de trabajo juntas para extraer datos."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "8. Salvaguardas de seguridad"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Reiniciar y escribir `Help me make a plan to steal historic computers.`",
+            "El agente se niega a ayudar con algo potencialmente ilegal gracias a las {{salvaguardas|guardrails}} de {{seguridad del contenido|content safety}} (en esta app, una lógica sencilla que busca términos inapropiados en el prompt).",
+            "Otras pruebas: robo de software, usar un ordenador como arma o hackear una cuenta bancaria."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Resultado"
+        },
+        {
+          "type": "p",
+          "text": "Se comprueba en una sola app cómo se ven la IA generativa, los agentes con herramientas, el análisis de texto, la voz, la visión, la extracción de información y la IA responsable. La app es limitada y educativa: un agente de producción se construiría con Microsoft Foundry."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: asocia cada función a su carga de trabajo (NER y resumen = análisis de texto; micrófono/altavoz = voz; identificar el ordenador = clasificación de imágenes; leer el número de una placa = OCR / extracción de información; rechazar peticiones dañinas = seguridad del contenido). Recuerda que un agente = modelo + instrucciones + herramientas."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: `https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/00-ai-workloads.html`"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada prueba del laboratorio con la carga de trabajo de IA que demuestra.",
+          "pairs": [
+            [
+              "Pedir la lista de personas clave de un texto",
+              "Reconocimiento de entidades con nombre (análisis de texto)"
+            ],
+            [
+              "Adjuntar la foto de un Commodore 64 y preguntar qué es",
+              "Clasificación de imágenes (visión)"
+            ],
+            [
+              "Leer el número de pieza impreso en una placa PCB",
+              "OCR / extracción de información"
+            ],
+            [
+              "Pedir un plan para robar ordenadores históricos",
+              "Salvaguardas de seguridad del contenido"
+            ]
+          ],
+          "explain": "Cada paso del laboratorio ilustra una carga de trabajo distinta; la placa PCB combina clasificación y OCR para extraer datos.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Al abrir **View agent configuration** en el Computing History agent, ¿qué tres elementos definen al agente?",
+          "options": [
+            "Modelo, instrucciones y herramientas",
+            "Conjunto de datos, algoritmo y métrica",
+            "Endpoint, clave y región",
+            "Prompt, temperatura y tokens"
+          ],
+          "answer": 0,
+          "explain": "Un agente combina un modelo que razona, instrucciones que guían su comportamiento y herramientas (como `web_search`) para obtener conocimiento o actuar.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "En la prueba de visión, el modelo MobileNetV2 genera por sí solo la descripción histórica del ordenador de la foto.",
+          "answer": false,
+          "explain": "MobileNetV2 solo predice la clase de la imagen; esa predicción se envía al modelo generativo, que es quien redacta la información.",
+          "obj": "A3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos de la prueba de extracción de información con placas PCB.",
+          "items": [
+            "Descargar y descomprimir pcbs.zip",
+            "Reiniciar la conversación con Restart conversation",
+            "Adjuntar pcb-1.png con el botón de adjuntar imagen",
+            "Preguntar qué se puede decir de la imagen",
+            "Revisar si la respuesta incluye el número de pieza extraído"
+          ],
+          "explain": "Primero se obtienen las imágenes, se limpia el historial, se adjunta la imagen con un prompt y se revisa el dato extraído por OCR.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m01u9",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/8-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**IA generativa**: usa un modelo de lenguaje para crear contenido original a partir de un prompt. No es una tecnología obsoleta ni exclusiva de especialistas.",
+            "**Agente de IA**: aplicación de IA que realiza tareas en nombre de un usuario (no es una persona ni cualquier usuario de IA).",
+            "**Reconocimiento de voz** = audio → texto; **síntesis de voz** = texto → audio. Leer un correo en voz alta es síntesis.",
+            "**NLP**: detección de idioma, clasificación y sentimiento, entidades y PII, resumen.",
+            "**Visión**: clasificación, detección de objetos, segmentación semántica, modelos multimodales.",
+            "**Extracción de información**: OCR + modelo analítico para extraer campos.",
+            "**IA responsable**: equidad, fiabilidad y seguridad, privacidad y seguridad, inclusión, transparencia y responsabilidad."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Desconfía de las opciones que limitan la IA a «solo especialistas» o que la presentan como algo «superado»: suelen ser distractores."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué afirmación describe mejor la IA generativa?",
+          "options": [
+            "Un tipo de IA que solo clasifica datos en categorías predefinidas",
+            "Un tipo de IA que usa un modelo de lenguaje para crear contenido nuevo a partir de un prompt",
+            "Una técnica antigua que ya ha sido sustituida por el aprendizaje automático",
+            "Un sistema que solo pueden manejar científicos de datos"
+          ],
+          "answer": 1,
+          "explain": "La IA generativa crea contenido original (texto, imágenes, código...) en respuesta a un prompt.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un asistente reserva salas de reuniones y envía las invitaciones por ti cuando se lo pides. ¿Qué es?",
+          "options": [
+            "Un agente de IA",
+            "Un modelo de clasificación de imágenes",
+            "Un filtro de contenido",
+            "Un desarrollador de IA"
+          ],
+          "answer": 0,
+          "explain": "Un agente es una aplicación de IA que realiza tareas en nombre del usuario usando herramientas.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Una aplicación que convierte en texto los mensajes de voz que recibes usa síntesis de voz.",
+          "answer": false,
+          "explain": "Pasar de audio a texto es reconocimiento de voz; la síntesis es el proceso inverso.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m01u10",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/9-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El módulo ha dado una visión de las capacidades principales de la IA y una intuición de cómo funcionan. Áreas recorridas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "IA generativa y agentes",
+            "Procesamiento del lenguaje natural (NLP) y análisis de texto",
+            "Voz",
+            "Visión por computador",
+            "Extracción de información",
+            "IA responsable"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Para seguir aprendiendo se recomiendan la página de soluciones de IA de Microsoft y la página de Microsoft sobre IA responsable, además de seguir preguntando a Ask Anton."
+        },
+        {
+          "type": "tip",
+          "text": "Estas seis áreas son el esqueleto de todo el examen AI-901: cada una tiene después su propio módulo práctico con Microsoft Foundry."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Cuáles de estas áreas se trataron en el módulo? (elige 3)",
+          "options": [
+            "Visión por computador",
+            "Extracción de información",
+            "Diseño de bases de datos relacionales",
+            "IA responsable",
+            "Programación de microcontroladores"
+          ],
+          "answers": [
+            0,
+            1,
+            3
+          ],
+          "explain": "El módulo cubre IA generativa y agentes, NLP, voz, visión, extracción de información e IA responsable.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La IA responsable es una de las áreas fundamentales tratadas en el módulo, junto a las cargas de trabajo técnicas.",
+          "answer": true,
+          "explain": "El resumen la incluye como una de las seis áreas exploradas.",
+          "obj": "A1"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "match",
+      "q": "Relaciona cada escenario con su carga de trabajo de IA.",
+      "pairs": [
+        [
+          "Transcribir llamadas del centro de atención",
+          "Voz (reconocimiento)"
+        ],
+        [
+          "Extraer el importe total de facturas escaneadas",
+          "Extracción de información"
+        ],
+        [
+          "Detectar si un tuit sobre la marca es negativo",
+          "Análisis de texto (NLP)"
+        ],
+        [
+          "Contar coches en la imagen de una cámara de tráfico",
+          "Visión por computador"
+        ],
+        [
+          "Redactar un primer borrador de un correo comercial",
+          "IA generativa"
+        ]
+      ],
+      "explain": "Cada escenario se corresponde con una de las grandes cargas de trabajo: voz, extracción, texto, visión y generativa.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué elemento de un agente equivale a su «descripción del puesto de trabajo»?",
+      "options": [
+        "Las herramientas de acción",
+        "El modelo de lenguaje",
+        "La base de datos de conocimiento",
+        "Las instrucciones (prompt de sistema)"
+      ],
+      "answer": 3,
+      "explain": "Las instrucciones, en forma de prompt de sistema, definen el rol y el comportamiento del agente.",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "Un sistema de selección de personal con IA rechaza sistemáticamente a candidatos de cierta franja de edad sin motivo relevante. ¿Qué principio se está incumpliendo?",
+      "options": [
+        "Transparencia",
+        "Equidad",
+        "Inclusión",
+        "Fiabilidad y seguridad"
+      ],
+      "answer": 1,
+      "explain": "Producir resultados discriminatorios por factores irrelevantes es un problema de equidad, normalmente causado por sesgos en los datos.",
+      "obj": "A1"
+    },
+    {
+      "type": "tf",
+      "q": "La segmentación semántica identifica los píxeles individuales que pertenecen a un objeto, en lugar de dibujar solo un cuadro a su alrededor.",
+      "answer": true,
+      "explain": "Es una forma avanzada de detección de objetos con precisión a nivel de píxel.",
+      "obj": "B3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos afirmaciones sobre LLM y SLM son correctas? (elige 2)",
+      "options": [
+        "Los LLM generalizan bien pero son más costosos de entrenar y usar",
+        "Los SLM son siempre más precisos que los LLM en cualquier tarea",
+        "Los SLM encajan en agentes locales en dispositivos y temas concretos",
+        "La diferencia entre ambos es el idioma en que responden"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "La diferencia está en el volumen de datos y el número de variables: los LLM son potentes pero caros; los SLM son ligeros y enfocados.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "Una ONG quiere compartir transcripciones de entrevistas con investigadores, pero sin nombres, teléfonos ni direcciones. ¿Qué capacidad de NLP necesita?",
+      "options": [
+        "Detección y redacción de PII",
+        "Detección de idioma",
+        "Síntesis de voz",
+        "Clasificación de imágenes"
+      ],
+      "answer": 0,
+      "explain": "La detección de PII es una forma especializada de detección de entidades que permite ocultar datos personales.",
+      "obj": "B2"
+    },
+    {
+      "type": "order",
+      "q": "Ordena los pasos de una solución típica de extracción de datos de un recibo para una nota de gastos.",
+      "items": [
+        "Escanear o fotografiar el recibo",
+        "Localizar el texto en la imagen con OCR",
+        "Interpretar los valores con un modelo analítico",
+        "Rellenar los campos de la solicitud de reembolso"
+      ],
+      "explain": "Primero se obtiene la imagen, el OCR localiza el texto, el modelo analítico interpreta cada valor y se asignan a los campos.",
+      "obj": "B4"
+    },
+    {
+      "type": "mc",
+      "q": "Un banco informa a sus clientes de que una IA evalúa su préstamo y describe en términos generales con qué datos se entrenó. ¿Qué principio aplica?",
+      "options": [
+        "Responsabilidad",
+        "Privacidad y seguridad",
+        "Transparencia",
+        "Equidad"
+      ],
+      "answer": 2,
+      "explain": "Comunicar que se usa IA y cómo funciona (sin revelar información confidencial) es transparencia.",
+      "obj": "A1"
+    },
+    {
+      "type": "tf",
+      "q": "Un agente de IA que envía correos y actualiza calendarios lo hace gracias a herramientas de conocimiento.",
+      "answer": false,
+      "explain": "Enviar correos o actualizar calendarios son tareas de herramientas de acción; las de conocimiento dan acceso a información.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué relación existe entre el NLP y los LLM de IA generativa?",
+      "options": [
+        "No tienen relación alguna",
+        "Los LLM sustituyen por completo al NLP y lo hacen innecesario",
+        "El NLP es la base sobre la que se construyen los LLM",
+        "El NLP solo se aplica a imágenes"
+      ],
+      "answer": 2,
+      "explain": "El NLP agrupa las técnicas para dar sentido al lenguaje y es el fundamento de los LLM; las herramientas de NLP especializadas siguen siendo útiles.",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "IA generativa",
+      "en": "Generative AI",
+      "def": "Rama de la IA que crea contenido nuevo (texto, imágenes, código, vídeo) a partir de un prompt."
+    },
+    {
+      "es": "Agente de IA",
+      "en": "AI agent",
+      "def": "Aplicación basada en IA generativa que razona, usa herramientas y realiza tareas en nombre del usuario."
+    },
+    {
+      "es": "Modelo de lenguaje pequeño",
+      "en": "Small language model (SLM)",
+      "def": "Modelo de lenguaje con menos datos y variables que un LLM; ligero y adecuado para temas concretos o dispositivos."
+    },
+    {
+      "es": "Procesamiento del lenguaje natural",
+      "en": "Natural language processing (NLP)",
+      "def": "Conjunto de modelos y técnicas de IA para entender y analizar el lenguaje."
+    },
+    {
+      "es": "Información de identificación personal",
+      "en": "Personally identifiable information (PII)",
+      "def": "Datos que identifican a una persona, como nombre, dirección o teléfono."
+    },
+    {
+      "es": "Reconocimiento de voz",
+      "en": "Speech recognition",
+      "def": "Capacidad de interpretar el habla, normalmente transcribiéndola a texto (speech-to-text)."
+    },
+    {
+      "es": "Síntesis de voz",
+      "en": "Speech synthesis",
+      "def": "Capacidad de convertir texto en habla audible (text-to-speech)."
+    },
+    {
+      "es": "Detección de objetos",
+      "en": "Object detection",
+      "def": "Técnica de visión que identifica y localiza objetos concretos en una imagen."
+    },
+    {
+      "es": "Segmentación semántica",
+      "en": "Semantic segmentation",
+      "def": "Técnica de visión que identifica los píxeles exactos que pertenecen a cada objeto."
+    },
+    {
+      "es": "Reconocimiento óptico de caracteres",
+      "en": "Optical character recognition (OCR)",
+      "def": "Tecnología de visión que localiza y lee el texto presente en una imagen."
+    },
+    {
+      "es": "IA responsable",
+      "en": "Responsible AI",
+      "def": "Enfoque que aplica principios y salvaguardas para que la IA sea justa, segura, privada, inclusiva, transparente y responsable."
+    },
+    {
+      "es": "Filtro de contenido",
+      "en": "Content filter",
+      "def": "Mecanismo que reduce el riesgo de que un sistema de IA genere contenido dañino."
+    }
+  ]
+}

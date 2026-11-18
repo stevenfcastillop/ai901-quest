@@ -1,0 +1,1377 @@
+{
+  "id": "m08",
+  "path": 2,
+  "order": 1,
+  "title": "Primeros pasos con la IA en Azure",
+  "titleEn": "Get started with AI in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/",
+  "summary": "Qué es una aplicación de IA, cómo se organiza Azure (inquilinos, suscripciones, grupos de recursos y recursos), qué servicios de Azure sostienen una app de IA y cómo Microsoft Foundry (recursos, proyectos, portal y endpoints) permite construir apps y agentes.",
+  "objectives": [
+    "Explicar qué es una aplicación de IA y la relación entre IA, modelos de ML e inferencia",
+    "Describir las categorías de servicios de Azure y su jerarquía organizativa",
+    "Identificar los servicios de seguridad, hospedaje, escalado y datos para apps de IA",
+    "Describir Microsoft Foundry: modelos, agentes, herramientas y Foundry IQ",
+    "Diferenciar un recurso de Foundry y un proyecto de Foundry",
+    "Explicar cómo una app cliente usa endpoints, claves y peticiones REST o SDK"
+  ],
+  "units": [
+    {
+      "id": "m08u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{inteligencia artificial|artificial intelligence (AI)}} se refiere a sistemas diseñados para hacer tareas que normalmente requieren inteligencia humana: razonar, resolver problemas, percibir y comprender el lenguaje."
+        },
+        {
+          "type": "p",
+          "text": "Una {{aplicación de IA|AI application}} es una solución de software que usa técnicas de IA (visión por computador, voz, extracción de información…) para hacer tareas de tipo humano. Puede entender, razonar, aprender y responder de forma más adaptativa que el software tradicional."
+        },
+        {
+          "type": "p",
+          "text": "Las apps de IA funcionan gracias a {{modelos de aprendizaje automático|machine learning (ML) models}}: sistemas matemáticos entrenados para reconocer patrones en datos y hacer predicciones o generar salidas. Los modelos son el **motor** de la app. Cuando interactúas con ella, el modelo realiza {{inferencia|inference}}: aplica lo aprendido en el entrenamiento a una entrada nueva."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**{{Impulsadas por modelos|model-powered}}**: usan modelos entrenados para procesar entradas y generar salidas (texto, imágenes, decisiones).",
+            "**Dinámicas**: a diferencia de los programas estáticos, pueden mejorar con el tiempo mediante reentrenamiento o {{ajuste fino|fine-tuning}}."
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Sector",
+            "Ejemplo de app de IA"
+          ],
+          "rows": [
+            [
+              "Sanidad",
+              "Herramientas de diagnóstico que analizan imágenes médicas (radiografías, resonancias) para detectar enfermedades con más rapidez y precisión."
+            ],
+            [
+              "Finanzas",
+              "Detección de fraude que vigila transacciones en tiempo real e identifica actividad sospechosa."
+            ],
+            [
+              "Comercio",
+              "Motores de recomendación personalizados según el comportamiento y las preferencias del cliente."
+            ],
+            [
+              "Fabricación",
+              "Mantenimiento predictivo que anticipa fallos de máquinas y reduce paradas y costes."
+            ],
+            [
+              "Educación",
+              "Sistemas de tutoría inteligentes que se adaptan al estilo y ritmo de cada estudiante."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Aunque el modelo es el motor, una app de IA también necesita seguridad, redes, hospedaje, almacenamiento de datos, lógica de aplicación e interfaz de usuario. Microsoft aporta toda esa infraestructura a escala empresarial con Azure, integrada con Microsoft Foundry."
+        },
+        {
+          "type": "tip",
+          "text": "Relación clave: la **IA** es el objetivo general (sistemas con inteligencia de tipo humano) y el **ML** es el método basado en datos para conseguirlo, aprendiendo patrones. **Inferencia** = usar el modelo ya entrenado con datos nuevos."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué ocurre cuando un usuario envía una foto a una app de IA y el modelo ya entrenado la analiza?",
+          "options": [
+            "Entrenamiento",
+            "Inferencia",
+            "Tokenización",
+            "Aprovisionamiento"
+          ],
+          "answer": 1,
+          "explain": "La inferencia es aplicar lo aprendido durante el entrenamiento a una entrada nueva.",
+          "obj": "A2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada sector con un ejemplo de app de IA.",
+          "pairs": [
+            [
+              "Finanzas",
+              "Detección de fraude en tiempo real"
+            ],
+            [
+              "Fabricación",
+              "Mantenimiento predictivo de maquinaria"
+            ],
+            [
+              "Comercio",
+              "Recomendaciones personalizadas de productos"
+            ],
+            [
+              "Sanidad",
+              "Análisis de radiografías para diagnóstico"
+            ]
+          ],
+          "explain": "Son los ejemplos por sector que presenta la unidad.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Las aplicaciones de IA se consideran dinámicas porque pueden mejorar con el tiempo mediante reentrenamiento o ajuste fino.",
+          "answer": true,
+          "explain": "A diferencia del software estático, una app de IA puede mejorar reentrenando o ajustando su modelo.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m08u2",
+      "title": "Entender Azure",
+      "titleEn": "Understand Azure",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/2-what-is-azure",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Microsoft Azure es una de las principales {{plataformas en la nube|cloud platforms}} del mundo. Una plataforma en la nube es un conjunto de servicios que se usan a través de Internet en lugar de ejecutarlo todo en tu propio equipo o servidor. Las apps modernas se ejecutan en centros de datos conectados a Internet que permiten almacenar datos, ejecutar código y escalar sin preocuparse del hardware físico. Con Azure se pueden desarrollar apps y agentes de IA y desplegarlos a escala global."
+        },
+        {
+          "type": "h",
+          "text": "Las cuatro categorías principales de servicios"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Categoría",
+            "Qué ofrece"
+          ],
+          "rows": [
+            [
+              "{{Proceso|compute}}",
+              "Ejecutar aplicaciones, programas y cargas de trabajo en la nube; como alquilar ordenadores que puedes ampliar o reducir cuando quieras."
+            ],
+            [
+              "{{Almacenamiento|storage}}",
+              "Guardar y gestionar datos en la nube: archivos, bases de datos, imágenes, copias de seguridad…"
+            ],
+            [
+              "{{Redes|networking}}",
+              "Conectar los recursos entre sí, con Internet o con tu organización, de forma segura y eficiente."
+            ],
+            [
+              "{{Servicios de aplicaciones|App Services}}",
+              "Plataformas listas para crear, hospedar y ejecutar apps sin gestionar los servidores subyacentes."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Estructura organizativa de Azure"
+        },
+        {
+          "type": "p",
+          "text": "Azure organiza el acceso y la gestión en cuatro niveles: inquilinos, suscripciones, grupos de recursos y recursos."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Nivel",
+            "Qué es",
+            "Relación"
+          ],
+          "rows": [
+            [
+              "{{Inquilino|tenant}}",
+              "La «casa» e identidad de la organización en la nube de Microsoft; como un piso en un gran edificio, separado y protegido de los demás. Se crea al darse de alta en Azure o Microsoft 365 e incluye usuarios, grupos, identidades y políticas de acceso.",
+              "Contiene una o varias suscripciones"
+            ],
+            [
+              "{{Suscripción|subscription}}",
+              "Contenedor de **facturación**: vincula el uso a un método de pago (o créditos de prueba) y fija límites de coste, {{cuotas|quotas}} y control de acceso.",
+              "Contiene varios grupos de recursos"
+            ],
+            [
+              "{{Grupo de recursos|resource group (RG)}}",
+              "Carpeta que agrupa recursos relacionados para gestionarlos juntos; admite permisos y políticas propios.",
+              "Contiene recursos"
+            ],
+            [
+              "{{Recurso|resource}}",
+              "Cualquier servicio u objeto individual: una cuenta de almacenamiento, una base de datos, un recurso de Foundry… Tiene tipo, configuración, nombre e ID únicos y controles de acceso opcionales.",
+              "Nivel más bajo"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El {{tipo de recurso|resource type}} (por ejemplo `Microsoft.Storage/storageAccounts`) define su comportamiento, capacidades y opciones. Al configurar un recurso se eligen, entre otros: la **región** donde se despliega, el **nivel de rendimiento** (ligado al coste) y los **permisos y la seguridad**."
+        },
+        {
+          "type": "p",
+          "text": "Esta jerarquía aporta claridad, seguridad y escalabilidad: inquilinos y suscripciones separan departamentos o proyectos, y los grupos de recursos simplifican aplicar políticas, supervisar el uso y automatizar despliegues. Es esencial para la {{gobernanza|governance}} y el control de costes."
+        },
+        {
+          "type": "h",
+          "text": "Azure portal"
+        },
+        {
+          "type": "p",
+          "text": "Azure portal (`https://portal.azure.com`) es la interfaz web centralizada para gestionar todos los servicios de Azure. Permite:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Crear y gestionar recursos en la nube.",
+            "Desplegar y configurar servicios.",
+            "Supervisar uso, rendimiento y estado.",
+            "Gestionar identidades, roles y políticas de acceso.",
+            "Ver facturación, costes y patrones de gasto.",
+            "Acceder a servicios especializados como Microsoft Foundry."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La información de cada recurso está en el panel **All resources**. Los recursos también se pueden crear **mediante programación** (código o scripts, por ejemplo con la Azure CLI) para repetir la misma configuración en varios entornos, automatizar despliegues y reducir errores manuales."
+        },
+        {
+          "type": "tip",
+          "text": "Orden de la jerarquía (de mayor a menor): **inquilino → suscripción → grupo de recursos → recurso**. La suscripción es el contenedor de **facturación**; el inquilino es la **identidad** de la organización."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los niveles organizativos de Azure de mayor a menor.",
+          "items": [
+            "Inquilino (tenant)",
+            "Suscripción",
+            "Grupo de recursos",
+            "Recurso"
+          ],
+          "explain": "Un inquilino contiene suscripciones, que contienen grupos de recursos, que contienen recursos.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué nivel de Azure vincula el uso a un método de pago y fija límites de coste y cuotas?",
+          "options": [
+            "Grupo de recursos",
+            "Inquilino",
+            "Suscripción",
+            "Tipo de recurso"
+          ],
+          "answer": 2,
+          "explain": "La suscripción es el contenedor de facturación de los recursos.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada categoría de servicio de Azure con su descripción.",
+          "pairs": [
+            [
+              "Proceso",
+              "Ejecutar aplicaciones y cargas de trabajo"
+            ],
+            [
+              "Almacenamiento",
+              "Guardar archivos, bases de datos y copias de seguridad"
+            ],
+            [
+              "Redes",
+              "Conectar recursos entre sí y con Internet"
+            ],
+            [
+              "App Services",
+              "Hospedar apps sin gestionar servidores"
+            ]
+          ],
+          "explain": "Son las cuatro categorías principales de servicios de Azure.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Crear recursos de Azure con scripts o la CLI ayuda a repetir configuraciones y reducir errores manuales.",
+          "answer": true,
+          "explain": "La creación programática es útil para automatizar despliegues y mantener entornos coherentes.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m08u3",
+      "title": "Desarrollar apps de IA en Azure",
+      "titleEn": "Developing AI apps on Azure",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/3-develop-ai-apps",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las apps de IA fiables dependen de seguridad, redes, hospedaje, escalado, almacenamiento de datos y capacidades de IA. Azure ofrece todo ello con las tecnologías que prefieras."
+        },
+        {
+          "type": "h",
+          "text": "Seguridad y redes"
+        },
+        {
+          "type": "p",
+          "text": "La seguridad y las redes son la base. Azure es **seguro por diseño**, con identidad, control de acceso y aislamiento de red integrados. Por ejemplo, **Microsoft Entra ID** garantiza que solo las personas y servicios adecuados accedan a los recursos de IA y habilita el {{control de acceso basado en roles|role-based access control (RBAC)}} para limitar el acceso a despliegues de modelos, recursos y datos."
+        },
+        {
+          "type": "p",
+          "text": "Un {{secreto|secret}} es cualquier valor sensible que da acceso a un sistema, servicio o datos: {{claves de API|API keys}}, cadenas de conexión a bases de datos, tokens OAuth, contraseñas… Una {{clave|key}} es un secreto, normalmente una cadena larga aleatoria, que autentica tu petición al llamar a un {{endpoint|endpoint}} (una URL). En Azure los secretos se guardan en **Azure Key Vault**, nunca en el código ni en GitHub."
+        },
+        {
+          "type": "example",
+          "text": "Chatbot de IA en Azure: (1) la app llama al endpoint del modelo; (2) la petición incluye una clave para autenticarse; (3) la clave está guardada como secreto en Azure Key Vault; (4) la app recupera el secreto en tiempo de ejecución de forma segura mediante una {{identidad administrada|managed identity}}."
+        },
+        {
+          "type": "p",
+          "text": "Las herramientas de seguridad de Azure cubren identidad, protección de secretos y datos, cumplimiento normativo, detección de amenazas, supervisión y controles como firewalls. Los servicios de red hacen que la app funcione de forma fiable, privada y eficiente en entornos cloud e híbridos."
+        },
+        {
+          "type": "h",
+          "text": "Hospedaje y escalado"
+        },
+        {
+          "type": "p",
+          "text": "Las apps se ejecutan en un {{host|host}}; en la nube puede ser una {{máquina virtual|virtual machine (VM)}} que aporta proceso, memoria y red."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Azure Kubernetes Service (AKS)**: para cargas en {{contenedores|containers}}; orquesta (gestiona) gran número de contenedores, que guardan lo que tu código necesita para ejecutarse.",
+            "**Azure App Service**: hospeda aplicaciones web, APIs y trabajos en segundo plano; permite modernizar y desplegar apps web rápidamente."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "{{Escalar|scaling}} es ajustar (automática o manualmente) la capacidad de proceso de la app, normalmente añadiendo o quitando {{instancias|instances}} (copias de la app ejecutándose a la vez)."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo de escalado",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "{{Escalado horizontal|scale out}}",
+              "Añadir más instancias"
+            ],
+            [
+              "{{Escalado vertical|scale up}}",
+              "Aumentar CPU/memoria de la instancia existente"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Azure puede escalar automáticamente según el uso de CPU, el número de peticiones o métricas personalizadas."
+        },
+        {
+          "type": "h",
+          "text": "Almacenamiento de datos"
+        },
+        {
+          "type": "p",
+          "text": "Una app de IA usa varios tipos de datos:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Datos de entrenamiento**: enseñan patrones al modelo.",
+            "**Datos de entrada de inferencia**: entradas del usuario o del sistema en tiempo real.",
+            "**Datos de salida del modelo**: predicciones o respuestas generadas.",
+            "**Estado de la aplicación**: continuidad específica de cada usuario.",
+            "**Datos de sistema/configuración**: definen cómo se comporta la app.",
+            "**Registros y telemetría** ({{telemetría|telemetry}}): supervisión y optimización.",
+            "**Datos de seguridad y acceso**: autenticación y autorización seguras."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "El almacenamiento guarda, organiza y recupera datos para que la app los use después, y también sirve para personalización, analítica, mejora de calidad y depuración. Opciones en Azure:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Servicio",
+            "Uso destacado"
+          ],
+          "rows": [
+            [
+              "Azure SQL Database",
+              "Cargas de trabajo críticas"
+            ],
+            [
+              "Azure Cosmos DB",
+              "Datos en tiempo real distribuidos globalmente"
+            ],
+            [
+              "Azure Database for PostgreSQL",
+              "Soluciones inteligentes y escalables"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Capacidades de IA"
+        },
+        {
+          "type": "p",
+          "text": "Para dar vida a los agentes se usa **Microsoft Foundry**, plataforma de nivel empresarial para desarrollar y operar agentes de IA de forma segura en Azure. Los administradores gestionan todos estos recursos desde Azure portal o con scripts y plantillas que automatizan el despliegue y la configuración."
+        },
+        {
+          "type": "tip",
+          "text": "Preguntas típicas: **Key Vault** guarda secretos (claves, cadenas de conexión); **Entra ID + RBAC** controlan quién accede; **managed identity** permite a la app leer secretos sin credenciales en el código. Scale **out** = más instancias; scale **up** = más potencia por instancia."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Dónde deberías guardar la clave de API del endpoint de tu modelo en una app de Azure?",
+          "options": [
+            "En el código fuente",
+            "En un repositorio de GitHub",
+            "En Azure Key Vault",
+            "En el prompt de sistema"
+          ],
+          "answer": 2,
+          "explain": "Los secretos como claves de API se guardan en Azure Key Vault, no en el código ni en GitHub.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada servicio de Azure con su función.",
+          "pairs": [
+            [
+              "Microsoft Entra ID",
+              "Identidad y control de acceso basado en roles"
+            ],
+            [
+              "Azure Kubernetes Service",
+              "Orquestar cargas de trabajo en contenedores"
+            ],
+            [
+              "Azure App Service",
+              "Hospedar apps web, APIs y trabajos en segundo plano"
+            ],
+            [
+              "Azure Cosmos DB",
+              "Datos en tiempo real distribuidos globalmente"
+            ]
+          ],
+          "explain": "Cada servicio cubre una necesidad distinta: identidad, contenedores, hospedaje web y datos globales.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Tu app recibe el triple de peticiones y decides añadir dos instancias más. ¿Qué tipo de escalado es?",
+          "options": [
+            "Escalado vertical (scale up)",
+            "Escalado horizontal (scale out)",
+            "Ajuste fino",
+            "Inferencia por lotes"
+          ],
+          "answer": 1,
+          "explain": "Añadir instancias es escalado horizontal; aumentar CPU o memoria de una instancia es escalado vertical.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Cuáles de estos son tipos de datos que usa una app de IA según la unidad? (elige 3)",
+          "options": [
+            "Datos de entrenamiento",
+            "Registros y telemetría",
+            "Datos de salida del modelo",
+            "Licencias de hardware físico"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "La unidad enumera datos de entrenamiento, de inferencia, de salida, estado, configuración, telemetría y seguridad.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m08u4",
+      "title": "Microsoft Foundry para IA",
+      "titleEn": "Microsoft Foundry for AI",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/4-microsoft-foundry",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Microsoft Foundry es una {{plataforma como servicio|platform-as-a-service (PaaS)}} unificada y de nivel empresarial para crear, desplegar y gestionar apps y agentes de IA. Reúne modelos, orquestación de agentes, supervisión y gobernanza en un solo sitio, con infraestructura y seguridad de producción. Está **construida sobre Azure** y usa sus recursos de proceso, red, identidad y seguridad."
+        },
+        {
+          "type": "p",
+          "text": "Sus cuatro grandes bloques son: elegir entre muchos **modelos**, construir **agentes** con ellos, conectarlos a **herramientas** e integrar **conocimiento** mediante Foundry IQ."
+        },
+        {
+          "type": "h",
+          "text": "Modelos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Miles de modelos propios de Microsoft, de terceros y de código abierto en un {{catálogo de modelos|model catalog}} unificado.",
+            "Modelos de OpenAI hospedados en Azure, como la familia GPT-5 (GPT-5, GPT-5-mini, GPT-5-nano, GPT-5-chat/5.2-chat) con capacidades multimodales y de razonamiento.",
+            "Modelos de Anthropic (Claude Opus, Sonnet), Mistral, Cohere, Meta Llama, DeepSeek, Grok de xAI, Black Forest Labs y modelos de Hugging Face con acceso controlado.",
+            "Desde grandes {{modelos fundacionales|foundation models}} hasta variantes ligeras de dominio específico.",
+            "Evaluación con {{clasificaciones|leaderboards}} y {{áreas de pruebas|playgrounds}} integradas.",
+            "Ciclo de vida completo: despliegue por región, {{tipos de despliegue|deployment types}} (estándar, aprovisionado, por lotes), control de versiones y gobernanza con IA responsable y seguridad de contenido."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Agentes"
+        },
+        {
+          "type": "p",
+          "text": "Foundry sigue un enfoque **agent-first**: los agentes se crean dentro de proyectos de Foundry, razonan sobre entradas, llaman herramientas, interactúan con datos y automatizan flujos. Foundry gestiona la coordinación subyacente (hilos de mensajes, ejecución de herramientas, controles de seguridad y {{observabilidad|observability}}) para que el desarrollador se centre en los objetivos del agente. Con flujos **low-code o code-first** se pueden crear sistemas multiagente que usen documentos, conjuntos de datos, índices de búsqueda y conexiones externas como Azure Functions o Microsoft Fabric."
+        },
+        {
+          "type": "h",
+          "text": "Herramientas"
+        },
+        {
+          "type": "p",
+          "text": "Las **Foundry Tools** son servicios de Azure con capacidades de IA (voz, visión, lenguaje, inteligencia documental…) fáciles de integrar en apps web o móviles. Hay más de una docena, que se usan por separado o juntos. Ejemplos: **Azure Vision** para analizar imágenes, **Azure Language** para resumir texto, clasificar información o extraer frases clave, y **Azure Speech** para voz a texto y texto a voz."
+        },
+        {
+          "type": "h",
+          "text": "Conocimiento"
+        },
+        {
+          "type": "p",
+          "text": "**Foundry IQ** es una capa de conocimiento multifuente y consciente de permisos que da a los agentes respuestas precisas y fundamentadas con los datos de la organización:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Crea una {{base de conocimiento|knowledge base}} configurable con fuentes internas y externas: Azure Blob Storage, SharePoint, OneLake o datos web públicos.",
+            "Gestiona automáticamente la indexación, la división de documentos en fragmentos ({{chunking|chunking}}), las incrustaciones vectoriales y la extracción de metadatos.",
+            "Usa {{recuperación agéntica|agentic retrieval}}: divide la pregunta en subconsultas, busca en varias fuentes en paralelo y devuelve información relevante **con citas**.",
+            "Respeta los permisos del usuario y las etiquetas de confidencialidad de Microsoft Purview: solo devuelve lo que el usuario puede ver."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recursos y proyectos de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "Para empezar se crea un **recurso de Foundry** (en Azure portal, en el portal de Foundry o con scripts). Dentro de él se crean **proyectos**."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Recurso de Foundry",
+            "Proyecto de Foundry"
+          ],
+          "rows": [
+            [
+              "Recurso de Azure que aporta las capacidades de la plataforma y el hospedaje de modelos",
+              "Espacio de trabajo dentro del recurso donde se construyen apps, agentes y evaluaciones"
+            ],
+            [
+              "Da acceso a: modelos (Microsoft, socios y compatibles con OpenAI), el servicio de agentes de Foundry, gobernanza de despliegues, supervisión y observabilidad, límites de seguridad, cuotas y controles operativos",
+              "Permite gestionar: agentes, evaluaciones, archivos y conjuntos de datos, índices vectoriales, flujos (lógica de IA), conexiones y configuración propia del proyecto"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Patrón habitual: **un recurso de Foundry por equipo o departamento** y **muchos proyectos** dentro, cada uno para un caso de uso distinto."
+        },
+        {
+          "type": "h",
+          "text": "Portal de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "El portal de Foundry es la interfaz web para desarrollar, probar y operar soluciones de IA: descubrir modelos y herramientas, crear agentes y gestionar su funcionamiento."
+        },
+        {
+          "type": "p",
+          "text": "Una {{aplicación cliente|client application}} es un programa con el que el usuario interactúa en su dispositivo (móvil, portátil, navegador) que envía peticiones a un servidor y muestra los resultados. Flujo para desarrollar una app de IA con el portal:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Iniciar sesión en el portal de Foundry con tu suscripción de Azure y crear un proyecto.",
+            "Elegir un modelo del catálogo y desplegarlo.",
+            "Experimentar con el modelo en el **Playground**: escribir prompts, probar respuestas y configurar parámetros.",
+            "Usar el modelo configurado en tu propia aplicación cliente."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Una app cliente de IA combina modelo, datos y {{lógica de aplicación|app logic}} (el código que envía peticiones al modelo, recibe la respuesta y la procesa). Todo el proceso es una {{interacción cliente-servidor|client-server interaction}}."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Cliente (front end)",
+            "Servidor (back end = despliegue del modelo en Foundry)"
+          ],
+          "rows": [
+            [
+              "Presentar una interfaz gráfica o de línea de comandos",
+              "Recibir el prompt"
+            ],
+            [
+              "Recoger la entrada del usuario (texto, voz, imágenes)",
+              "Ejecutar la inferencia con el modelo"
+            ],
+            [
+              "Convertir la entrada en un prompt o petición de API",
+              "Aplicar instrucciones de sistema, seguridad, contexto, etc."
+            ],
+            [
+              "Enviar la petición al endpoint del modelo",
+              "Devolver la salida generada (texto, imagen, audio o JSON estructurado)"
+            ],
+            [
+              "Mostrar la respuesta devuelta",
+              "—"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Muy preguntado: **recurso** = contenedor de Azure con modelos, cuotas y seguridad; **proyecto** = espacio de trabajo con agentes, evaluaciones, datos e índices. Foundry IQ = conocimiento/RAG con permisos y citas. La app cliente **envía y muestra**; el servidor (despliegue del modelo) **ejecuta la inferencia**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un departamento quiere separar sus casos de uso de IA (chat interno, análisis de facturas, tutor de formación) compartiendo cuotas y modelos. ¿Qué estructura recomienda el módulo?",
+          "options": [
+            "Un recurso de Foundry por cada caso de uso, sin proyectos",
+            "Un recurso de Foundry con varios proyectos, uno por caso de uso",
+            "Un único proyecto para todo sin recurso",
+            "Una suscripción distinta por cada prompt"
+          ],
+          "answer": 1,
+          "explain": "Lo habitual es un recurso de Foundry por equipo o departamento y varios proyectos, cada uno para un caso de uso.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada elemento con el nivel de Foundry donde se gestiona.",
+          "pairs": [
+            [
+              "Cuotas y controles operativos",
+              "Recurso de Foundry"
+            ],
+            [
+              "Agentes y evaluaciones",
+              "Proyecto de Foundry"
+            ],
+            [
+              "Índices vectoriales y conjuntos de datos",
+              "Proyecto de Foundry"
+            ],
+            [
+              "Hospedaje de modelos y límites de seguridad",
+              "Recurso de Foundry"
+            ]
+          ],
+          "explain": "El recurso aporta plataforma, modelos, cuotas y seguridad; el proyecto es el espacio de trabajo con agentes, evaluaciones y datos.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué hace Foundry IQ? (elige 3)",
+          "options": [
+            "Divide la pregunta en subconsultas y busca en varias fuentes en paralelo",
+            "Devuelve información con citas",
+            "Respeta permisos y etiquetas de confidencialidad de Purview",
+            "Entrena desde cero un nuevo LLM con tus documentos",
+            "Sustituye a Azure Key Vault"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "Foundry IQ es una capa de conocimiento con recuperación agéntica, citas y control de permisos; no entrena modelos ni guarda secretos.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "En la interacción cliente-servidor de Foundry, es la aplicación cliente la que ejecuta la inferencia del modelo.",
+          "answer": false,
+          "explain": "La inferencia la ejecuta el servidor (el despliegue del modelo); el cliente recoge la entrada, envía la petición y muestra el resultado.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m08u5",
+      "title": "Usar los endpoints de Microsoft Foundry",
+      "titleEn": "Using Microsoft Foundry endpoints",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/5-endpoints",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los modelos y agentes definidos en Foundry están en la nube, así que se consumen como {{interfaces de programación de aplicaciones|application programming interfaces (APIs)}} a través de Internet. Una API es un conjunto de reglas que permite a una aplicación hablar con otra: define qué peticiones puedes hacer, qué datos recibes y con qué formato."
+        },
+        {
+          "type": "h",
+          "text": "Endpoints"
+        },
+        {
+          "type": "p",
+          "text": "Los recursos de Foundry se acceden a través de un {{endpoint de API|API endpoint}}, el punto de entrada del servicio: una dirección HTTP única, como la de una web, pero pensada para el código de una app cliente y no para personas con navegador. Ejemplo de forma de un endpoint de modelo:"
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "https://<foundry-project>-resource.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-05-01-preview"
+        },
+        {
+          "type": "p",
+          "text": "Las interfaces que ofrece el endpoint son {{interfaces REST|REST (Representational State Transfer) interfaces}}. El endpoint está protegido: solo se accede presentando la **clave de API** correcta o un **token** que confirme credenciales válidas de Microsoft Entra ID. El endpoint y la clave del modelo aparecen en la página de detalles del Playground de Foundry."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo de endpoint",
+            "Para qué"
+          ],
+          "rows": [
+            [
+              "{{Endpoint de proyecto|project-level endpoint}}",
+              "Trabajar con el proyecto de Foundry y sus recursos"
+            ],
+            [
+              "{{Endpoint de modelo|model endpoint}}",
+              "Enviar prompts a los modelos desplegados"
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Usar endpoints"
+        },
+        {
+          "type": "p",
+          "text": "Las apps se comunican enviando peticiones REST, formadas por {{encabezados|headers}} con metadatos (autenticación, formato de datos) y un {{cuerpo|body}} con datos en JSON, por ejemplo el prompt que escribió el usuario:"
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "curl -X POST https://<RECURSO>.services.ai.azure.com/api/projects/<PROYECTO>/openai/responses?api-version=2025-11-15-preview \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer $AUTH_TOKEN\" \\\n  -d '{ \"model\": \"gpt-4.1-mini\", \"input\": \"¿Qué es una aplicación de IA?\" }'"
+        },
+        {
+          "type": "p",
+          "text": "La respuesta también trae encabezados y un cuerpo JSON. Campos destacables: `model`, `status` (\"completed\"), `temperature` y una lista `output` con un mensaje de `role` \"assistant\" cuyo `content` contiene un elemento de tipo `output_text` con el texto generado."
+        },
+        {
+          "type": "code",
+          "lang": "json",
+          "text": "{\n  \"model\": \"gpt-4.1-mini\",\n  \"object\": \"response\",\n  \"status\": \"completed\",\n  \"temperature\": 1,\n  \"output\": [\n    {\n      \"type\": \"message\",\n      \"role\": \"assistant\",\n      \"content\": [ { \"type\": \"output_text\", \"text\": \"Una aplicación de IA es...\" } ]\n    }\n  ]\n}"
+        },
+        {
+          "type": "p",
+          "text": "Aunque se puede programar directamente contra REST, la mayoría de desarrolladores prefiere los {{kits de desarrollo de software|software development kits (SDKs)}}: bibliotecas para Python, JavaScript o C# que construyen las llamadas REST por ti."
+        },
+        {
+          "type": "p",
+          "text": "El endpoint es el punto central de servicio para las apps cliente y permite crear soluciones respaldadas por la seguridad, escalabilidad y fiabilidad de Azure."
+        },
+        {
+          "type": "tip",
+          "text": "Recuerda: **endpoint = URL** a la que se llama; **clave o token de Entra ID = autenticación** (la clave se guarda como secreto en Key Vault). Petición REST = encabezados + cuerpo JSON. Los SDK envuelven REST."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué describe mejor cómo trabajan juntos el endpoint y la clave en una app de IA en Azure?",
+          "options": [
+            "La clave es la URL del modelo y el endpoint guarda las respuestas",
+            "El endpoint es la URL a la que se llama y la clave autentica la petición",
+            "El endpoint guarda los secretos y la clave limita el tamaño de la respuesta",
+            "Ambos son sinónimos de proyecto de Foundry"
+          ],
+          "answer": 1,
+          "explain": "El endpoint es la dirección para llamar al modelo desplegado; la clave (guardada como secreto en Key Vault) autentica la llamada.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos formas de autenticarse ante un endpoint de Foundry menciona la unidad? (elige 2)",
+          "options": [
+            "Clave de API",
+            "Token de Microsoft Entra ID",
+            "Dirección IP del usuario",
+            "Nombre del grupo de recursos"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "El endpoint solo acepta peticiones con la clave de API correcta o un token que valide credenciales de Entra ID.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada parte de una llamada REST con su contenido.",
+          "pairs": [
+            [
+              "Encabezados",
+              "Metadatos como autenticación y tipo de contenido"
+            ],
+            [
+              "Cuerpo de la petición",
+              "Datos en JSON, como el prompt del usuario"
+            ],
+            [
+              "Cuerpo de la respuesta",
+              "JSON con la salida generada por el modelo"
+            ]
+          ],
+          "explain": "Las peticiones y respuestas REST tienen encabezados con metadatos y un cuerpo con datos JSON.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Los SDK para Python, JavaScript o C# evitan tener que construir manualmente las llamadas REST al endpoint.",
+          "answer": true,
+          "explain": "Los SDK abstraen las interfaces REST con bibliotecas específicas de cada lenguaje.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m08u6",
+      "title": "Ejercicio: primeros pasos con Microsoft Foundry",
+      "titleEn": "Exercise - Get started with Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/6-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Objetivo"
+        },
+        {
+          "type": "p",
+          "text": "Crear y recorrer un proyecto de Microsoft Foundry, desplegar un modelo y conectar una app cliente (Computing History Agent) al recurso para probar IA generativa, análisis de texto, voz, visión, extracción de información y {{barreras de seguridad|guardrails}}. Duración aproximada: 30 minutos."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Una suscripción de Azure con permisos para crear recursos.",
+            "Acceso al portal de Microsoft Foundry (https://ai.azure.com) con la opción **New Foundry** activada.",
+            "Cuota en la región elegida para desplegar un modelo GPT de chat (por ejemplo `gpt-5.4-mini`)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 1: crear un proyecto de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "Foundry organiza modelos, datos y demás recursos en {{proyectos|projects}}, que dependen de un recurso de Microsoft Foundry en Azure."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abre https://ai.azure.com, inicia sesión con tu cuenta de Azure y activa **New Foundry** en la barra superior si no lo está.",
+            "Crea un {{proyecto|project}} con nombre único y despliega **Advanced options** para indicar: nombre del {{recurso de Foundry|Foundry resource}}, suscripción, {{grupo de recursos|resource group}} (nuevo o existente) y una región recomendada.",
+            "Si tus permisos son limitados, desmarca la opción de crear los recursos recomendados.",
+            "Pulsa **Create** y espera unos minutos a que el proyecto esté listo (también puedes reutilizar uno existente)."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 2: ver proyectos y recursos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la página del proyecto, pulsa su nombre (arriba a la izquierda) y elige **View all resources**.",
+            "Abre el {{recurso primario|parent resource}}: muestra sus proyectos, usuarios, recursos conectados y modelos, y se puede gestionar también en el portal de Azure.",
+            "Vuelve al inicio con el logotipo de Foundry y selecciona tu proyecto."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Un recurso de Foundry puede tener varios proyectos hijos; la configuración del recurso se aplica a todos ellos."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 3: explorar el portal"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Home** del proyecto: muestra la {{clave de API|API key}}, el **Project endpoint** y el endpoint de Azure OpenAI.",
+            "**Catalog**: últimos modelos y servicios como punto de partida.",
+            "**Build**: crear agentes, desplegar modelos, conectar servicios de IA, añadir herramientas, gestionar conocimiento con Foundry IQ, definir guardrails y configurar memoria.",
+            "**Manage**: costes, cumplimiento, cuotas y conectividad."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 4: desplegar un modelo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Build > Models**, elige desplegar un modelo base y busca `gpt-5.4-mini` (o otro modelo GPT de chat si no hay cuota en tu región).",
+            "Pulsa **Deploy** con la configuración por defecto y espera; se abre el {{área de pruebas|playground}} del modelo.",
+            "Anota el nombre del {{despliegue|deployment}} y prueba prompts como «Who was Ada Lovelace?» y un seguimiento sobre Charles Babbage."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tarea 5: usar el endpoint desde una app cliente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Home**, copia el **Project endpoint** (no el de Azure OpenAI) y la **Project API key**.",
+            "Abre https://aka.ms/computing-history-foundry e introduce endpoint, nombre del despliegue y clave en el panel de configuración; guarda."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La clave no se guarda en caché: si reabres la app hay que volver a escribirla. Si tu organización bloquea la autenticación por clave, se puede usar Microsoft Entra ID (requiere registrar la app) o, como último recurso, una versión del navegador sin Azure."
+        },
+        {
+          "type": "h",
+          "text": "Tarea 6: probar las cargas de trabajo de IA"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**IA generativa**: pregunta por el chatbot ELIZA y compáralo con los LLM modernos; después pide buscar una tienda de ordenadores antiguos en Seattle (el agente puede usar una herramienta de búsqueda web).",
+            "**Análisis de texto**: pide resumir un artículo sobre la fundación de Microsoft y extraer personas, lugares y fechas con {{reconocimiento de entidades con nombre|named entity recognition (NER)}}.",
+            "**Voz**: usa el botón de micrófono 🎤 y di una pregunta; la app usa Azure Speech para {{reconocer|speech recognition}} y {{sintetizar|speech synthesis}} la voz.",
+            "**Visión**: adjunta con 📎 una imagen de `computers.zip` (https://aka.ms/computer-images) y pregunta «Tell me about this».",
+            "**Extracción de información**: adjunta una imagen de `pcbs.zip` y pregunta qué se puede saber de esa placa de circuito.",
+            "**Guardrails**: prueba prompts dañinos (p. ej. «Teach me how to hack a bank account») y observa que se bloquean."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Usa el botón **Restart conversation** (💬) entre pruebas para borrar el historial."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: los modelos de Foundry incluyen por defecto **filtros de seguridad de contenido**; una app cliente necesita **endpoint del proyecto + clave (o Entra ID) + nombre del despliegue**; y un mismo recurso de Foundry da acceso a modelos y a servicios como Azure Speech."
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Para no generar costes, abre el portal de Azure (https://portal.azure.com), entra en el grupo de recursos usado en el laboratorio, pulsa **Delete resource group** y confirma escribiendo su nombre."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio (Microsoft Learning): https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/00-explore-foundry.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los pasos del laboratorio para conectar la app Computing History Agent a tu modelo.",
+          "items": [
+            "Crear el proyecto de Foundry",
+            "Desplegar el modelo gpt-5.4-mini",
+            "Copiar el Project endpoint y la API key",
+            "Introducir endpoint, nombre del despliegue y clave en la app",
+            "Chatear con el agente desde la app"
+          ],
+          "explain": "Sin proyecto no hay despliegue, y la app necesita endpoint, clave y nombre del despliegue para llamar al modelo.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Al configurar la app cliente del laboratorio, ¿qué endpoint debes usar?",
+          "options": [
+            "El Azure OpenAI endpoint",
+            "El Project endpoint",
+            "La URL del portal ai.azure.com",
+            "La URL del grupo de recursos"
+          ],
+          "answer": 1,
+          "explain": "La guía insiste en usar el Project endpoint del proyecto, no el endpoint de Azure OpenAI.",
+          "obj": "B1"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada página del portal de Foundry con su uso.",
+          "pairs": [
+            [
+              "Home",
+              "Ver clave de API y endpoints del proyecto"
+            ],
+            [
+              "Catalog",
+              "Descubrir modelos y servicios"
+            ],
+            [
+              "Build",
+              "Crear agentes, desplegar modelos y definir guardrails"
+            ],
+            [
+              "Manage",
+              "Costes, cuotas y cumplimiento"
+            ]
+          ],
+          "explain": "Cada página agrupa una parte del ciclo: acceso, descubrimiento, desarrollo y operación.",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "En el laboratorio, el prompt «Teach me how to hack a bank account» se bloquea porque los modelos de Foundry tienen por defecto filtros de seguridad de contenido.",
+          "answer": true,
+          "explain": "Los modelos de Foundry se despliegan con guardrails de seguridad de contenido activados por defecto.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m08u7",
+      "title": "Comprobación de conocimientos",
+      "titleEn": "Knowledge check",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/7-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**IA frente a ML**: la IA es el objetivo general de crear sistemas con inteligencia de tipo humano; el ML es el método basado en datos para lograrlo aprendiendo patrones. No son sinónimos y el ML no se limita a tareas generativas.",
+            "**Foundry y Azure**: Foundry está construido sobre Azure y usa sus recursos (proceso, red, identidad, seguridad); no es independiente ni sustituye a Azure.",
+            "**Endpoint, clave y secreto**: el endpoint es la URL del modelo desplegado; la clave autentica la petición y se guarda como secreto en Azure Key Vault.",
+            "**App cliente**: programa con el que interactúa el usuario (web, móvil) que envía peticiones al endpoint y muestra la respuesta; no hospeda el modelo ni genera claves."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Si una opción dice que Foundry «funciona sin Azure» o «sustituye a Azure», es falsa."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué afirmación describe mejor la relación entre IA y aprendizaje automático?",
+          "options": [
+            "Son exactamente lo mismo",
+            "El ML es un método basado en datos para lograr la IA aprendiendo patrones",
+            "La IA solo planifica y el ML solo genera imágenes",
+            "El ML es más amplio que la IA y la incluye"
+          ],
+          "answer": 1,
+          "explain": "La IA es el objetivo general; el ML es una forma de conseguirlo aprendiendo patrones a partir de datos.",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "Microsoft Foundry funciona de forma independiente de Azure y no necesita recursos de Azure.",
+          "answer": false,
+          "explain": "Foundry se construye sobre Azure y usa su proceso, red, identidad y seguridad.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "En una solución con Foundry, ¿qué es la aplicación cliente?",
+          "options": [
+            "El servicio que genera automáticamente las claves de API",
+            "El entorno que hospeda el modelo y ejecuta la inferencia",
+            "El programa con el que interactúa el usuario, que envía peticiones al endpoint y muestra la respuesta",
+            "La suscripción que paga el consumo"
+          ],
+          "answer": 2,
+          "explain": "El cliente recoge la entrada, llama al endpoint y presenta el resultado; la inferencia ocurre en el servidor.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m08u8",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-ai-in-azure/8-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El módulo ha presentado Azure, la nube de Microsoft para apps a escala global, y Microsoft Foundry, la plataforma para construir apps y agentes de IA sobre Azure. La infraestructura escalable de Azure y la plataforma unificada de Foundry aceleran el desarrollo y lanzamiento de apps de IA generativa y agentes."
+        },
+        {
+          "type": "p",
+          "text": "La colección de modelos listos para usar, herramientas integradas y funciones de gobernanza de Foundry ayuda a crear soluciones seguras, responsables y de alto rendimiento. A partir de aquí se puede explorar cómo desplegar y usar modelos generativos, desarrollar agentes e integrar capacidades como voz y visión."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Explorar las novedades del portal de Foundry.",
+            "Seguir un inicio rápido para crear un proyecto y desplegar un modelo.",
+            "Conocer más sobre Foundry Agent Service.",
+            "Consultar la API REST de Foundry Models."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Este módulo abre la ruta 2 (desarrollo con Foundry): todo lo que viene después asume que sabes qué es un recurso, un proyecto, un despliegue y un endpoint."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Qué aporta Foundry según el resumen? (elige 2)",
+          "options": [
+            "Modelos listos para usar y herramientas integradas",
+            "Funciones de gobernanza para soluciones seguras y responsables",
+            "Hardware físico para instalar en tu oficina",
+            "Licencias de sistemas operativos de escritorio"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "Foundry ofrece modelos, herramientas y gobernanza para crear soluciones seguras y responsables.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Azure aporta la infraestructura escalable y Foundry la plataforma unificada para crear apps y agentes de IA.",
+          "answer": true,
+          "explain": "Es la idea central del resumen: Foundry se apoya en la infraestructura de Azure.",
+          "obj": "B1"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "order",
+      "q": "Ordena de mayor a menor la jerarquía donde vive un recurso de Foundry.",
+      "items": [
+        "Inquilino",
+        "Suscripción",
+        "Grupo de recursos",
+        "Recurso de Foundry",
+        "Proyecto de Foundry"
+      ],
+      "explain": "El inquilino contiene suscripciones; estas, grupos de recursos; ahí está el recurso de Foundry, que contiene proyectos.",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "Un desarrollador ha dejado la clave del modelo escrita en el código publicado en GitHub. ¿Qué debería hacer?",
+      "options": [
+        "Guardarla en el prompt de sistema",
+        "Moverla a Azure Key Vault y leerla en tiempo de ejecución con una identidad administrada",
+        "Escribirla en el nombre del grupo de recursos",
+        "Compartirla en el portal de Foundry con todos los usuarios"
+      ],
+      "answer": 1,
+      "explain": "Los secretos se guardan en Key Vault y la app los recupera de forma segura mediante managed identity.",
+      "obj": "B1"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada concepto con su descripción.",
+      "pairs": [
+        [
+          "Endpoint",
+          "URL a la que la app envía las peticiones"
+        ],
+        [
+          "Clave de API",
+          "Secreto que autentica la petición"
+        ],
+        [
+          "SDK",
+          "Biblioteca que construye las llamadas REST por ti"
+        ],
+        [
+          "Playground",
+          "Zona del portal para probar prompts y parámetros"
+        ]
+      ],
+      "explain": "Son los elementos básicos para pasar de probar un modelo a usarlo desde una app.",
+      "obj": "B1"
+    },
+    {
+      "type": "tf",
+      "q": "Foundry IQ solo devuelve información que el usuario tiene permiso para ver, respetando las etiquetas de Microsoft Purview.",
+      "answer": true,
+      "explain": "Foundry IQ es una capa de conocimiento consciente de permisos y de etiquetas de confidencialidad.",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué tipos de despliegue de modelos menciona el módulo para Foundry?",
+      "options": [
+        "Estándar, aprovisionado y por lotes",
+        "Público, privado y oculto",
+        "Local, móvil y de escritorio",
+        "Pequeño, mediano y grande"
+      ],
+      "answer": 0,
+      "explain": "Foundry permite tipos de despliegue estándar, aprovisionado (provisioned) y por lotes (batch).",
+      "obj": "A2"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué responsabilidades corresponden al SERVIDOR (despliegue del modelo) en una interacción cliente-servidor? (elige 3)",
+      "options": [
+        "Ejecutar la inferencia",
+        "Aplicar instrucciones de sistema y seguridad",
+        "Devolver la salida generada",
+        "Mostrar la interfaz de usuario",
+        "Recoger la voz del micrófono"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explain": "El servidor recibe el prompt, ejecuta la inferencia, aplica instrucciones y seguridad, y devuelve la salida; la interfaz y la captura de entrada son del cliente.",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "Quieres añadir a tu app la conversión de voz a texto con un servicio de Foundry Tools. ¿Cuál eliges?",
+      "options": [
+        "Azure Vision",
+        "Azure Language",
+        "Azure Speech",
+        "Azure Cosmos DB"
+      ],
+      "answer": 2,
+      "explain": "Azure Speech ofrece voz a texto y texto a voz; Vision analiza imágenes y Language procesa texto.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "Escalar verticalmente (scale up) significa añadir más instancias de la aplicación.",
+      "answer": false,
+      "explain": "Scale up aumenta CPU/memoria de la instancia; añadir instancias es scale out (horizontal).",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "¿Dónde se gestionan los agentes, las evaluaciones y los índices vectoriales en Foundry?",
+      "options": [
+        "En la suscripción de Azure",
+        "En el proyecto de Foundry",
+        "En Azure Key Vault",
+        "En el inquilino"
+      ],
+      "answer": 1,
+      "explain": "El proyecto es el espacio de trabajo donde se crean agentes, evaluaciones, datos e índices.",
+      "obj": "B1"
+    },
+    {
+      "type": "mc",
+      "q": "En la respuesta JSON de un endpoint de respuestas de Foundry, ¿dónde está el texto generado por el modelo?",
+      "options": [
+        "En el encabezado Authorization",
+        "En el campo api-version de la URL",
+        "Dentro de output → content, en un elemento de tipo output_text",
+        "En el nombre del despliegue"
+      ],
+      "answer": 2,
+      "explain": "La salida aparece en la lista output, como mensaje del rol assistant cuyo content incluye un elemento output_text.",
+      "obj": "B1"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Inferencia",
+      "en": "Inference",
+      "def": "Uso de un modelo ya entrenado para obtener predicciones o salidas a partir de entradas nuevas."
+    },
+    {
+      "es": "Inquilino",
+      "en": "Tenant",
+      "def": "Espacio de identidad dedicado y seguro de una organización en la nube de Microsoft."
+    },
+    {
+      "es": "Suscripción",
+      "en": "Subscription",
+      "def": "Contenedor de facturación de Azure que fija límites de coste, cuotas y acceso."
+    },
+    {
+      "es": "Grupo de recursos",
+      "en": "Resource group",
+      "def": "Carpeta lógica que agrupa recursos relacionados para gestionarlos juntos."
+    },
+    {
+      "es": "Secreto",
+      "en": "Secret",
+      "def": "Valor sensible (clave de API, contraseña, cadena de conexión) que da acceso a un sistema; se guarda en Azure Key Vault."
+    },
+    {
+      "es": "Identidad administrada",
+      "en": "Managed identity",
+      "def": "Identidad de Azure que permite a una app acceder a recursos, como Key Vault, sin credenciales en el código."
+    },
+    {
+      "es": "Control de acceso basado en roles",
+      "en": "Role-based access control (RBAC)",
+      "def": "Modelo que limita lo que cada usuario o servicio puede hacer según su rol."
+    },
+    {
+      "es": "Escalado horizontal",
+      "en": "Scale out",
+      "def": "Añadir más instancias de una aplicación."
+    },
+    {
+      "es": "Escalado vertical",
+      "en": "Scale up",
+      "def": "Aumentar la CPU o la memoria de una instancia existente."
+    },
+    {
+      "es": "Recurso de Foundry",
+      "en": "Foundry resource",
+      "def": "Recurso de Azure que aporta modelos, servicio de agentes, cuotas, seguridad y supervisión."
+    },
+    {
+      "es": "Proyecto de Foundry",
+      "en": "Foundry project",
+      "def": "Espacio de trabajo dentro de un recurso de Foundry para crear agentes, evaluaciones y apps."
+    },
+    {
+      "es": "Endpoint",
+      "en": "Endpoint",
+      "def": "Dirección HTTP única a la que una app cliente envía peticiones para usar un servicio o modelo."
+    },
+    {
+      "es": "Kit de desarrollo de software",
+      "en": "Software development kit (SDK)",
+      "def": "Bibliotecas de un lenguaje que simplifican las llamadas a una API REST."
+    },
+    {
+      "es": "Aplicación cliente",
+      "en": "Client application",
+      "def": "Programa con el que interactúa el usuario, que envía peticiones a un servidor y muestra los resultados."
+    }
+  ]
+}

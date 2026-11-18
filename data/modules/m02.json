@@ -1,0 +1,1036 @@
+{
+  "id": "m02",
+  "path": 1,
+  "order": 2,
+  "title": "Introducción a la IA generativa y los agentes",
+  "titleEn": "Introduction to generative AI and agents",
+  "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/",
+  "summary": "Cómo funcionan por dentro los modelos de lenguaje (tokens, transformadores, atención, incrustaciones), cómo se interactúa con ellos mediante prompts y RAG, y cómo los agentes de IA usan modelos, instrucciones y herramientas para realizar tareas.",
+  "objectives": [
+    "Explicar cómo un LLM predice completaciones a partir de un prompt",
+    "Describir la tokenización, las incrustaciones y la arquitectura transformer con atención",
+    "Diferenciar prompts de sistema y de usuario, e historial de conversación",
+    "Explicar la generación aumentada por recuperación (RAG)",
+    "Aplicar buenas prácticas para escribir prompts",
+    "Describir los componentes de un agente y los sistemas multiagente"
+  ],
+  "units": [
+    {
+      "id": "m02u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{IA generativa|generative AI}} está cada vez más presente en la conciencia pública, incluso entre personas sin formación técnica. Parece casi mágica por su capacidad de producir contenido original con apariencia humana: poesía, prosa e incluso código."
+        },
+        {
+          "type": "p",
+          "text": "El módulo recuerda la frase atribuida a Arthur C. Clarke según la cual cualquier tecnología lo bastante avanzada no se distingue de la magia. Pero en la IA generativa **no hay magia**: solo técnicas matemáticas descubiertas y refinadas durante años de investigación en estadística, ciencia de datos y {{aprendizaje automático|machine learning}}."
+        },
+        {
+          "type": "p",
+          "text": "Entendiendo los conceptos centrales (cómo funcionan los modelos de lenguaje, cómo se usan los prompts y cómo la IA generativa impulsa una nueva generación de {{agentes de IA|AI agents}}) se puede comprender a alto nivel «cómo se hace el truco»."
+        },
+        {
+          "type": "tip",
+          "text": "Idea de fondo para el examen: la IA generativa es **probabilística y matemática**, no «inteligencia mágica». Por eso puede equivocarse y necesita salvaguardas."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "tf",
+          "q": "La IA generativa se basa en técnicas matemáticas de estadística, ciencia de datos y aprendizaje automático refinadas durante años.",
+          "answer": true,
+          "explain": "El módulo insiste en que no hay magia: son técnicas matemáticas acumuladas durante años de investigación.",
+          "obj": "A2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué tipos de contenido original puede producir la IA generativa según la introducción? (elige 3)",
+          "options": [
+            "Poesía",
+            "Prosa",
+            "Código informático",
+            "Hardware físico"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "La introducción menciona poesía, prosa e incluso código como contenido generado.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m02u2",
+      "title": "Modelos de lenguaje grandes (LLM)",
+      "titleEn": "Large language models (LLMs)",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/3-language-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "En el núcleo de la IA generativa están los {{modelos de lenguaje grandes|large language models (LLMs)}} y sus parientes más compactos, los {{modelos de lenguaje pequeños|small language models (SLMs)}}. Ambos encapsulan las relaciones lingüísticas y semánticas entre las palabras y frases de un vocabulario, y las usan para razonar sobre la entrada en lenguaje natural y generar respuestas relevantes."
+        },
+        {
+          "type": "p",
+          "text": "En esencia, un LLM está entrenado para generar {{completaciones|completions}} a partir de {{prompts|prompts}}. Es como un texto predictivo de móvil superpotente: el prompt inicia una secuencia de predicciones. La clave es que el modelo sabe qué palabras de la secuencia influyen más en la siguiente y elige la continuación más probable."
+        },
+        {
+          "type": "example",
+          "text": "Frase: «Oí a un perro ladrar fuerte a un gato». Si solo oyes «Oí a un perro…», las palabras «oí» y «perro» son las mejores pistas: lo que se oye es un sonido y los perros hacen sonidos concretos, así que es probable que siga «ladrar». Puedes adivinarlo porque (1) tienes un vocabulario amplio, (2) conoces las estructuras lingüísticas habituales y (3) entiendes los conceptos semánticos asociados a las palabras."
+        },
+        {
+          "type": "h",
+          "text": "Tokenización"
+        },
+        {
+          "type": "p",
+          "text": "El primer paso es dar al modelo un vocabulario enorme: los LLM actuales manejan **cientos de miles de {{tokens|tokens}}**. Un token no es siempre una palabra: puede ser una palabra, una subpalabra (como «un» en «unbelievable» y «unlikely»), un signo de puntuación u otra secuencia de caracteres frecuente. La {{tokenización|tokenization}} divide el texto de entrenamiento en tokens distintos y asigna a cada uno un **identificador entero único**."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Token",
+            "ID"
+          ],
+          "rows": [
+            [
+              "I",
+              "1"
+            ],
+            [
+              "heard",
+              "2"
+            ],
+            [
+              "a",
+              "3"
+            ],
+            [
+              "dog",
+              "4"
+            ],
+            [
+              "bark",
+              "5"
+            ],
+            [
+              "loudly",
+              "6"
+            ],
+            [
+              "at",
+              "7"
+            ],
+            [
+              "a (repetido)",
+              "3 (ya asignado)"
+            ],
+            [
+              "cat",
+              "8"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "A medida que se añaden datos de entrenamiento, se incorporan más tokens al vocabulario (por ejemplo «puppy», «skateboard» o «car»). El ejemplo tokeniza por palabras para simplificar; en la realidad hay también subpalabras y puntuación."
+        },
+        {
+          "type": "h",
+          "text": "Transformar tokens con un transformer"
+        },
+        {
+          "type": "p",
+          "text": "Para relacionar los tokens entre sí, a cada uno se le asigna un {{vector|vector}}: una lista de valores numéricos (por ejemplo [1, 23, 45]). Cada elemento o {{dimensión|dimension}} codifica atributos lingüísticos y semánticos del token. Esos vectores iniciales se transforman en otros que incorporan el significado según el contexto en que aparece el token; como llevan valores semánticos incrustados se llaman {{incrustaciones|embeddings}}."
+        },
+        {
+          "type": "p",
+          "text": "Para ello se usa un modelo {{transformer|transformer}}, con dos bloques:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Bloque",
+            "Función"
+          ],
+          "rows": [
+            [
+              "{{Codificador|encoder}}",
+              "Crea las incrustaciones aplicando {{atención|attention}}: examina cada token y determina cómo le influyen los tokens que lo rodean. Usa {{atención multicabezal|multi-head attention}} para evaluar varios elementos del token en paralelo y asignar pesos. El resultado pasa a una red neuronal totalmente conectada que busca la mejor representación vectorial."
+            ],
+            [
+              "{{Decodificador|decoder}}",
+              "Usa las incrustaciones calculadas por el codificador para determinar el siguiente token más probable de una secuencia iniciada por un prompt. También usa atención y una red neuronal {{de propagación hacia delante|feed-forward}}."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La arquitectura está muy simplificada en el módulo; la idea esencial es que la atención captura las características lingüísticas y semánticas de cada token según los contextos en que se usa. La referencia original es el artículo «Attention is all you need»."
+        },
+        {
+          "type": "h",
+          "text": "Vectores iniciales y codificación posicional"
+        },
+        {
+          "type": "p",
+          "text": "Al principio los valores de los vectores se asignan **al azar**. Se introducen en el transformer junto con una {{codificación posicional|positional encoding}} que indica dónde aparece cada token en la secuencia, porque el orden importa para saber cómo se relacionan los tokens. En el ejemplo, «a» tiene el mismo ID (3) y el mismo vector inicial en las posiciones 3 y 8, pero distinta posición. Los vectores reales tienen **miles de elementos**; el ejemplo usa tres para poder visualizarlos en 3D."
+        },
+        {
+          "type": "h",
+          "text": "Atención e incrustaciones"
+        },
+        {
+          "type": "p",
+          "text": "La capa de atención considera cada token dentro de su secuencia y **pondera** los tokens vecinos según su influencia; con esos pesos calcula los elementos del vector de incrustación. Al analizar «bark» en «I heard a dog bark», «heard» y «dog» reciben más peso que «I» o «a»."
+        },
+        {
+          "type": "p",
+          "text": "Al principio el modelo no sabe qué tokens influyen en otros, pero al exponerse a grandes volúmenes de texto aprende de forma iterativa qué tokens suelen aparecer juntos, según su proximidad y frecuencia. La atención multicabezal hace el proceso más eficiente."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Token",
+            "Incrustación (ejemplo 3D)"
+          ],
+          "rows": [
+            [
+              "dog",
+              "[10, 3, 2]"
+            ],
+            [
+              "cat",
+              "[10, 3, 1]"
+            ],
+            [
+              "puppy",
+              "[5, 3, 2]"
+            ],
+            [
+              "bark",
+              "[9, 2, 10]"
+            ],
+            [
+              "car",
+              "[-2, -2, 1]"
+            ],
+            [
+              "skateboard",
+              "[-3, -2, 2]"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los elementos de las incrustaciones son dimensiones de un {{espacio vectorial|vector space}} multidimensional. Los tokens que se usan en contextos parecidos (significado similar) producen vectores con **direcciones similares**: «dog» y «puppy» apuntan casi en la misma dirección, no muy lejos de «cat», y muy lejos de «skateboard» o «car». La cercanía semántica se mide con la {{similitud del coseno|cosine similarity}}."
+        },
+        {
+          "type": "h",
+          "text": "Predecir completaciones a partir de prompts"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El bloque decodificador predice de forma iterativa la siguiente palabra a partir de un prompt inicial.",
+            "Aquí la atención solo puede considerar los tokens **anteriores** al que se predice.",
+            "Durante el entrenamiento se usa {{atención enmascarada|masked attention}}: se ignoran los tokens posteriores al actual. Como la secuencia completa ya se conoce, el modelo compara su predicción con el token real y ajusta los pesos para reducir el error en las siguientes iteraciones.",
+            "Al generar una completación nueva, las capas de atención calculan posibles vectores para el siguiente token y la red feed-forward ayuda a elegir el candidato más probable.",
+            "El token predicho se añade a la secuencia y el proceso se repite hasta que el decodificador predice que la secuencia ha terminado."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Ante «When my dog was a…», el modelo pondera los tokens con atención y predice que lo más probable es «puppy», no «cat» ni «skateboard»."
+        },
+        {
+          "type": "tip",
+          "text": "Cadena para memorizar: **texto → tokens (IDs) → vectores + posición → atención (codificador) → incrustaciones → decodificador predice el siguiente token → se repite**. Las incrustaciones son vectores que capturan significado; la similitud se mide con el coseno."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena las etapas de cómo un modelo transformer procesa el lenguaje, según el módulo.",
+          "items": [
+            "Dividir el texto en tokens con un ID único",
+            "Asignar vectores iniciales aleatorios con codificación posicional",
+            "Aplicar atención en el codificador para obtener incrustaciones",
+            "Usar el decodificador para predecir el siguiente token más probable"
+          ],
+          "explain": "Primero se tokeniza, luego se asignan vectores y posición, el codificador crea incrustaciones con atención y el decodificador predice la continuación.",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué son las incrustaciones (embeddings)?",
+          "options": [
+            "Palabras extra que el modelo inserta para alargar las respuestas",
+            "Representaciones vectoriales de tokens que capturan su significado semántico",
+            "Identificadores enteros únicos asignados a cada token",
+            "Modelos pequeños especializados en una tarea"
+          ],
+          "answer": 1,
+          "explain": "Son vectores con información contextual que reflejan cómo se relacionan los tokens; el ID entero es otra cosa (tokenización).",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "En un espacio de incrustaciones, ¿qué palabra tendrá un vector con dirección más parecida a la de «perro»?",
+          "options": [
+            "Monopatín",
+            "Coche",
+            "Cachorro",
+            "Teclado"
+          ],
+          "answer": 2,
+          "explain": "Los tokens usados en contextos parecidos tienen vectores con direcciones similares; «cachorro» está semánticamente cerca de «perro».",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "En la atención enmascarada usada al entrenar el decodificador, el modelo puede ver los tokens que vienen después del que está prediciendo.",
+          "answer": false,
+          "explain": "La atención enmascarada ignora los tokens posteriores; solo se consideran los anteriores al que se predice.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m02u3",
+      "title": "Prompts",
+      "titleEn": "Prompts",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/6-writing-prompts",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Un {{prompt|prompt}} es simplemente la entrada que se da a un LLM para obtener una respuesta: una pregunta, una orden o un comentario para iniciar una conversación. El modelo responde con una {{completación|completion}}."
+        },
+        {
+          "type": "h",
+          "text": "Tipos de prompt"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo",
+            "Para qué sirve",
+            "Ejemplo"
+          ],
+          "rows": [
+            [
+              "{{Prompt de sistema|system prompt}}",
+              "Fija el comportamiento, el tono y las restricciones que el modelo debe respetar en sus respuestas.",
+              "«Eres un asistente útil que responde de forma alegre y cercana»."
+            ],
+            [
+              "{{Prompt de usuario|user prompt}}",
+              "Pide una respuesta a una pregunta o instrucción concreta.",
+              "«Resume para un directivo las consideraciones clave sobre adopción de IA generativa del documento GenAI_Considerations.docx, en un máximo de seis viñetas y con tono profesional»."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Normalmente el prompt de sistema lo establece la **aplicación** que usa el modelo. Los prompts de usuario los escribe una persona en un chat o, a veces, los genera la aplicación en nombre del usuario. El modelo responde a los prompts de usuario **respetando las directrices generales** del prompt de sistema."
+        },
+        {
+          "type": "h",
+          "text": "Historial de conversación"
+        },
+        {
+          "type": "p",
+          "text": "Para que una conversación sea coherente, las apps de IA generativa guardan el {{historial de conversación|conversation history}} e incluyen versiones resumidas de él en los prompts siguientes. Así el modelo tiene un contexto continuo sobre el que construir."
+        },
+        {
+          "type": "example",
+          "text": "Tras recibir un resumen de seis puntos sobre adopción de IA generativa (gobernanza y políticas de IA responsable, priorizar casos de uso de alto valor, mitigar riesgos de privacidad, seguridad y cumplimiento, preparar a la organización y su cultura, medir impacto y rendición de cuentas, anticiparse a cambios estratégicos), el usuario pregunta «¿Cuáles son los riesgos de privacidad más comunes?». El prompt incluye la pregunta nueva y los prompts y respuestas anteriores, de modo que el modelo entiende que se refiere a la adopción de IA generativa."
+        },
+        {
+          "type": "h",
+          "text": "Generación aumentada por recuperación (RAG)"
+        },
+        {
+          "type": "p",
+          "text": "La {{generación aumentada por recuperación|retrieval augmented generation (RAG)}} añade aún más contexto: la app **recupera** información (documentos, correos…) y la usa para **aumentar** el prompt con datos relevantes. La respuesta queda así {{fundamentada|grounded}} en la información proporcionada."
+        },
+        {
+          "type": "example",
+          "text": "Pregunta: «¿Cuánto puedo reclamar como máximo por gastos de viaje de negocios?». Sin más información, el modelo da una respuesta genérica (consulta la política de tu empresa). Con RAG, un asistente de gastos busca primero en la política de gastos de la organización las secciones sobre «gastos de viaje», las incluye en el prompt junto a la pregunta, y el modelo responde con datos concretos y relevantes."
+        },
+        {
+          "type": "h",
+          "text": "Consejos para mejores prompts"
+        },
+        {
+          "type": "p",
+          "text": "La calidad de las respuestas depende tanto del modelo como de los prompts que se le envían:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Sé claro y específico**: las instrucciones o preguntas explícitas funcionan mejor que el lenguaje vago.",
+            "**Añade contexto**: indica el tema, el público o el formato que quieres.",
+            "**Usa ejemplos**: si buscas un estilo concreto, muestra un ejemplo.",
+            "**Pide estructura**: viñetas, tablas o listas numeradas."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "En el examen: el **prompt de sistema** = reglas, rol, tono y restricciones (lo pone la app); el **prompt de usuario** = la petición concreta. RAG = recuperar datos propios y añadirlos al prompt para **fundamentar** la respuesta, sin reentrenar el modelo."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada elemento con su descripción.",
+          "pairs": [
+            [
+              "Prompt de sistema",
+              "Define el tono, el rol y las restricciones del modelo"
+            ],
+            [
+              "Prompt de usuario",
+              "Plantea la pregunta o instrucción concreta"
+            ],
+            [
+              "Historial de conversación",
+              "Aporta el contexto de los intercambios anteriores"
+            ],
+            [
+              "RAG",
+              "Añade al prompt información recuperada de fuentes de datos"
+            ]
+          ],
+          "explain": "Cada elemento aporta algo distinto al contexto que recibe el modelo.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Un chatbot de RR. HH. da respuestas genéricas sobre vacaciones. ¿Qué técnica haría que respondiera según la política real de la empresa?",
+          "options": [
+            "Aumentar la longitud máxima de la respuesta",
+            "Cambiar a un modelo de visión",
+            "Retrieval augmented generation (RAG) con los documentos de la política",
+            "Quitar el prompt de sistema"
+          ],
+          "answer": 2,
+          "explain": "RAG recupera los fragmentos relevantes de la política y los añade al prompt, fundamentando la respuesta en datos de la empresa.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué prácticas mejoran la calidad de un prompt? (elige 3)",
+          "options": [
+            "Ser claro y específico",
+            "Usar lenguaje vago para dar libertad al modelo",
+            "Indicar público y formato deseado",
+            "Pedir una estructura como viñetas o tablas",
+            "Evitar dar cualquier ejemplo"
+          ],
+          "answers": [
+            0,
+            2,
+            3
+          ],
+          "explain": "Claridad, contexto (público, formato), ejemplos y estructura mejoran los resultados; el lenguaje vago los empeora.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "Normalmente es la propia aplicación, y no el usuario final, quien establece el prompt de sistema.",
+          "answer": true,
+          "explain": "El prompt de sistema lo fija la app; el usuario aporta los prompts de usuario.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m02u4",
+      "title": "Agentes de IA",
+      "titleEn": "AI agents",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/7-agents",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Un asistente digital que no solo responde preguntas sino que **hace cosas**: eso es un {{agente de IA|AI agent}}. Los agentes son aplicaciones basadas en IA generativa que razonan sobre lenguaje natural y lo generan, automatizan tareas usando herramientas y reaccionan a condiciones del contexto para actuar de forma adecuada."
+        },
+        {
+          "type": "h",
+          "text": "Componentes de un agente"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Componente",
+            "Papel"
+          ],
+          "rows": [
+            [
+              "{{Modelo de lenguaje grande|large language model}}",
+              "El cerebro: comprensión del lenguaje y razonamiento mediante IA generativa."
+            ],
+            [
+              "{{Instrucciones|instructions}}",
+              "Un prompt de sistema que define el rol y el comportamiento del agente; su «descripción del puesto»."
+            ],
+            [
+              "{{Herramientas|tools}}",
+              "Permiten interactuar con el mundo. **De conocimiento**: acceso a información (buscadores, bases de datos). **De acción**: realizar tareas (enviar correos, actualizar calendarios, controlar dispositivos)."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Con estas capacidades, los agentes actúan como asistentes digitales que automatizan tareas de forma inteligente y colaboran contigo."
+        },
+        {
+          "type": "h",
+          "text": "Sistemas multiagente"
+        },
+        {
+          "type": "p",
+          "text": "En un {{sistema multiagente|multi-agent system}}, en lugar de que un único agente lo haga todo, varios agentes colaboran, cada uno con su especialidad: uno recopila datos, otro los analiza y un tercero actúa. Juntos forman una especie de plantilla de trabajo impulsada por IA capaz de gestionar flujos complejos, como un equipo humano."
+        },
+        {
+          "type": "p",
+          "text": "Los agentes **se comunican entre sí mediante prompts**, y usan la IA generativa para decidir qué tareas hacen falta y qué agente se encarga de cada una."
+        },
+        {
+          "type": "p",
+          "text": "La {{IA agéntica|agentic AI}} se perfila como el siguiente gran avance en cómo usamos la tecnología para encontrar información y trabajar."
+        },
+        {
+          "type": "tip",
+          "text": "Diferencia típica de examen: un chatbot **responde**; un agente **actúa** usando herramientas. En multiagente, la comunicación entre agentes se hace con prompts."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cómo se comunican los agentes entre sí en un sistema multiagente?",
+          "options": [
+            "Mediante prompts, usando IA generativa para repartir tareas",
+            "Solo a través de una base de datos compartida",
+            "Mediante llamadas telefónicas automatizadas",
+            "No se comunican: cada uno trabaja aislado"
+          ],
+          "answer": 0,
+          "explain": "Los agentes se comunican mediante prompts y usan IA generativa para determinar qué tareas hay y quién las hace.",
+          "obj": "B1"
+        },
+        {
+          "type": "multi",
+          "q": "¿Cuáles son ejemplos de herramientas de ACCIÓN de un agente? (elige 2)",
+          "options": [
+            "Enviar un correo electrónico",
+            "Consultar un motor de búsqueda",
+            "Encender un dispositivo inteligente",
+            "Leer una base de datos de productos"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "Las herramientas de acción ejecutan tareas (enviar correos, controlar dispositivos); buscar o leer datos son herramientas de conocimiento.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "En un sistema multiagente, un agente puede recopilar datos, otro analizarlos y un tercero tomar medidas.",
+          "answer": true,
+          "explain": "Es el ejemplo de especialización que describe el módulo, similar a un equipo humano.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m02u5",
+      "title": "Ejercicio: explorar la IA generativa",
+      "titleEn": "Exercise - Explore generative AI",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/7a-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo**: usar un {{área de pruebas de chat|chat playground}} en el navegador para ver cómo se comporta un modelo generativo y cómo cambian sus respuestas al añadir **instrucciones**, **herramientas** y **conocimiento**; y después ver el código cliente que usa la API de OpenAI (unos 15 minutos)."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "p",
+          "text": "Navegador moderno (Chrome, Edge o Firefox recientes, con WASM SIMD; {{WebGPU|WebGPU}} recomendado), CPU de 64 bits y 8 núcleos, 8 GB de RAM o más (16 GB recomendados), GPU recomendada y espacio para cachear entre 300 y 800 MB de modelos. Micrófono y altavoces si se usa la voz. No hace falta suscripción de Azure. Existe un **modo básico** sin modelo como respaldo."
+        },
+        {
+          "type": "h",
+          "text": "1. Chatear con un modelo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir **Chat Playground** en `https://aka.ms/chat-playground` y esperar a que se descargue el modelo (Microsoft **Phi 3.5 Mini**, un {{modelo de lenguaje pequeño|small language model (SLM)}}).",
+            "Preguntar `Who was Ada Lovelace?` y luego `Tell me more about her work with Charles Babbage.`: el {{historial del chat|chat history}} se incluye en el prompt, por eso «her» se entiende como Ada Lovelace. En modo básico no hay historial y se lanza una búsqueda nueva en Wikipedia.",
+            "Pulsar **New chat (💬)** y probar `List three facts about Ada Lovelace.`: con el modelo, el prompt cambia el estilo de la respuesta; en modo básico sale lo mismo porque solo busca palabras clave."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Diferencia clave: un LLM **genera** la respuesta de forma dinámica (flexible, pero no necesariamente {{fundamentada|grounded}} en hechos), mientras que una búsqueda tradicional **recupera** texto estático por palabras clave."
+        },
+        {
+          "type": "h",
+          "text": "2. Especificar instrucciones"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nuevo chat y, en el cuadro **Instructions** del panel izquierdo, cambiar el {{prompt del sistema|system prompt}}.",
+            "Preguntar `What can you tell me about ELIZA?` y después `How did it compare to modern LLMs?`."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "You are an expert in the history of computing and AI. You provide succinct and concise responses."
+        },
+        {
+          "type": "p",
+          "text": "Las instrucciones dan al modelo un rol y un foco, y fijan formato, estilo y límites de lo que debe o no incluir."
+        },
+        {
+          "type": "h",
+          "text": "3. Añadir una herramienta de búsqueda web"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En la sección **Tools**, en el desplegable **Add**, elegir **Web search** (no File search).",
+            "Preguntar `Find a vintage computer store near Seattle` (o tu ciudad): el modelo busca en la web información actual que no está en sus datos de entrenamiento."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "4. Añadir conocimiento"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir `https://aka.ms/pcb_info` y guardar `pcb_info.txt` (números de serie de placas PCB de ordenadores antiguos).",
+            "En **Tools**, añadir **File search** (o **Upload files**) y subir el archivo; el chat se reinicia.",
+            "Preguntar por una placa con «ASSY 250425»: la respuesta se apoya en el archivo. Probar también «820-001A» o «i386». Si el archivo no tiene el dato, el modelo usa su propio conocimiento."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Este patrón de recuperar contexto, añadirlo al prompt y generar la respuesta es la {{generación aumentada por recuperación|Retrieval Augmented Generation (RAG)}}. En empresa los datos suelen estar en un {{índice vectorial|vector index}}, y **Foundry IQ** (basado en Azure AI Search) centraliza varias fuentes de conocimiento."
+        },
+        {
+          "type": "h",
+          "text": "5. Explorar el código cliente"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Ir a **Model Coder** en `https://aka.ms/model-coder`: un entorno Python en el navegador con una librería que imita las clases más usadas del SDK de OpenAI.",
+            "Elegir la plantilla **Simple chat (Responses API)**, poner las mismas instrucciones del paso 2 y ejecutar con **▶ Run code**.",
+            "En el panel **Terminal**, escribir preguntas (Commodore 64, ZX Spectrum, Grace Hopper...) y `quit` para salir."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "from openai import OpenAI\n\nopenai_client = OpenAI(base_url=endpoint, api_key=key)\n\nresponse = openai_client.responses.create(\n    model=model_name,\n    instructions=\"You are an expert in the history of computing and AI. ...\",\n    input=input_text\n)\nprint(response.output_text)"
+        },
+        {
+          "type": "p",
+          "text": "Otras plantillas usan la API **ChatCompletions** (más antigua pero aún habitual), el seguimiento del historial con la Responses API, el {{streaming|streaming}} y el procesamiento asíncrono para mejorar la sensación de rapidez."
+        },
+        {
+          "type": "h",
+          "text": "Resultado"
+        },
+        {
+          "type": "p",
+          "text": "Se ve que las respuestas de un modelo cambian con instrucciones, herramientas y conocimiento, y que los desarrolladores lo programan con APIs compatibles con OpenAI. La interfaz imita el portal de **Microsoft Foundry**, y el SDK de OpenAI puede conectarse a endpoints de Foundry."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: instrucciones = prompt del sistema; mensaje del usuario = `input`; herramienta web = información actual; File search con tus documentos = RAG / fundamentación. En la Responses API: `instructions`, `input` y `response.output_text`."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: `https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/02-generative-ai.html`"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena cómo se fue ampliando el modelo en el Chat Playground durante el laboratorio.",
+          "items": [
+            "Chatear con el modelo sin configuración adicional",
+            "Cambiar las instrucciones (prompt del sistema)",
+            "Añadir la herramienta Web search",
+            "Subir pcb_info.txt con File search",
+            "Escribir código con la Responses API en Model Coder"
+          ],
+          "explain": "El laboratorio parte del chat básico y va añadiendo instrucciones, herramientas, conocimiento propio y, por último, código cliente.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Tras subir `pcb_info.txt` con File search, el modelo responde sobre «ASSY 250425» usando ese archivo. ¿Qué patrón ilustra?",
+          "options": [
+            "Ajuste fino del modelo",
+            "Generación aumentada por recuperación (RAG)",
+            "Reconocimiento de entidades con nombre",
+            "Clasificación de imágenes"
+          ],
+          "answer": 1,
+          "explain": "Se recupera información del archivo, se añade al prompt y el modelo genera la respuesta fundamentada en ella: eso es RAG, sin reentrenar el modelo.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "En el código de Model Coder, ¿qué parámetro de `responses.create` contiene el prompt del sistema?",
+          "options": [
+            "`input`",
+            "`model`",
+            "`instructions`",
+            "`output_text`"
+          ],
+          "answer": 2,
+          "explain": "`instructions` define el comportamiento del modelo; `input` lleva el mensaje del usuario y `output_text` es el texto de la respuesta.",
+          "obj": "B1"
+        },
+        {
+          "type": "tf",
+          "q": "En el modo básico del Chat Playground, la pregunta de seguimiento sobre «her work with Charles Babbage» conserva el contexto de Ada Lovelace.",
+          "answer": false,
+          "explain": "El modo básico no usa modelo ni historial: solo busca en Wikipedia por palabras clave, así que trata la pregunta como nueva.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m02u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/8-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**LLM**: modelo de IA diseñado para generar texto similar al humano (no se limita a imágenes ni es necesariamente pequeño).",
+            "**Tokenización**: dividir el texto en unidades más pequeñas (tokens) con un ID; no es ordenar alfabéticamente ni convertir a binario.",
+            "**Incrustaciones**: representaciones vectoriales de tokens que capturan su significado semántico.",
+            "**Capa de atención**: examina la relación entre cada token y los que lo rodean (no elimina palabras ni filtra contenido).",
+            "**Prompt de sistema**: aporta contexto e instrucciones al modelo (no tiene que ver con el sistema operativo).",
+            "**Agente**: sistema de IA que realiza tareas en nombre de un usuario (no es un operador humano)."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Los distractores suelen jugar con el doble sentido de las palabras: «sistema» (operativo), «agente» (persona), «atención» (moderación). Céntrate en el significado técnico."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué hace una capa de atención en un transformer?",
+          "options": [
+            "Bloquea contenido inapropiado en la salida",
+            "Evalúa cómo influye en cada token el resto de tokens a su alrededor",
+            "Elimina las palabras irrelevantes del texto de entrada",
+            "Traduce el texto a código binario"
+          ],
+          "answer": 1,
+          "explain": "La atención pondera los tokens vecinos según su influencia para calcular la incrustación de cada token.",
+          "obj": "A2"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cuál es el propósito de la tokenización?",
+          "options": [
+            "Ordenar las palabras alfabéticamente",
+            "Cifrar el texto por seguridad",
+            "Dividir el texto en unidades más pequeñas con identificadores",
+            "Generar imágenes a partir de texto"
+          ],
+          "answer": 2,
+          "explain": "La tokenización descompone el texto en tokens (palabras, subpalabras, puntuación) y les asigna un ID.",
+          "obj": "A2"
+        },
+        {
+          "type": "tf",
+          "q": "El prompt de sistema sirve para configurar en qué sistema operativo se ejecuta el modelo.",
+          "answer": false,
+          "explain": "El prompt de sistema proporciona contexto e instrucciones (rol, tono, restricciones) al modelo.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m02u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/9-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La IA generativa es un campo en rápido desarrollo que permite generar lenguaje, desarrollar código, crear imágenes y más. En el módulo se ha visto:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cómo la IA generativa usa modelos de lenguaje grandes para dar sentido al lenguaje (tokens, incrustaciones, transformers y atención).",
+            "Cómo interactuar con esos modelos mediante prompts (de sistema y de usuario), historial y RAG.",
+            "Cómo los agentes de IA, construidos sobre IA generativa, actúan como asistentes digitales que colaboran contigo para encontrar información y completar tareas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Recursos recomendados: qué son los LLM, qué es la generación aumentada por recuperación (RAG) y el artículo «Agent Factory» sobre casos de uso y patrones de diseño de la IA agéntica."
+        },
+        {
+          "type": "tip",
+          "text": "Este módulo es la base conceptual de la sección B1 del examen (apps y agentes generativos con Foundry)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "tf",
+          "q": "Los agentes de IA están construidos sobre IA generativa y pueden colaborar contigo para encontrar información y completar tareas.",
+          "answer": true,
+          "explain": "Así los describe el resumen: asistentes digitales basados en IA generativa.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cuál de estas NO es una capacidad que el resumen atribuye a la IA generativa?",
+          "options": [
+            "Generar lenguaje",
+            "Desarrollar código",
+            "Crear imágenes",
+            "Garantizar respuestas siempre correctas"
+          ],
+          "answer": 3,
+          "explain": "La IA generativa es probabilística y puede equivocarse; el resumen menciona lenguaje, código e imágenes.",
+          "obj": "A2"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "order",
+      "q": "Ordena cómo genera un LLM una completación una vez recibido el prompt.",
+      "items": [
+        "El prompt se divide en tokens",
+        "La atención pondera los tokens de la secuencia",
+        "Se predice el siguiente token más probable",
+        "El token se añade a la secuencia y el proceso se repite",
+        "El modelo predice que la secuencia ha terminado"
+      ],
+      "explain": "La generación es iterativa: tokenizar, atender, predecir, añadir y repetir hasta el final de la secuencia.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Con qué métrica se mide en el módulo la cercanía semántica entre dos incrustaciones?",
+      "options": [
+        "Distancia de Levenshtein",
+        "Similitud del coseno",
+        "Número de caracteres en común",
+        "Orden alfabético"
+      ],
+      "answer": 1,
+      "explain": "La similitud del coseno compara la dirección de los vectores: tokens de significado parecido apuntan en direcciones similares.",
+      "obj": "A2"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada término con su definición.",
+      "pairs": [
+        [
+          "Token",
+          "Unidad de texto (palabra, subpalabra o signo) con un ID"
+        ],
+        [
+          "Incrustación",
+          "Vector que captura el significado contextual de un token"
+        ],
+        [
+          "Codificación posicional",
+          "Indica en qué lugar de la secuencia aparece un token"
+        ],
+        [
+          "Atención multicabezal",
+          "Evalúa en paralelo varios elementos de los tokens"
+        ]
+      ],
+      "explain": "Son los ingredientes básicos del transformer descrito en el módulo.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "Una aseguradora quiere que su asistente responda siempre en tono formal y nunca dé consejos médicos. ¿Dónde debe indicarse?",
+      "options": [
+        "En el prompt de sistema",
+        "En cada prompt de usuario que escriba el cliente",
+        "En la codificación posicional",
+        "En el historial de conversación"
+      ],
+      "answer": 0,
+      "explain": "El prompt de sistema define tono, comportamiento y restricciones que el modelo debe respetar.",
+      "obj": "B1"
+    },
+    {
+      "type": "tf",
+      "q": "RAG mejora la relevancia de las respuestas recuperando información y añadiéndola al prompt, sin necesidad de reentrenar el modelo.",
+      "answer": true,
+      "explain": "RAG aumenta el prompt con datos recuperados para fundamentar la respuesta.",
+      "obj": "B1"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos elementos usa el bloque decodificador de un transformer para predecir el siguiente token? (elige 2)",
+      "options": [
+        "Atención",
+        "Una red neuronal feed-forward",
+        "Reconocimiento óptico de caracteres",
+        "Un filtro de contenido"
+      ],
+      "answers": [
+        0,
+        1
+      ],
+      "explain": "El decodificador usa atención y una red feed-forward para elegir el token más probable.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Por qué las apps de chat incluyen el historial de conversación en los prompts siguientes?",
+      "options": [
+        "Para reducir el coste del modelo",
+        "Para que el modelo tenga contexto y entienda las preguntas de seguimiento",
+        "Para cifrar la conversación",
+        "Para cambiar de modelo en cada turno"
+      ],
+      "answer": 1,
+      "explain": "El historial da al modelo un contexto continuo; así entiende a qué se refiere una pregunta de seguimiento.",
+      "obj": "B1"
+    },
+    {
+      "type": "tf",
+      "q": "Los tokens de un LLM son siempre palabras completas.",
+      "answer": false,
+      "explain": "Los tokens pueden ser palabras, subpalabras (como «un»), signos de puntuación u otras secuencias frecuentes.",
+      "obj": "A2"
+    },
+    {
+      "type": "mc",
+      "q": "Un equipo diseña un sistema en el que un agente recopila incidencias, otro las clasifica y un tercero abre tickets. ¿Qué describe?",
+      "options": [
+        "Un modelo de lenguaje pequeño",
+        "Un pipeline de OCR",
+        "Un sistema multiagente",
+        "Un prompt de sistema"
+      ],
+      "answer": 2,
+      "explain": "Varios agentes especializados que colaboran forman un sistema multiagente.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué consejo de escritura de prompts aplica la petición «Explícalo para alumnos de 12 años en una tabla de tres columnas»?",
+      "options": [
+        "Añadir contexto (público) y pedir estructura",
+        "Usar lenguaje vago",
+        "Aportar un ejemplo de estilo",
+        "Eliminar el prompt de sistema"
+      ],
+      "answer": 0,
+      "explain": "Indica el público (contexto) y el formato deseado (estructura en tabla).",
+      "obj": "B1"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Modelo de lenguaje grande",
+      "en": "Large language model (LLM)",
+      "def": "Modelo entrenado con enormes volúmenes de texto para generar completaciones a partir de prompts."
+    },
+    {
+      "es": "Token",
+      "en": "Token",
+      "def": "Unidad mínima del vocabulario del modelo: palabra, subpalabra, signo u otra secuencia de caracteres."
+    },
+    {
+      "es": "Tokenización",
+      "en": "Tokenization",
+      "def": "Proceso de dividir el texto en tokens y asignar a cada uno un ID único."
+    },
+    {
+      "es": "Incrustación",
+      "en": "Embedding",
+      "def": "Vector numérico que representa un token con su significado semántico y contextual."
+    },
+    {
+      "es": "Transformer",
+      "en": "Transformer",
+      "def": "Arquitectura de modelo con bloques codificador y decodificador basada en mecanismos de atención."
+    },
+    {
+      "es": "Atención",
+      "en": "Attention",
+      "def": "Mecanismo que pondera la influencia de los tokens vecinos sobre cada token."
+    },
+    {
+      "es": "Codificación posicional",
+      "en": "Positional encoding",
+      "def": "Información que indica la posición de cada token dentro de la secuencia."
+    },
+    {
+      "es": "Similitud del coseno",
+      "en": "Cosine similarity",
+      "def": "Medida de cercanía semántica entre dos vectores según su dirección."
+    },
+    {
+      "es": "Prompt de sistema",
+      "en": "System prompt",
+      "def": "Instrucciones que fijan el rol, el tono y las restricciones del modelo."
+    },
+    {
+      "es": "Prompt de usuario",
+      "en": "User prompt",
+      "def": "Pregunta o instrucción concreta a la que el modelo debe responder."
+    },
+    {
+      "es": "Generación aumentada por recuperación",
+      "en": "Retrieval augmented generation (RAG)",
+      "def": "Técnica que recupera información relevante y la añade al prompt para fundamentar la respuesta."
+    },
+    {
+      "es": "Sistema multiagente",
+      "en": "Multi-agent system",
+      "def": "Conjunto de agentes especializados que colaboran comunicándose mediante prompts."
+    }
+  ]
+}

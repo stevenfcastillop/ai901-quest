@@ -1,0 +1,1032 @@
+{
+  "id": "m15",
+  "path": 2,
+  "order": 8,
+  "title": "Introducción a los agentes de voz en Microsoft Foundry",
+  "titleEn": "Get started with voice agents in Microsoft Foundry",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/",
+  "summary": "Enseña a crear, configurar y probar un agente de voz en el playground de Microsoft Foundry usando como ejemplo un asistente de devoluciones de Contoso: instrucciones pensadas para el oído, voz y saludo, detección de turnos y mejora iterativa.",
+  "objectives": [
+    "Explicar cómo un agente de voz escucha, razona y habla",
+    "Crear un agente con modo de interacción de voz en Foundry",
+    "Escribir instrucciones adecuadas para una conversación hablada",
+    "Elegir voz y saludo para el agente",
+    "Probar el agente con audio y ajustar la detección de turnos",
+    "Relacionar cada síntoma de una mala conversación con el ajuste que lo corrige"
+  ],
+  "units": [
+    {
+      "id": "m15u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Microsoft Foundry Agent Service** permite crear {{agentes de voz|voice agents}} que atienden a los usuarios mediante conversación hablada. Además de dar respuestas útiles, un agente de voz necesita **hablar con claridad** y respetar los **tiempos** de la conversación."
+        },
+        {
+          "type": "example",
+          "text": "Un cliente pregunta si puede devolver un producto. Un asistente de devoluciones debe explicar la política, pedir los datos que falten y dejar que el cliente termine de hablar. Este escenario acotado permite explorar los agentes de voz sin conectar un sistema de pedidos ni un servicio telefónico."
+        },
+        {
+          "type": "p",
+          "text": "En el módulo se crea un agente de voz en el playground de Foundry, se configuran sus instrucciones y su voz, se prueba con peticiones habladas, se comparan ajustes de {{detección de turnos|turn detection}} y se hacen mejoras concretas."
+        },
+        {
+          "type": "tip",
+          "text": "Un buen agente de voz se evalúa por dos cosas: el contenido de la respuesta y la experiencia de escucha (claridad y momento en que responde)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "Según la introducción, ¿qué dos aspectos necesita un agente de voz además de dar respuestas útiles? (Elige dos.)",
+          "options": [
+            "Habla clara",
+            "Tiempos adecuados en la conversación",
+            "Generar imágenes",
+            "Conexión obligatoria a un sistema telefónico"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "Un agente de voz debe responder bien, hablar con claridad y respetar los tiempos (por ejemplo, dejar terminar al usuario).",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Para empezar a explorar un agente de voz de devoluciones es imprescindible conectarlo antes a un sistema de pedidos y a una línea telefónica.",
+          "answer": false,
+          "explain": "El escenario acotado se prueba en el navegador sin sistema de pedidos ni servicio telefónico.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m15u2",
+      "title": "Explorar y crear un agente de voz",
+      "titleEn": "Explore and create a voice agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/2-explore-create-voice-agent",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Explorar los agentes de voz"
+        },
+        {
+          "type": "p",
+          "text": "Con un agente de texto, el cliente escribe y lee; con un agente de voz, pregunta en voz alta y escucha la respuesta. El agente sigue necesitando **instrucciones** que definan su función y la información que usa, pero la voz añade dos requisitos: **saber cuándo el cliente ha terminado de hablar** y **dar respuestas fáciles de seguir de oído**."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Capacidad",
+            "Propósito"
+          ],
+          "rows": [
+            [
+              "Escuchar",
+              "Recibe el audio y detecta cuándo el usuario termina su turno."
+            ],
+            [
+              "Razonar",
+              "Usa un modelo, las instrucciones y las herramientas conectadas para decidir cómo responder."
+            ],
+            [
+              "Hablar",
+              "Entrega la respuesta con la voz seleccionada."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Foundry gestiona la {{orquestación de voz|voice orchestration}}, así que no hace falta construir una canalización de voz propia para probar una conversación. Hay dos enfoques de modelo:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Un {{modelo nativo de voz a voz|native speech-to-speech model}} procesa el audio **directamente**.",
+            "Un **modelo basado en texto** usa una secuencia: reconocimiento de voz → generación de respuesta en texto → síntesis de voz."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Para un primer agente se recomienda empezar con el modelo administrado y la voz compatible que ofrece el portal."
+        },
+        {
+          "type": "h",
+          "text": "Elegir un escenario acotado"
+        },
+        {
+          "type": "p",
+          "text": "Un buen agente inicial responde a un pequeño conjunto de preguntas **sin modificar registros de clientes**. Por ejemplo, un asistente ficticio de devoluciones de Contoso explica una política de devoluciones de ejemplo y hace una pregunta aclaratoria cuando la petición es confusa. Así hay algo concreto que probar (¿responde con claridad en una conversación hablada?) sin sistema de pedidos, verificación de identidad ni conexión telefónica."
+        },
+        {
+          "type": "p",
+          "text": "Distingue entre **responder** y **actuar**: explicar una política no requiere ninguna transacción; comprobar un pedido real o emitir un reembolso requiere herramientas conectadas, permisos adecuados y confirmación antes de actuar. Esas capacidades se añaden solo cuando la conversación básica funciona."
+        },
+        {
+          "type": "h",
+          "text": "Crear un agente de voz en Foundry"
+        },
+        {
+          "type": "p",
+          "text": "El portal de Foundry permite crear agentes de voz dentro de un proyecto. La configuración inicial incluye un **nombre**, un {{modo de interacción|interaction mode}} **Voice** y un **objetivo** que describe la tarea (por ejemplo: ayudar a los clientes a entender la política de devoluciones)."
+        },
+        {
+          "type": "p",
+          "text": "Una vez creado, el playground reúne las **instrucciones**, el **modelo de IA** y la **configuración de voz**. Esa configuración permite ya una conversación hablada en el navegador, pero el agente aún necesita instrucciones específicas e información aprobada para responder de forma fiable."
+        },
+        {
+          "type": "tip",
+          "text": "La disponibilidad de agentes de voz depende del proyecto, la suscripción y la región. **No se puede cambiar el modo de interacción de un agente existente de texto a voz**: hay que crearlo con modo Voice."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada capacidad de un agente de voz con su propósito.",
+          "pairs": [
+            [
+              "Escuchar",
+              "Recibir audio y detectar el final del turno del usuario"
+            ],
+            [
+              "Razonar",
+              "Decidir la respuesta con el modelo, las instrucciones y las herramientas"
+            ],
+            [
+              "Hablar",
+              "Entregar la respuesta con la voz seleccionada"
+            ]
+          ],
+          "explain": "Un agente de voz combina estas tres capacidades, orquestadas por Foundry.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Puedes convertir un agente de texto ya existente en un agente de voz cambiando su modo de interacción.",
+          "answer": false,
+          "explain": "El modo de interacción de un agente existente no puede cambiarse de texto a voz; hay que crear el agente con modo Voice.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "¿En qué se diferencia un modelo nativo de voz a voz de un modelo basado en texto dentro de un agente de voz?",
+          "options": [
+            "El nativo procesa el audio directamente; el de texto encadena reconocimiento, respuesta en texto y síntesis",
+            "El nativo solo funciona por teléfono; el de texto solo en el navegador",
+            "El nativo no necesita instrucciones",
+            "No hay diferencia: ambos convierten siempre el audio a texto primero"
+          ],
+          "answer": 0,
+          "explain": "El {{modelo nativo de voz a voz|native speech-to-speech model}} trabaja directamente con audio; el basado en texto usa STT → texto → TTS.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "Un cliente pide al asistente de devoluciones que compruebe el estado de su pedido real. ¿Qué necesita el agente para hacerlo?",
+          "options": [
+            "Solo una voz más clara",
+            "Herramientas conectadas, permisos adecuados y confirmación antes de actuar",
+            "Un saludo más largo",
+            "Aumentar la duración del silencio"
+          ],
+          "answer": 1,
+          "explain": "Actuar sobre datos reales exige herramientas, permisos y confirmación; explicar una política no.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m15u3",
+      "title": "Configurar un agente de voz",
+      "titleEn": "Configure a voice agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/3-configure-voice-agent",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Tras crear el agente, sus **instrucciones**, su **voz** y su **saludo** determinan la experiencia del usuario: definen su propósito, cómo se comunica y los límites de lo que hace."
+        },
+        {
+          "type": "h",
+          "text": "Instrucciones para una conversación hablada"
+        },
+        {
+          "type": "p",
+          "text": "Quien escucha no puede ojear un párrafo, mirar una tabla ni volver atrás. Por eso las instrucciones deben pedir **respuestas cortas**, **una pregunta cada vez** y **aclarar en lugar de adivinar**. En el playground, el panel **Instructions** trae un prompt inicial con cinco secciones:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Sección",
+            "Qué define"
+          ],
+          "rows": [
+            [
+              "{{Personalidad|Personality}}",
+              "Identidad y carácter del asistente. Por defecto presenta a «Riley», un asistente general amable, directo y honesto sobre sus dudas y limitaciones."
+            ],
+            [
+              "{{Entorno|Environment}}",
+              "El contexto hablado, qué sabe el agente del usuario y cómo gestiona el idioma; también qué datos (nombres, números de referencia) hay que confirmar."
+            ],
+            [
+              "{{Tono|Tone}}",
+              "Estilo al hablar y turnos: respuestas cortas, lenguaje sencillo, una pregunta cada vez y callarse si el usuario interrumpe."
+            ],
+            [
+              "{{Objetivo|Goal}}",
+              "Propósito y flujo de la conversación: saludo, aclaración, respuesta útil y siguiente paso adecuado."
+            ],
+            [
+              "{{Barreras de protección|Guardrails}}",
+              "Límites de precisión, seguridad y acciones: no inventar datos, confirmar detalles importantes, resistir intentos de cambiar las reglas y derivar a una persona cuando haga falta."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La personalidad y el objetivo centran al agente en una tarea concreta (preguntas de documentación, políticas, citas…). Un pequeño conjunto de **hechos aprobados** le da contexto. Las barreras de protección hacen que reconozca la información que le falta, no pida datos sensibles innecesarios y **no afirme haber completado acciones sin herramientas que las realicen**: explicar un proceso no es ejecutarlo."
+        },
+        {
+          "type": "p",
+          "text": "En un servicio real, añadir **herramientas** y **bases de conocimiento** da acceso a contenido aprobado sin tener que mantener información cambiante dentro del prompt."
+        },
+        {
+          "type": "h",
+          "text": "Elegir voz y saludo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El control **Voice** permite escuchar muestras de las voces compatibles. Una voz adecuada habla el idioma esperado con claridad y pronuncia bien los términos importantes.",
+            "La **velocidad de reproducción** también influye en lo fácil que resulta seguir la respuesta.",
+            "El ajuste **Greeting** decide si el agente habla al iniciar la sesión. Un saludo estático da una apertura coherente que identifica al asistente e invita a explicar la necesidad, p. ej.: «Hola, soy tu asistente virtual. ¿En qué puedo ayudarte hoy?»"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La **voz** cambia cómo suena la respuesta; las **instrucciones** cambian su contenido y estilo. Cambiar de voz **no arregla** una respuesta demasiado larga: la longitud se controla en las instrucciones. Las voces y controles de audio disponibles dependen del modelo; cambiar de modelo puede afectar a la compatibilidad de voces y a las opciones de **Advanced settings**."
+        },
+        {
+          "type": "h",
+          "text": "Consideraciones de configuración"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Alcance**: qué preguntas debe responder y qué peticiones requieren otra fuente de ayuda.",
+            "**Información**: qué hechos aprobados respaldan las respuestas y qué hacer si falta información.",
+            "**Estilo al hablar**: respuestas lo bastante cortas para seguirlas de oído, con una pregunta cada vez.",
+            "**Claridad**: que la voz encaje con el idioma del usuario y pronuncie bien los términos clave.",
+            "**Límites**: que las instrucciones distingan entre explicar un proceso y realizar una acción."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Una petición de información requiere una respuesta concisa y fundamentada; una petición de acción requiere la herramienta y los permisos adecuados, o una explicación clara de las limitaciones del agente."
+        },
+        {
+          "type": "tip",
+          "text": "Respuestas demasiado largas → corrígelo en las **instrucciones** (p. ej. «responde en una o dos frases y haz una sola pregunta»), no cambiando la voz."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada sección del prompt inicial de instrucciones con lo que define.",
+          "pairs": [
+            [
+              "Personality",
+              "Identidad y carácter del asistente"
+            ],
+            [
+              "Environment",
+              "Contexto hablado, idioma y datos que hay que confirmar"
+            ],
+            [
+              "Tone",
+              "Estilo al hablar y gestión de turnos"
+            ],
+            [
+              "Goal",
+              "Propósito y flujo de la conversación"
+            ],
+            [
+              "Guardrails",
+              "Límites de precisión, seguridad y acciones"
+            ]
+          ],
+          "explain": "El panel Instructions organiza el prompt inicial en estas cinco secciones.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "El asistente de devoluciones da respuestas correctas pero larguísimas. ¿Qué cambio mejora más la experiencia?",
+          "options": [
+            "Elegir una voz con tono más grave",
+            "Pedirle que presente cada respuesta como una tabla",
+            "Desactivar el saludo",
+            "Indicar en las instrucciones que responda en una o dos frases y haga una pregunta cada vez"
+          ],
+          "answer": 3,
+          "explain": "La longitud de la respuesta se controla en las instrucciones; cambiar la voz solo cambia cómo suena.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Un agente sin herramientas conectadas recibe la petición «Hazme ya el reembolso». ¿Qué respuesta es la adecuada según sus guardrails?",
+          "options": [
+            "Confirmar que el reembolso está hecho",
+            "Pedir los datos de la tarjeta para procesarlo en la llamada",
+            "Explicar que no puede emitir reembolsos e indicar cómo contactar con el equipo de soporte",
+            "Colgar la conversación"
+          ],
+          "answer": 2,
+          "explain": "El agente no debe afirmar acciones que no puede realizar ni pedir datos sensibles innecesarios; debe reconocer su límite y derivar.",
+          "obj": "A1"
+        },
+        {
+          "type": "tf",
+          "q": "Cambiar el modelo de IA del agente puede modificar las voces compatibles y las opciones de Advanced settings.",
+          "answer": true,
+          "explain": "Las voces y controles de audio disponibles dependen del modelo seleccionado.",
+          "obj": "A2"
+        }
+      ]
+    },
+    {
+      "id": "m15u4",
+      "title": "Probar y mejorar un agente de voz",
+      "titleEn": "Test and improve a voice agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/4-test-improve-voice-agent",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las conversaciones habladas permiten evaluar tanto las respuestas como la experiencia del usuario: una buena respuesta necesita **información correcta, habla clara y un momento adecuado**."
+        },
+        {
+          "type": "h",
+          "text": "Probar conversaciones realistas"
+        },
+        {
+          "type": "p",
+          "text": "Conviene tener un conjunto pequeño y **repetible** de casos de prueba:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Preguntas sencillas con respuesta conocida.",
+            "Peticiones ambiguas que requieren aclaración.",
+            "Preguntas fuera del conocimiento o del alcance del agente.",
+            "Pausas a mitad de frase mientras el usuario piensa.",
+            "Interrupciones que corrigen o cambian la petición.",
+            "Llamadas a herramientas que funcionan, fallan o no devuelven información relevante."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Un cliente hace una pausa antes de dar un dato importante, o corrige una fecha mientras el agente habla. El agente debe esperar a que termine y responder con la información actualizada, no seguir con una suposición ya obsoleta."
+        },
+        {
+          "type": "p",
+          "text": "Las preguntas **escritas** sirven para evaluar instrucciones y calidad de respuesta, pero **no ponen a prueba** el audio entrante, la detección de turnos ni la locución. Las pruebas con audio revelan pronunciación poco clara, respuestas demasiado largas y peticiones innecesarias de datos sensibles."
+        },
+        {
+          "type": "h",
+          "text": "Tiempos de la conversación"
+        },
+        {
+          "type": "p",
+          "text": "La {{detección de turnos|turn detection}} decide cuándo ha terminado de hablar el usuario. En **Advanced settings** hay dos opciones:"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Tipo",
+            "Cómo detecta el fin del turno"
+          ],
+          "rows": [
+            [
+              "**Azure semantic**",
+              "Usa el **significado** del contenido hablado."
+            ],
+            [
+              "**Basic**",
+              "Usa el **volumen** del audio y controles de tiempo, como cuánto {{silencio|silence duration}} termina un turno."
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los valores predeterminados son un punto de partida; el ajuste ideal depende de cómo hablan los usuarios. Con Basic, una **duración de silencio más larga** da más margen a las pausas, pero puede **retrasar** la respuesta; una **más corta** reduce la espera pero puede **cortar** al usuario tomando una pausa por el final de la petición."
+        },
+        {
+          "type": "p",
+          "text": "La ejecución de herramientas y la generación de la respuesta también producen pausas. Una {{respuesta provisional|interim response}} es un breve aviso (p. ej. «Un momento, lo compruebo») que cubre la espera si el modelo y la voz lo admiten. Indica que hay trabajo en curso, **no que la acción haya tenido éxito**."
+        },
+        {
+          "type": "h",
+          "text": "Revisar y mejorar"
+        },
+        {
+          "type": "p",
+          "text": "La transcripción y las conversaciones grabadas en **Traces** (cuando están disponibles) ayudan a entender qué ocurrió en una sesión. La actividad de las herramientas muestra si el agente pidió la información correcta, recibió un resultado útil y describió con precisión el resultado."
+        },
+        {
+          "type": "p",
+          "text": "Con un modelo nativo de voz a voz, la transcripción legible es una **salida aparte**: no sustituye al procesamiento directo del audio, así que la transcripción sola no basta para evaluar la interacción hablada."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Síntoma",
+            "Dónde ajustar"
+          ],
+          "rows": [
+            [
+              "Respuestas largas o dispersas",
+              "Guía de longitud y alcance de la tarea en **Instructions**"
+            ],
+            [
+              "Responde antes de tiempo o tarda demasiado",
+              "Detección de turnos en **Advanced settings**"
+            ],
+            [
+              "Habla difícil de entender",
+              "Selección de **voz** y controles de reproducción"
+            ],
+            [
+              "Pausas sin explicación al usar herramientas",
+              "Latencia de la herramienta y **respuestas provisionales**"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La **calidad de la respuesta** y la **calidad de la conversación** se evalúan por separado: una respuesta exacta puede ser difícil de seguir si es larga o llega antes de que el usuario termine; y una respuesta natural puede contener información no respaldada o afirmar una acción que no ocurrió."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Las comparaciones son más útiles si **solo cambia un ajuste** y se repiten los **mismos casos de prueba**.",
+            "Cada vez que guardas se crea una **nueva versión** del agente; el playground usa la última configuración guardada.",
+            "Anotar qué versión se probó ayuda a distinguir cambios de configuración de diferencias entre conversaciones.",
+            "Monitorizar con el tiempo revela lagunas de conocimiento, herramientas poco fiables y tiempos que hay que afinar."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Pregunta típica: con detección **Basic**, el agente contesta mientras el usuario hace una pausa → **aumentar la duración del silencio**. No se arregla cambiando la voz ni con respuestas provisionales."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un agente con detección de turnos Basic responde mientras los usuarios hacen pausas a mitad de frase. ¿Qué ajustas primero?",
+          "options": [
+            "Elegir una voz más lenta",
+            "Aumentar la duración del silencio de la detección de turnos",
+            "Añadir más respuestas provisionales",
+            "Alargar el saludo"
+          ],
+          "answer": 1,
+          "explain": "Con Basic, más {{duración de silencio|silence duration}} da margen a las pausas antes de cerrar el turno.",
+          "obj": "B2"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada síntoma con el área de configuración que debes revisar.",
+          "pairs": [
+            [
+              "Respuestas largas o dispersas",
+              "Instructions"
+            ],
+            [
+              "Responde antes de tiempo o tarda demasiado",
+              "Detección de turnos en Advanced settings"
+            ],
+            [
+              "Habla difícil de entender",
+              "Selección de voz y controles de reproducción"
+            ],
+            [
+              "Silencios largos al llamar a herramientas",
+              "Latencia de herramientas y respuestas provisionales"
+            ]
+          ],
+          "explain": "Cada síntoma apunta a una zona distinta de la configuración del agente.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Probar el agente solo con preguntas escritas es suficiente para evaluar la detección de turnos y la pronunciación.",
+          "answer": false,
+          "explain": "El texto no ejercita el audio entrante, la detección de turnos ni la locución; hace falta probar con voz.",
+          "obj": "B2"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué dos prácticas hacen más útiles las comparaciones entre configuraciones? (Elige dos.)",
+          "options": [
+            "Cambiar un único ajuste cada vez",
+            "Cambiar varios ajustes a la vez para ahorrar tiempo",
+            "Repetir los mismos casos de prueba y anotar la versión del agente",
+            "Usar casos de prueba diferentes en cada ronda"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "Aislar un cambio y repetir las mismas pruebas, sabiendo qué versión se probó, permite atribuir las diferencias a la configuración.",
+          "obj": "B2"
+        }
+      ]
+    },
+    {
+      "id": "m15u5",
+      "title": "Ejercicio: crear un agente de voz",
+      "titleEn": "Exercise - Build a voice agent",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/5-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo:** configurar en Microsoft Foundry un {{agente de voz|voice agent}} de atención al cliente, ajustando sus tres capas: razonamiento (instrucciones pensadas para hablar), escucha (transcripción y detección de turnos) y habla (voz y respuestas intermedias), y probarlo con escenarios realistas. Duración aproximada: 30 minutos."
+        },
+        {
+          "type": "p",
+          "text": "**Requisitos:** una suscripción de Azure y un micrófono para las pruebas."
+        },
+        {
+          "type": "h",
+          "text": "1. Crear o abrir un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir el portal de Microsoft Foundry (https://ai.azure.com), activar la opción **New Foundry** y crear un {{proyecto|project}} con nombre único (o reutilizar uno existente). En **Advanced options** se indica el recurso de Foundry, la suscripción, el {{grupo de recursos|resource group}} y una región recomendada. Si faltan permisos, desmarcar la creación de recursos recomendados."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. Crear el agente de voz"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Build** > **Agents**, elegir **Build an agent** y darle un nombre como `customer-support-agent`.",
+            "Seleccionar **Voice** como {{modo de interacción|interaction mode}} y escribir un objetivo (atención al cliente de Contoso Shop con devoluciones online).",
+            "Pulsar **Create agent and open playground**."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "3. Escribir instrucciones para voz"
+        },
+        {
+          "type": "p",
+          "text": "Las instrucciones de plantilla se sustituyen por otras pensadas para conversación hablada. Se editan dos secciones y se guarda con **Save**:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Personality**: el agente es «Alex», un asistente que explica con claridad y paciencia la política de devoluciones, admite cuando no tiene datos y **no** tramita devoluciones ni aprueba reembolsos.",
+            "**Guardrails** ({{barreras de protección|guardrails}}): no dar datos de cuenta sin verificar la identidad; ceñirse a la política de devoluciones; no inventar plazos, tarifas ni importes; no prometer devoluciones ni reembolsos; pasar a una persona cuando se pida o no pueda resolver; responder en el idioma del cliente y aclarar si hay duda."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "markdown",
+          "text": "### Guardrails\n- Stay in scope: explain return-policy information only.\n- Do not promise a return, refund, exchange, approval, or timeline.\n- Hand off to a human when asked or when you cannot resolve the question."
+        },
+        {
+          "type": "h",
+          "text": "4. Configurar la entrada de audio (escucha)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir **Advanced settings**. En **Input**: {{modelo de transcripción|transcript model}} **Azure Speech** e idioma **Auto-detect** para varios idiomas.",
+            "En **Automatic turn detection**: **Azure Semantic Multilingual**, que detecta cuándo el usuario ha terminado de hablar por el sentido de la frase y no solo por el silencio.",
+            "En **Audio enhancement**: activar **Noise suppression** y **Echo cancellation** para entornos telefónicos reales.",
+            "En **Conversational behavior**: activar **Interim response** con **LLM-generated messages**, y guardar con **Select**."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "5. Configurar la salida de audio (habla)"
+        },
+        {
+          "type": "list",
+          "items": [
+            "En **Voice**, abrir las opciones avanzadas de voz y elegir una voz estándar de Azure (por ejemplo «Ash» o «Alloy»), previsualizándola.",
+            "Dejar la {{velocidad de reproducción|playback speed}} en 1.0 y guardar con **Select**."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "6. Probar el agente en el playground"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Pulsar **Start session** y permitir el micrófono. El agente aún no tiene base de conocimiento, así que solo usa sus instrucciones.",
+            "**Saludo**: ¿suena natural?",
+            "**Detección de turnos**: hacer una pausa de 2-3 segundos a mitad de frase; el agente debe esperar sin interrumpir.",
+            "**Interrupción**: hablar mientras el agente habla; debe detectarlo y callarse.",
+            "**Claridad**: decir algo ambiguo («Tengo un problema con mi pedido»); debe pedir aclaración en vez de adivinar.",
+            "Terminar con **End session**. Como mejora opcional, añadir una base de conocimiento con la política de devoluciones."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Al terminar, en el portal de Azure (https://portal.azure.com) se abre el grupo de recursos usado y se elige **Delete resource group**, escribiendo su nombre para confirmar; así no se generan costes."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: una detección de turnos demasiado agresiva hace que el agente interrumpa, y una demasiado pasiva crea silencios incómodos; el modo semántico gestiona mejor las pausas naturales. Las respuestas intermedias evitan que el usuario crea que se cortó la llamada cuando una herramienta tarda más de unos 1,5 segundos."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/08-configure-voice-agent.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada ajuste del laboratorio con la capa del agente de voz a la que pertenece.",
+          "pairs": [
+            [
+              "Secciones Personality y Guardrails",
+              "Razonamiento"
+            ],
+            [
+              "Azure Semantic Multilingual en Automatic turn detection",
+              "Escucha"
+            ],
+            [
+              "Voz Ash o Alloy y playback speed 1.0",
+              "Habla"
+            ],
+            [
+              "Noise suppression y Echo cancellation",
+              "Escucha (mejora del audio de entrada)"
+            ]
+          ],
+          "explain": "Las instrucciones guían el razonamiento; transcripción, detección de turnos y mejora de audio afectan a cómo escucha; la voz y su velocidad, a cómo habla.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "En la prueba de detección de turnos haces una pausa de 2-3 segundos a mitad de frase y el agente te interrumpe. ¿Qué ajuste del laboratorio está pensado para evitarlo?",
+          "options": [
+            "Subir la velocidad de reproducción a 1.5",
+            "Usar Azure Semantic Multilingual como detección automática de turnos",
+            "Desactivar la cancelación de eco",
+            "Cambiar el modo de interacción a Text"
+          ],
+          "answer": 1,
+          "explain": "La detección semántica valora si la frase ha terminado, no solo el silencio, así que tolera mejor las pausas naturales.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Las respuestas intermedias (Interim response) se activan para que el usuario no piense que la llamada se ha cortado mientras el agente espera a una herramienta lenta.",
+          "answer": true,
+          "explain": "Si una herramienta tarda más de alrededor de 1,5 segundos, un mensaje intermedio evita un silencio que parecería un corte.",
+          "obj": "B2"
+        },
+        {
+          "type": "mc",
+          "q": "En la prueba de claridad dices «Tengo un problema con mi pedido». Según las instrucciones del laboratorio, ¿qué comportamiento es el correcto?",
+          "options": [
+            "Aprobar un reembolso para resolverlo rápido",
+            "Suponer que quiere devolver el último pedido",
+            "Pedir una aclaración sobre el problema",
+            "Terminar la sesión"
+          ],
+          "answer": 2,
+          "explain": "Un agente de voz bien instruido aclara en lugar de adivinar, y además no puede prometer ni aprobar reembolsos.",
+          "obj": "B1"
+        }
+      ]
+    },
+    {
+      "id": "m15u6",
+      "title": "Comprobación de conocimientos",
+      "titleEn": "Knowledge check",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de ideas clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Si con detección **Basic** el agente interrumpe pausas → **aumenta la duración del silencio** (no cambies la voz ni añadas respuestas provisionales).",
+            "Respuestas exactas pero largas → instrucciones que pidan **una o dos frases y una pregunta cada vez** (nada de tablas markdown ni explicar toda la política de golpe).",
+            "Sin herramientas conectadas, ante una petición de reembolso el agente debe **explicar que no puede hacerlo y derivar al soporte**, sin confirmar acciones falsas ni pedir datos de pago."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Los usuarios se quejan de que el agente tarda demasiado en responder cuando ya han terminado de hablar. Usa detección Basic. ¿Qué ajuste puede ayudar?",
+          "options": [
+            "Reducir la duración del silencio",
+            "Aumentar la duración del silencio",
+            "Cambiar a una voz más rápida",
+            "Eliminar las guardrails"
+          ],
+          "answer": 0,
+          "explain": "Una duración de silencio más corta reduce la espera tras el final del turno, aunque aumenta el riesgo de cortar pausas.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Para que un agente de voz sea más fácil de seguir conviene pedirle que formatee cada respuesta como una tabla markdown detallada.",
+          "answer": false,
+          "explain": "El oyente no puede ver tablas; lo adecuado son frases cortas y una pregunta cada vez.",
+          "obj": "B1"
+        },
+        {
+          "type": "mc",
+          "q": "Un usuario pide a un agente sin herramientas que cancele su suscripción. ¿Qué comportamiento es correcto?",
+          "options": [
+            "Decir que la suscripción ya está cancelada",
+            "Pedir la contraseña de la cuenta",
+            "Ignorar la petición y cambiar de tema",
+            "Explicar que no puede realizar esa acción e indicar a quién dirigirse"
+          ],
+          "answer": 3,
+          "explain": "Las guardrails impiden afirmar acciones que no se pueden ejecutar; el agente debe reconocer el límite y derivar.",
+          "obj": "A1"
+        }
+      ]
+    },
+    {
+      "id": "m15u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-foundry-voice-agents/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El módulo mostró cómo los agentes de voz **escuchan, razonan y hablan**, usando el asistente de devoluciones de Contoso como ejemplo para crear, configurar y probar una conversación hablada en el playground de Foundry."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Empieza con una tarea acotada**: una conversación sobre una política de ejemplo permite probar la voz sin sistema de pedidos ni conexión telefónica.",
+            "**Escribe para el oído**: respuestas cortas, una pregunta cada vez y qué hacer cuando falta información.",
+            "**Separa consejo y acción**: el agente no debe afirmar que comprobó un pedido o emitió un reembolso sin herramientas que lo hagan.",
+            "**Prueba con audio**: las peticiones habladas revelan problemas de pausas, interrupciones y claridad que el texto no muestra.",
+            "**Haz cambios concretos**: relaciona el síntoma con el ajuste, guarda el agente y repite la misma prueba."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Lecturas adicionales: «Create a voice-based prompt agent» y «Configure a voice agent» en la documentación de Foundry."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "multi",
+          "q": "¿Qué tres recomendaciones forman parte de las conclusiones del módulo? (Elige tres.)",
+          "options": [
+            "Escribir para el oído con respuestas cortas",
+            "Separar el consejo de la acción",
+            "Probar con audio, no solo con texto",
+            "Conectar siempre un sistema telefónico desde el primer día",
+            "Cambiar varios ajustes a la vez para avanzar rápido"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "El resumen destaca tarea acotada, escribir para el oído, separar consejo y acción, probar con audio y hacer cambios concretos.",
+          "obj": "B2"
+        },
+        {
+          "type": "tf",
+          "q": "Tras ajustar un síntoma, lo recomendable es guardar el agente y repetir la misma prueba.",
+          "answer": true,
+          "explain": "Así se comprueba si el cambio concreto resolvió el problema.",
+          "obj": "B2"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Quieres probar un agente de voz en Foundry sin construir tu propia canalización de reconocimiento y síntesis. ¿Por qué es posible?",
+      "options": [
+        "Porque Foundry gestiona la orquestación de voz",
+        "Porque los agentes de voz no usan modelos",
+        "Porque el agente funciona solo con texto escrito",
+        "Porque es obligatorio usar un servicio telefónico externo"
+      ],
+      "answer": 0,
+      "explain": "Foundry administra la {{orquestación de voz|voice orchestration}}, de modo que puedes conversar sin montar una canalización propia.",
+      "obj": "B2"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada ajuste con lo que controla.",
+      "pairs": [
+        [
+          "Instructions",
+          "Contenido, estilo y longitud de las respuestas"
+        ],
+        [
+          "Voice",
+          "Cómo suena la respuesta"
+        ],
+        [
+          "Greeting",
+          "Si el agente habla al iniciar la sesión"
+        ],
+        [
+          "Turn detection",
+          "Cuándo se considera que el usuario terminó de hablar"
+        ]
+      ],
+      "explain": "Cada ajuste del playground afecta a un aspecto distinto de la experiencia.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué tipo de detección de turnos usa el significado de lo que se dice para decidir el final del turno?",
+      "options": [
+        "Basic",
+        "Azure semantic",
+        "Interim response",
+        "Greeting estático"
+      ],
+      "answer": 1,
+      "explain": "Azure semantic se basa en el significado; Basic usa volumen y tiempo de silencio.",
+      "obj": "B2"
+    },
+    {
+      "type": "tf",
+      "q": "Una respuesta provisional como «Un momento, lo compruebo» confirma al usuario que la acción solicitada se ha completado con éxito.",
+      "answer": false,
+      "explain": "La {{respuesta provisional|interim response}} solo indica que hay trabajo en curso, no que la acción haya funcionado.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "Con un modelo nativo de voz a voz, un analista revisa solo la transcripción para evaluar la experiencia. ¿Cuál es el problema?",
+      "options": [
+        "La transcripción es una salida aparte y no refleja por sí sola la interacción hablada",
+        "Los modelos nativos no generan transcripciones nunca",
+        "La transcripción incluye siempre el audio original",
+        "No hay ningún problema; la transcripción es suficiente"
+      ],
+      "answer": 0,
+      "explain": "El modelo procesa el audio directamente; la transcripción es aparte y no basta para valorar tiempos, claridad o pronunciación.",
+      "obj": "B2"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos casos de prueba revelan problemas propios de la voz que las preguntas escritas no detectan? (Elige dos.)",
+      "options": [
+        "Pausas a mitad de frase",
+        "Interrupciones que corrigen la petición",
+        "Comprobar la ortografía del prompt",
+        "Revisar el nombre del agente"
+      ],
+      "answers": [
+        0,
+        1
+      ],
+      "explain": "Pausas e interrupciones ponen a prueba la detección de turnos y la gestión de la conversación hablada.",
+      "obj": "B2"
+    },
+    {
+      "type": "order",
+      "q": "Ordena el ciclo de mejora recomendado para un agente de voz.",
+      "items": [
+        "Probar con un conjunto repetible de conversaciones habladas",
+        "Identificar el síntoma (p. ej. respuestas prematuras)",
+        "Cambiar solo el ajuste relacionado",
+        "Guardar el agente (nueva versión)",
+        "Repetir los mismos casos de prueba"
+      ],
+      "explain": "Mejorar de forma controlada: probar, diagnosticar, cambiar un ajuste, guardar y volver a probar.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "¿Qué sección de las instrucciones debe impedir que el agente invente datos o acepte que un usuario cambie sus reglas?",
+      "options": [
+        "Personality",
+        "Tone",
+        "Guardrails",
+        "Environment"
+      ],
+      "answer": 2,
+      "explain": "Las {{barreras de protección|guardrails}} fijan límites de precisión, seguridad y acciones.",
+      "obj": "A1"
+    },
+    {
+      "type": "tf",
+      "q": "Si el agente pronuncia mal los términos de producto, lo primero es revisar la selección de voz y los controles de reproducción.",
+      "answer": true,
+      "explain": "La habla difícil de entender se corrige en la voz y sus controles; la longitud, en cambio, en las instrucciones.",
+      "obj": "B2"
+    },
+    {
+      "type": "mc",
+      "q": "Para que un agente de voz responda con información de una política que cambia a menudo sin reescribir el prompt, ¿qué conviene añadir?",
+      "options": [
+        "Una voz distinta",
+        "Un saludo más largo",
+        "Mayor duración de silencio",
+        "Herramientas y bases de conocimiento con contenido aprobado"
+      ],
+      "answer": 3,
+      "explain": "Herramientas y bases de conocimiento dan acceso a contenido aprobado sin mantener información cambiante en el prompt.",
+      "obj": "B1"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Agente de voz",
+      "en": "Voice agent",
+      "def": "Agente que recibe peticiones habladas y responde con voz."
+    },
+    {
+      "es": "Modo de interacción",
+      "en": "Interaction mode",
+      "def": "Ajuste de creación del agente (texto o voz); no se puede cambiar de texto a voz después."
+    },
+    {
+      "es": "Orquestación de voz",
+      "en": "Voice orchestration",
+      "def": "Gestión, por parte de Foundry, de escuchar, razonar y hablar sin canalización propia."
+    },
+    {
+      "es": "Modelo nativo de voz a voz",
+      "en": "Native speech-to-speech model",
+      "def": "Modelo que procesa el audio directamente, sin pasar por texto."
+    },
+    {
+      "es": "Detección de turnos",
+      "en": "Turn detection",
+      "def": "Mecanismo que decide cuándo el usuario ha terminado de hablar."
+    },
+    {
+      "es": "Azure semantic",
+      "en": "Azure semantic turn detection",
+      "def": "Detección de turnos basada en el significado de lo dicho."
+    },
+    {
+      "es": "Detección básica",
+      "en": "Basic turn detection",
+      "def": "Detección de turnos basada en volumen y duración del silencio."
+    },
+    {
+      "es": "Duración del silencio",
+      "en": "Silence duration",
+      "def": "Tiempo de silencio que, con detección Basic, cierra un turno."
+    },
+    {
+      "es": "Respuesta provisional",
+      "en": "Interim response",
+      "def": "Aviso breve que cubre una espera; no confirma que la acción haya tenido éxito."
+    },
+    {
+      "es": "Barreras de protección",
+      "en": "Guardrails",
+      "def": "Sección de instrucciones que fija límites de precisión, seguridad y acciones."
+    },
+    {
+      "es": "Saludo",
+      "en": "Greeting",
+      "def": "Ajuste que decide si el agente habla al iniciar la sesión y con qué frase."
+    },
+    {
+      "es": "Trazas",
+      "en": "Traces",
+      "def": "Registro de transcripciones, grabaciones y actividad de herramientas de las sesiones."
+    }
+  ]
+}

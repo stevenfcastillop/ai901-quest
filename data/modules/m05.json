@@ -1,0 +1,1073 @@
+{
+  "id": "m05",
+  "path": 1,
+  "order": 5,
+  "title": "Introducción a los conceptos de visión artificial",
+  "titleEn": "Introduction to computer vision concepts",
+  "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/",
+  "summary": "Explica los fundamentos de la visión artificial: cómo un ordenador representa una imagen como píxeles, cómo los filtros y las redes neuronales convolucionales extraen características, y cómo los transformadores de visión y los modelos multimodales permiten describir y generar imágenes.",
+  "objectives": [
+    "Comprender las tareas habituales de visión artificial: clasificación, detección de objetos, segmentación semántica y análisis contextual",
+    "Entender cómo se representa una imagen como matriz de píxeles y canales RGB",
+    "Explicar cómo los filtros convolucionales transforman imágenes",
+    "Describir cómo una red neuronal convolucional (CNN) aprende a clasificar imágenes",
+    "Comprender los transformadores de visión (ViT) y los modelos multimodales",
+    "Conocer cómo los modelos de difusión generan imágenes y vídeo a partir de texto"
+  ],
+  "units": [
+    {
+      "id": "m05u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{visión artificial|computer vision}} es una de las áreas centrales de la inteligencia artificial. Su objetivo es crear soluciones que permitan a las aplicaciones de IA **procesar información visual**."
+        },
+        {
+          "type": "h",
+          "text": "Escenarios típicos"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Un **vehículo autónomo** que debe detectar el tráfico y a los peatones y reaccionar ante ellos.",
+            "Una tienda con **cajas inteligentes** equipadas con cámaras que identifican los productos que lleva el cliente en la cesta.",
+            "Un **timbre con cámara** que detecta a las personas que llegan a la puerta de casa."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Los ordenadores no tienen ojos biológicos, pero sí pueden procesar imágenes procedentes de una cámara en directo, de fotografías digitales o de vídeos. Esa capacidad de procesar imágenes es la base para crear software que **emule la percepción visual humana**. El módulo recorre los bloques fundamentales sobre los que se construyen las soluciones modernas de visión artificial."
+        },
+        {
+          "type": "tip",
+          "text": "En el examen, cualquier escenario en el que la entrada sea una imagen, un vídeo o una cámara en directo pertenece a la carga de trabajo de **visión artificial**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un fabricante quiere que una cámara en la línea de montaje identifique piezas defectuosas. ¿Qué carga de trabajo de IA describe este escenario?",
+          "options": [
+            "Procesamiento de lenguaje natural",
+            "Visión artificial",
+            "Reconocimiento de voz",
+            "Análisis de sentimiento"
+          ],
+          "answer": 1,
+          "explain": "La entrada es información visual (imágenes de una cámara), por lo que se trata de {{visión artificial|computer vision}}.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "La visión artificial solo puede trabajar con fotografías almacenadas; no puede procesar la señal de una cámara en directo.",
+          "answer": false,
+          "explain": "Los sistemas de visión artificial pueden procesar fotografías, vídeos y también transmisiones en directo de una cámara.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u2",
+      "title": "Visión general de la visión artificial",
+      "titleEn": "Computer vision overview",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/2-overview",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El término visión artificial agrupa un conjunto de tareas y técnicas en las que el software de IA procesa una entrada visual: normalmente imágenes, vídeos o transmisiones de cámara en directo. Es un campo consolidado de la IA y sus técnicas para extraer información de lo visual han evolucionado mucho con los años."
+        },
+        {
+          "type": "h",
+          "text": "Clasificación de imágenes"
+        },
+        {
+          "type": "p",
+          "text": "La {{clasificación de imágenes|image classification}} es una de las soluciones más antiguas. Un modelo entrenado con una gran cantidad de imágenes **predice una etiqueta de texto** a partir del contenido de una imagen, es decir, cuál es su tema principal."
+        },
+        {
+          "type": "example",
+          "text": "Un supermercado quiere una caja inteligente para frutas y verduras: el cliente coloca el producto en la báscula, una cámara lo fotografía y la aplicación identifica si es una manzana, una naranja o un plátano y cobra según el peso. Para ello el modelo se entrena con muchas imágenes, cada una etiquetada con el nombre correcto, y aprende a usar las características visuales para predecir el sujeto principal."
+        },
+        {
+          "type": "h",
+          "text": "Detección de objetos"
+        },
+        {
+          "type": "p",
+          "text": "Si la caja debe reconocer **varios productos a la vez**, se usa la {{detección de objetos|object detection}}. Estos modelos examinan múltiples regiones de la imagen para encontrar objetos individuales y su ubicación. La predicción indica **qué objetos** se detectaron y **dónde** están, mediante las coordenadas de un {{cuadro delimitador|bounding box}} rectangular."
+        },
+        {
+          "type": "h",
+          "text": "Segmentación semántica"
+        },
+        {
+          "type": "p",
+          "text": "La {{segmentación semántica|semantic segmentation}} es una forma más sofisticada de localizar objetos: el modelo **clasifica cada píxel** de la imagen según el objeto al que pertenece. El resultado es una máscara que indica la ubicación de los objetos con mucha más precisión que un rectángulo."
+        },
+        {
+          "type": "h",
+          "text": "Análisis contextual de imágenes"
+        },
+        {
+          "type": "p",
+          "text": "Los modelos de visión {{multimodales|multimodal}} más recientes se entrenan para encontrar relaciones contextuales entre los objetos de las imágenes y el texto que los describe. Así pueden interpretar semánticamente una imagen, determinar qué objetos y actividades aparecen y **generar descripciones** o sugerir **etiquetas** relevantes (por ejemplo: «Una persona comiendo una manzana»)."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Técnica",
+            "Qué devuelve",
+            "Ejemplo"
+          ],
+          "rows": [
+            [
+              "Clasificación de imágenes",
+              "Una etiqueta para el tema principal de la imagen",
+              "«plátano»"
+            ],
+            [
+              "Detección de objetos",
+              "Clase de cada objeto + coordenadas de su cuadro delimitador",
+              "manzana en (x, y, ancho, alto)"
+            ],
+            [
+              "Segmentación semántica",
+              "Clase de cada píxel (máscaras)",
+              "máscara exacta de la naranja"
+            ],
+            [
+              "Análisis contextual (multimodal)",
+              "Descripción en lenguaje natural o etiquetas",
+              "«Una persona comiendo una manzana»"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Pregunta clásica: ¿necesitas saber **qué hay** (clasificación), **qué hay y dónde, con un rectángulo** (detección de objetos) o **la forma exacta píxel a píxel** (segmentación semántica)?"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada técnica de visión artificial con su resultado.",
+          "pairs": [
+            [
+              "Clasificación de imágenes",
+              "Una etiqueta con el tema principal"
+            ],
+            [
+              "Detección de objetos",
+              "Objetos con coordenadas de cuadro delimitador"
+            ],
+            [
+              "Segmentación semántica",
+              "Clasificación de cada píxel"
+            ],
+            [
+              "Análisis contextual de imágenes",
+              "Descripción en lenguaje natural de la escena"
+            ]
+          ],
+          "explain": "Cada técnica añade precisión: etiqueta global, luego rectángulos, luego píxeles; los modelos multimodales además describen la escena con texto.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Una aplicación de tráfico debe contar los coches de una foto e indicar la posición de cada uno mediante un rectángulo. ¿Qué técnica necesita?",
+          "options": [
+            "Clasificación de imágenes",
+            "Segmentación semántica",
+            "Detección de objetos",
+            "Generación de imágenes"
+          ],
+          "answer": 2,
+          "explain": "La {{detección de objetos|object detection}} localiza varios objetos y devuelve sus {{cuadros delimitadores|bounding boxes}}.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Un sistema médico necesita delimitar con precisión, píxel a píxel, la zona de un tumor en una radiografía. ¿Qué técnica es la más adecuada?",
+          "options": [
+            "Segmentación semántica",
+            "Clasificación de imágenes",
+            "Detección de objetos",
+            "Reconocimiento óptico de caracteres"
+          ],
+          "answer": 0,
+          "explain": "La segmentación semántica clasifica cada píxel, lo que da una ubicación mucho más precisa que un rectángulo.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Los modelos multimodales de visión pueden generar una descripción en lenguaje natural de lo que ocurre en una imagen.",
+          "answer": true,
+          "explain": "Al aprender relaciones entre imágenes y el texto que las describe, pueden interpretar la escena y generar descripciones o etiquetas.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u3",
+      "title": "Comprender el procesamiento de imágenes",
+      "titleEn": "Understand image processing",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/3-understand-image-processing",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Una imagen es una matriz de números"
+        },
+        {
+          "type": "p",
+          "text": "Para un ordenador, una imagen es una {{matriz|array}} de valores numéricos de {{píxeles|pixels}}. Por ejemplo, una matriz de 7 filas × 7 columnas representa una imagen de 7×7 píxeles; ese tamaño es la {{resolución|resolution}} de la imagen."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": " 0   0   0   0   0   0   0\n 0   0   0   0   0   0   0\n 0   0  255 255 255  0   0\n 0   0  255 255 255  0   0\n 0   0  255 255 255  0   0\n 0   0   0   0   0   0   0\n 0   0   0   0   0   0   0"
+        },
+        {
+          "type": "p",
+          "text": "Cada píxel vale entre **0 (negro)** y **255 (blanco)**; los valores intermedios son tonos de gris. La matriz anterior dibuja un cuadrado blanco de 3×3 sobre fondo negro. Al ser una única capa bidimensional (filas y columnas, coordenadas x e y), representa una imagen en {{escala de grises|grayscale}}."
+        },
+        {
+          "type": "h",
+          "text": "Imágenes en color: canales RGB"
+        },
+        {
+          "type": "p",
+          "text": "La mayoría de imágenes digitales son multidimensionales y tienen **tres capas** llamadas {{canales|channels}}, que representan los tonos **rojo, verde y azul** ({{RGB|red, green, blue}}). Cada píxel se define por la combinación de sus tres valores."
+        },
+        {
+          "type": "example",
+          "text": "Con tres matrices de 7×7 se puede dibujar el mismo cuadrado en color. Los píxeles del borde tienen Rojo=150, Verde=0, Azul=255, lo que produce **morado**; los del centro tienen Rojo=255, Verde=255, Azul=0, lo que produce **amarillo**."
+        },
+        {
+          "type": "h",
+          "text": "Filtros"
+        },
+        {
+          "type": "p",
+          "text": "Una forma común de procesar imágenes es aplicar {{filtros|filters}} que modifican los valores de los píxeles para crear un efecto visual. Un filtro se define mediante una o varias matrices de pesos llamadas {{núcleos de filtro|filter kernels}}. Ejemplo de núcleo 3×3:"
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "-1 -1 -1\n-1  8 -1\n-1 -1 -1"
+        },
+        {
+          "type": "p",
+          "text": "El núcleo se **convoluciona** sobre la imagen: para cada bloque de 3×3 píxeles se multiplica cada valor por el peso correspondiente del núcleo y se suman los resultados (suma ponderada). Ese valor se guarda en una nueva matriz."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "Primer bloque (esquina superior izquierda):\n(0×-1)+(0×-1)+(0×-1)+(0×-1)+(0×8)+(0×-1)+(0×-1)+(0×-1)+(255×-1) = -255\n\nSe desplaza un píxel a la derecha:\n(0×-1)+(0×-1)+(0×-1)+(0×-1)+(0×8)+(0×-1)+(0×-1)+(255×-1)+(255×-1) = -510\n\nNueva matriz hasta ahora:  -255  -510"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El proceso se repite hasta recorrer toda la imagen.",
+            "Algunos resultados quedan fuera del rango 0-255, así que se **ajustan** para que encajen en ese rango.",
+            "Por la forma del filtro, el borde exterior de píxeles no se calcula; se aplica un valor de {{relleno|padding}} (normalmente 0).",
+            "La matriz resultante es una imagen nueva transformada por el filtro."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Como el filtro se desliza (convoluciona) por la imagen, esta técnica se llama {{filtrado convolucional|convolutional filtering}}. El núcleo del ejemplo es un {{filtro de Laplace|Laplace filter}}, que **resalta los bordes** de los objetos. Existen muchos otros filtros para desenfocar, enfocar, invertir colores y lograr otros efectos."
+        },
+        {
+          "type": "tip",
+          "text": "Recuerda: escala de grises = 1 canal; color = 3 canales (RGB); valores de 0 a 255; un filtro de Laplace resalta bordes."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "En una imagen en escala de grises de 8 bits, ¿qué representa un píxel con valor 255?",
+          "options": [
+            "Negro",
+            "Gris medio",
+            "Blanco",
+            "Transparente"
+          ],
+          "answer": 2,
+          "explain": "Los valores van de 0 (negro) a 255 (blanco); los intermedios son grises.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cuántos canales tiene normalmente una imagen digital en color?",
+          "options": [
+            "Uno",
+            "Dos",
+            "Cuatro",
+            "Tres"
+          ],
+          "answer": 3,
+          "explain": "Una imagen en color suele tener tres canales: rojo, verde y azul (RGB).",
+          "obj": "A3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos para aplicar un filtro convolucional a una imagen.",
+          "items": [
+            "Definir el núcleo del filtro (por ejemplo, 3×3)",
+            "Colocar el núcleo sobre un bloque de píxeles y calcular la suma ponderada",
+            "Desplazar el núcleo un píxel y repetir por toda la imagen",
+            "Ajustar los valores al rango 0-255 y aplicar relleno en los bordes"
+          ],
+          "explain": "El núcleo se convoluciona por la imagen calculando sumas ponderadas; después se ajustan los valores y se rellena el borde no calculado.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Un filtro de Laplace se utiliza para resaltar los bordes de los objetos de una imagen.",
+          "answer": true,
+          "explain": "El núcleo de Laplace (8 en el centro y -1 alrededor) realza los cambios bruscos de intensidad, es decir, los bordes.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u4",
+      "title": "Modelos de visión artificial y redes convolucionales",
+      "titleEn": "Computer vision models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/4-computer-vision-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los filtros sirven para aplicar efectos, como en un editor de fotos, pero la visión artificial busca normalmente **extraer significado** o información accionable de las imágenes. Para ello se crean modelos de {{aprendizaje automático|machine learning}} entrenados con grandes volúmenes de imágenes para reconocer características."
+        },
+        {
+          "type": "h",
+          "text": "Red neuronal convolucional (CNN)"
+        },
+        {
+          "type": "p",
+          "text": "Una de las arquitecturas más comunes es la {{red neuronal convolucional|convolutional neural network (CNN)}}, un tipo de {{aprendizaje profundo|deep learning}}. Las CNN usan filtros para extraer {{mapas de características|feature maps}} numéricos de las imágenes y después pasan esos valores a una red neuronal que predice una etiqueta. En clasificación, la etiqueta responde a «¿de qué es esta imagen?» (por ejemplo, manzana, plátano o naranja)."
+        },
+        {
+          "type": "p",
+          "text": "Al empezar el entrenamiento, los núcleos de los filtros tienen **pesos aleatorios**. A medida que avanza, las predicciones se comparan con las etiquetas conocidas y los pesos se ajustan para mejorar la precisión. Al final, el modelo usa los pesos de filtro que mejor extraen las características que distinguen cada fruta."
+        },
+        {
+          "type": "h",
+          "text": "Cómo funciona una CNN de clasificación"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Se introducen imágenes con **etiquetas conocidas** (p. ej. 0: manzana, 1: plátano, 2: naranja) para entrenar el modelo.",
+            "Una o varias **capas de filtros** extraen características de cada imagen; los núcleos empiezan con pesos aleatorios y generan matrices llamadas mapas de características. Otras capas pueden hacer {{agrupación|pooling}} o reducción de tamaño para crear matrices más pequeñas que destacan las características clave.",
+            "Los mapas de características se **aplanan** en una matriz unidimensional de valores.",
+            "Esos valores se introducen en una red neuronal **totalmente conectada**.",
+            "La capa de salida usa una función {{softmax|softmax}} (u otra similar) que devuelve una **probabilidad por cada clase**, por ejemplo [0.2, 0.5, 0.3]."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Entrenamiento: pérdida y épocas"
+        },
+        {
+          "type": "p",
+          "text": "Durante el entrenamiento, las probabilidades de salida se comparan con la clase real; una imagen de plátano (clase 1) debería dar [0.0, 1.0, 0.0]. La diferencia entre lo predicho y lo real se usa para calcular la {{pérdida|loss}}, y se modifican los pesos de la red totalmente conectada y de los núcleos de filtro para reducirla. El proceso se repite durante varias {{épocas|epochs}} hasta encontrar un conjunto óptimo de pesos, que se guarda para predecir etiquetas de imágenes nuevas."
+        },
+        {
+          "type": "p",
+          "text": "Las CNN reales suelen tener múltiples capas convolucionales y capas adicionales para reducir los mapas, restringir valores y manipular características. La idea clave es: **los filtros extraen características numéricas y una red neuronal las usa para predecir etiquetas**."
+        },
+        {
+          "type": "tip",
+          "text": "En una CNN, el papel principal de los filtros NO es embellecer la imagen, sino **extraer características numéricas** que alimentan la red neuronal."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cuál es la función principal de las capas de filtros en una CNN de clasificación de imágenes?",
+          "options": [
+            "Comprimir la imagen para enviarla más rápido",
+            "Mejorar el aspecto visual de la imagen",
+            "Convertir la imagen a escala de grises",
+            "Extraer características numéricas (mapas de características) para la red neuronal"
+          ],
+          "answer": 3,
+          "explain": "Los filtros generan {{mapas de características|feature maps}} que, una vez aplanados, alimentan la red totalmente conectada que predice la etiqueta.",
+          "obj": "A3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena el flujo de datos en una CNN de clasificación de imágenes.",
+          "items": [
+            "Entrada de la imagen etiquetada",
+            "Capas de filtros que generan mapas de características",
+            "Agrupación (pooling) para reducir los mapas",
+            "Aplanado a un vector unidimensional",
+            "Red neuronal totalmente conectada",
+            "Salida softmax con una probabilidad por clase"
+          ],
+          "explain": "La CNN extrae características con filtros, las reduce, las aplana y las pasa a una red totalmente conectada cuya salida da probabilidades por clase.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Al comenzar el entrenamiento de una CNN, los pesos de los núcleos de filtro se inicializan con valores aleatorios.",
+          "answer": true,
+          "explain": "Los núcleos empiezan con pesos aleatorios y se ajustan en cada época para reducir la pérdida.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "Durante el entrenamiento, ¿qué se usa para decidir cómo ajustar los pesos del modelo?",
+          "options": [
+            "La pérdida: diferencia entre las probabilidades predichas y la clase real",
+            "El tamaño en bytes de la imagen",
+            "El número de canales de color",
+            "La resolución de la pantalla"
+          ],
+          "answer": 0,
+          "explain": "La {{pérdida|loss}} mide el error de la predicción y guía la modificación de los pesos para reducirlo.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u5",
+      "title": "Modelos de visión modernos",
+      "titleEn": "Modern vision models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/5-modern-vision-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Las CNN han sido el núcleo de la visión artificial durante muchos años y son también la base de modelos más complejos. Por ejemplo, la detección de objetos combina capas de extracción de características de una CNN con la identificación de {{regiones de interés|regions of interest}} para localizar varias clases de objetos en la misma imagen."
+        },
+        {
+          "type": "p",
+          "text": "Mientras tanto, en el {{procesamiento de lenguaje natural|natural language processing (NLP)}} otra arquitectura, el {{transformador|transformer}}, permitió crear modelos de lenguaje muy sofisticados."
+        },
+        {
+          "type": "h",
+          "text": "Modelado semántico del lenguaje: transformadores"
+        },
+        {
+          "type": "p",
+          "text": "Los transformadores procesan enormes volúmenes de datos y codifican {{tokens|tokens}} (palabras o fragmentos) como {{incrustaciones|embeddings}}: vectores de valores numéricos. Una técnica llamada {{atención|attention}} asigna valores que reflejan cómo se usa cada token en el contexto de los demás."
+        },
+        {
+          "type": "p",
+          "text": "Las incrustaciones pueden imaginarse como vectores en un espacio multidimensional, donde cada dimensión recoge un atributo lingüístico. Los tokens que se usan en contextos parecidos quedan **orientados en direcciones similares**, creando relaciones semánticas útiles para análisis de texto, traducción, generación de lenguaje y otras tareas. En la práctica estos vectores tienen muchísimas más dimensiones que las tres de un diagrama."
+        },
+        {
+          "type": "h",
+          "text": "Modelado semántico de imágenes: transformadores de visión"
+        },
+        {
+          "type": "p",
+          "text": "El éxito de los transformadores en lenguaje llevó a aplicarlos a imágenes: así nacen los {{transformadores de visión|vision transformers (ViT)}}. En lugar de tokens de texto, el modelo extrae {{parches|patches}} de valores de píxeles de la imagen y genera un vector lineal a partir de cada uno."
+        },
+        {
+          "type": "p",
+          "text": "La misma técnica de **atención** determina las relaciones contextuales entre parches. La diferencia es que las incrustaciones codifican **características visuales** (color, forma, contraste, textura…) en lugar de lingüísticas. El resultado es un «mapa» multidimensional de rasgos visuales según cómo aparecen juntos en las imágenes de entrenamiento."
+        },
+        {
+          "type": "example",
+          "text": "Los rasgos visuales típicos de un sombrero quedan relacionados con los de una cabeza porque suelen verse juntos. El modelo no sabe qué es un «sombrero» ni una «cabeza», pero infiere una relación semántica entre sus características visuales."
+        },
+        {
+          "type": "h",
+          "text": "Todo junto: modelos multimodales"
+        },
+        {
+          "type": "p",
+          "text": "Un transformador de lenguaje crea un vocabulario lingüístico; uno de visión crea un vocabulario visual. Si los datos de entrenamiento incluyen imágenes con descripciones de texto, pueden combinarse los codificadores de ambos en un {{modelo multimodal|multimodal model}}, usando {{atención cruzada entre modalidades|cross-model attention}} para obtener una representación espacial unificada de las incrustaciones."
+        },
+        {
+          "type": "p",
+          "text": "Así el modelo descubre relaciones semánticas entre lenguaje y rasgos visuales, y puede **predecir descripciones complejas de imágenes que nunca ha visto**: reconoce las características visuales y busca en el espacio vectorial compartido el lenguaje asociado (p. ej. «Una persona en un parque con sombrero y mochila»)."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Modelo",
+            "Unidad de entrada",
+            "Qué codifica"
+          ],
+          "rows": [
+            [
+              "Transformador de lenguaje",
+              "Tokens de texto",
+              "Relaciones semánticas entre palabras"
+            ],
+            [
+              "Transformador de visión (ViT)",
+              "Parches de píxeles",
+              "Relaciones entre rasgos visuales (color, forma, textura…)"
+            ],
+            [
+              "Modelo multimodal",
+              "Texto + imágenes",
+              "Espacio compartido que relaciona lenguaje y rasgos visuales"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Definición de examen: un ViT es un modelo que usa **atención** sobre **parches de imagen** para crear **incrustaciones contextuales**."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué describe mejor a un transformador de visión (ViT)?",
+          "options": [
+            "Un filtro que cambia el aspecto visual de una foto",
+            "Un modelo que aplica atención a parches de la imagen para crear incrustaciones contextuales",
+            "Un agente que convierte un LLM en un modelo de visión",
+            "Un algoritmo que comprime imágenes"
+          ],
+          "answer": 1,
+          "explain": "El ViT divide la imagen en {{parches|patches}} y usa {{atención|attention}} para relacionarlos, generando incrustaciones de rasgos visuales.",
+          "obj": "A3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada concepto con su descripción.",
+          "pairs": [
+            [
+              "Incrustación",
+              "Vector numérico que representa un token o parche"
+            ],
+            [
+              "Atención",
+              "Técnica que captura el contexto entre tokens o parches"
+            ],
+            [
+              "Parche",
+              "Bloque de píxeles usado como entrada de un ViT"
+            ],
+            [
+              "Atención cruzada entre modalidades",
+              "Une las incrustaciones de texto e imagen en un espacio común"
+            ]
+          ],
+          "explain": "Estos son los componentes clave de transformadores, transformadores de visión y modelos multimodales.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Un modelo multimodal puede generar la descripción de una imagen que nunca vio durante el entrenamiento.",
+          "answer": true,
+          "explain": "Reconoce los rasgos visuales y busca en el espacio vectorial compartido el lenguaje asociado a ellos.",
+          "obj": "A3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué características visuales codifican las incrustaciones de un transformador de visión? (Elige dos.)",
+          "options": [
+            "Color y contraste",
+            "La sintaxis gramatical de una frase",
+            "Forma y textura",
+            "La frecuencia de audio"
+          ],
+          "answers": [
+            0,
+            2
+          ],
+          "explain": "Las incrustaciones de un ViT se basan en rasgos visuales como color, forma, contraste y textura.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u6",
+      "title": "Generación de imágenes",
+      "titleEn": "Generate images",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/5a-generate-images",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La misma arquitectura multimodal que permite responder con texto a una entrada visual sirve también para lo contrario: **crear imágenes a partir de una instrucción en lenguaje natural**. Al conocer qué rasgos visuales se asocian con el lenguaje, un modelo de {{síntesis de imágenes|image synthesis}} puede tomar la descripción de una imagen o vídeo y generarla."
+        },
+        {
+          "type": "h",
+          "text": "Difusión"
+        },
+        {
+          "type": "p",
+          "text": "La mayoría de modelos actuales de generación de imágenes usan {{difusión|diffusion}}:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "El {{prompt|prompt}} sirve para identificar un conjunto de rasgos visuales relacionados que pueden combinarse.",
+            "La imagen se crea de forma **iterativa**, partiendo de un conjunto **aleatorio de píxeles** (ruido).",
+            "En cada iteración se **elimina ruido** para ir creando estructura.",
+            "Tras cada paso el modelo compara la imagen parcial con el prompt, hasta producir una imagen final que representa la escena pedida."
+          ]
+        },
+        {
+          "type": "example",
+          "text": "Con el prompt «Un perro llevando un palo en la boca», la primera iteración es casi ruido, y en las siguientes va apareciendo cada vez con más nitidez la silueta del perro y el palo."
+        },
+        {
+          "type": "h",
+          "text": "Generación de vídeo"
+        },
+        {
+          "type": "p",
+          "text": "Algunos modelos aplican un proceso similar para generar vídeo. Además de asociar rasgos visuales con tokens de lenguaje, tienen en cuenta el **comportamiento físico** de los objetos (por ejemplo, que un perro camine con las patas en el suelo) y la **progresión temporal**, para que el vídeo muestre una secuencia lógica."
+        },
+        {
+          "type": "tip",
+          "text": "Difusión = empezar con ruido aleatorio y eliminarlo paso a paso, guiado por el prompt."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Cómo empieza el proceso de un modelo de difusión al generar una imagen?",
+          "options": [
+            "Con una imagen de referencia proporcionada por el usuario",
+            "Con una imagen en blanco de 255 en todos los píxeles",
+            "Con un boceto vectorial",
+            "Con un conjunto aleatorio de valores de píxeles (ruido)"
+          ],
+          "answer": 3,
+          "explain": "La {{difusión|diffusion}} parte de ruido aleatorio y lo elimina iterativamente hasta que la imagen coincide con el prompt.",
+          "obj": "B3"
+        },
+        {
+          "type": "multi",
+          "q": "Además de asociar rasgos visuales con el lenguaje, ¿qué dos factores tiene en cuenta un modelo de generación de vídeo? (Elige dos.)",
+          "options": [
+            "El comportamiento físico de los objetos",
+            "La progresión temporal de la acción",
+            "El número de canales de audio",
+            "El formato de compresión del archivo"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "La generación de vídeo debe respetar la física del mundo real y una secuencia temporal lógica.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "En la difusión, el modelo compara la imagen intermedia con el prompt después de cada iteración.",
+          "answer": true,
+          "explain": "Tras cada paso evalúa el resultado parcial frente al prompt hasta lograr la imagen final.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m05u7",
+      "title": "Ejercicio: explorar la visión artificial",
+      "titleEn": "Exercise - Explore computer vision",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/5b-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo**: ver un patrón habitual para combinar texto e imagen en el prompt de un modelo generativo: un modelo de visión analiza la imagen y su resultado se añade al prompt del modelo de lenguaje (unos 15 minutos)."
+        },
+        {
+          "type": "h",
+          "text": "Requisitos"
+        },
+        {
+          "type": "p",
+          "text": "Navegador moderno (Chrome, Edge o Firefox recientes, con WASM SIMD; {{WebGPU|WebGPU}} recomendado), CPU de 64 bits y 8 núcleos, 8 GB de RAM o más (16 GB recomendados), GPU recomendada y espacio para cachear entre 300 y 800 MB de modelos. Micrófono y altavoces si se usa la voz. No hace falta suscripción de Azure. Con un **modo básico** de respaldo."
+        },
+        {
+          "type": "h",
+          "text": "1. Preparar el chat con imágenes"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir **Chat Playground** en `https://aka.ms/chat-playground` y esperar a que cargue el modelo de lenguaje (Phi 3.5 Mini).",
+            "Mientras tanto, descargar `images.zip` desde `https://aka.ms/ai-images` y descomprimirlo: son las imágenes que se van a analizar.",
+            "Volver al playground y, en la sección **Vision** del panel de configuración, activar **Image analysis**; esperar a que se descargue el modelo de visión. Se habilita el botón **Upload image (📎)**.",
+            "Cambiar las **Instructions** por un asistente que identifica hardware informático antiguo."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "text": "You are an AI assistant that helps people identify vintage computer hardware."
+        },
+        {
+          "type": "h",
+          "text": "2. Preguntar sobre imágenes"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Pulsar **Upload image** y elegir una de las imágenes: aparece una miniatura en la zona del prompt.",
+            "Escribir `What can you tell me about this?`: la imagen va incluida en el mensaje.",
+            "El modelo **MobileNetV2** hace la {{clasificación de imágenes|image classification}} (decide el sujeto probable) y ese resultado se añade al prompt de Phi, que redacta la respuesta.",
+            "Repetir con las demás imágenes (`What is this?`, `Tell me about this.`) y, si se quiere, con imágenes propias."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Resultado"
+        },
+        {
+          "type": "p",
+          "text": "El clasificador debería identificar bien las imágenes, aunque la calidad del texto varía según el modo. Al combinar un modelo pequeño con un modelo de visión limitado, los resultados son más pobres que con un verdadero {{modelo multimodal|multimodal model}}."
+        },
+        {
+          "type": "p",
+          "text": "En Microsoft Foundry hay modelos multimodales que aceptan imagen y texto juntos y permiten interpretaciones mucho más complejas; además, **Azure Content Understanding** puede analizar imágenes."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: un modelo multimodal recibe imagen + texto en el mismo prompt. El laboratorio simula ese patrón con dos modelos (clasificador de visión + LLM). La clasificación asigna una etiqueta a toda la imagen; la generación de la descripción la hace el modelo de lenguaje."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: `https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/05-vision.html`"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los pasos para preguntar sobre una imagen en el Chat Playground.",
+          "items": [
+            "Esperar a que cargue el modelo de lenguaje",
+            "Activar Image analysis en la sección Vision",
+            "Cambiar las instrucciones a un asistente de hardware antiguo",
+            "Subir una imagen con Upload image",
+            "Enviar un prompt como «What can you tell me about this?»"
+          ],
+          "explain": "El botón de subir imagen solo se habilita tras activar el análisis de imágenes; después se ajusta el prompt del sistema y se envía imagen + texto.",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "En la app del laboratorio, ¿qué hace exactamente el modelo MobileNetV2?",
+          "options": [
+            "Genera la respuesta completa en lenguaje natural",
+            "Clasifica la imagen y su resultado se añade al prompt del modelo de lenguaje",
+            "Extrae todo el texto de la imagen con OCR",
+            "Genera una imagen nueva a partir del prompt"
+          ],
+          "answer": 1,
+          "explain": "MobileNetV2 predice el sujeto probable de la imagen; Phi recibe esa predicción en el prompt y redacta la respuesta.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "Un modelo multimodal de Microsoft Foundry puede recibir imagen y texto en el mismo prompt sin un clasificador aparte.",
+          "answer": true,
+          "explain": "El laboratorio simula el patrón con dos modelos, pero los modelos multimodales aceptan directamente entradas combinadas de imagen y texto.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m05u8",
+      "title": "Comprobación de conocimientos",
+      "titleEn": "Knowledge check",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de ideas clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "La visión artificial se basa en manipular y analizar los **valores numéricos de los píxeles**, no metadatos ni nombres de archivo.",
+            "En una CNN, los filtros sirven para **extraer características numéricas** que usa la red neuronal, no para embellecer ni comprimir la imagen.",
+            "Un **ViT** usa atención sobre parches de imagen para crear incrustaciones contextuales.",
+            "Los modelos multimodales combinan codificadores de lenguaje y visión para describir imágenes; los de difusión generan imágenes a partir de ruido guiados por un prompt."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un compañero dice que un modelo de visión «entiende» una foto leyendo la fecha y hora guardadas en sus metadatos. ¿Qué analiza realmente la visión artificial?",
+          "options": [
+            "El nombre del archivo",
+            "Los valores de los píxeles",
+            "La fecha de captura",
+            "El tamaño del archivo en disco"
+          ],
+          "answer": 1,
+          "explain": "La visión artificial trabaja sobre los valores numéricos de los {{píxeles|pixels}} de la imagen.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "En una CNN, el objetivo principal de los filtros es aplicar efectos estéticos para que la imagen se vea mejor.",
+          "answer": false,
+          "explain": "En una CNN los filtros extraen características numéricas para la clasificación; los efectos estéticos son propios de la edición de imágenes.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué técnica comparten los transformadores de lenguaje y los transformadores de visión para capturar el contexto?",
+          "options": [
+            "Filtro de Laplace",
+            "Difusión",
+            "Pooling",
+            "Atención"
+          ],
+          "answer": 3,
+          "explain": "Ambos usan {{atención|attention}}: entre tokens en lenguaje y entre parches en visión.",
+          "obj": "A3"
+        }
+      ]
+    },
+    {
+      "id": "m05u9",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La visión artificial se basa en analizar y manipular los **valores numéricos de los píxeles**. Los modelos de aprendizaje automático, entrenados con grandes volúmenes de imágenes, hacen posibles escenarios como la clasificación de imágenes, la detección de objetos, la segmentación semántica o la generación de descripciones."
+        },
+        {
+          "type": "p",
+          "text": "Los modelos han evolucionado desde clasificadores estadísticos, pasando por las **redes neuronales convolucionales**, hasta los actuales **modelos multimodales basados en transformadores**. Los modelos más avanzados no solo interpretan la entrada visual, sino que también **generan imágenes y vídeo**."
+        },
+        {
+          "type": "tip",
+          "text": "Para profundizar, Microsoft remite a la documentación «What is Azure Vision?»."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena cronológicamente la evolución de los modelos de visión artificial.",
+          "items": [
+            "Clasificadores de imágenes basados en estadística",
+            "Redes neuronales convolucionales (CNN)",
+            "Modelos multimodales basados en transformadores"
+          ],
+          "explain": "La visión artificial pasó de clasificadores estadísticos a CNN y de ahí a los modelos multimodales con transformadores.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Los modelos de visión más avanzados pueden tanto interpretar imágenes como generar contenido visual.",
+          "answer": true,
+          "explain": "Los modelos multimodales modernos describen imágenes y, con técnicas como la difusión, también las generan.",
+          "obj": "B3"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Una tienda quiere que su caja inteligente identifique cada producto de una bandeja con varios artículos y marque dónde está cada uno. ¿Qué técnica utilizarías?",
+      "options": [
+        "Clasificación de imágenes",
+        "Detección de objetos",
+        "Síntesis de voz",
+        "Generación de imágenes por difusión"
+      ],
+      "answer": 1,
+      "explain": "La detección de objetos encuentra múltiples objetos y devuelve sus cuadros delimitadores.",
+      "obj": "A3"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada concepto con su definición.",
+      "pairs": [
+        [
+          "Resolución",
+          "Número de filas y columnas de píxeles de la imagen"
+        ],
+        [
+          "Canal",
+          "Capa de valores de un color (rojo, verde o azul)"
+        ],
+        [
+          "Núcleo de filtro",
+          "Matriz de pesos que se convoluciona sobre la imagen"
+        ],
+        [
+          "Mapa de características",
+          "Matriz numérica generada por los filtros de una CNN"
+        ],
+        [
+          "Softmax",
+          "Función que da una probabilidad por cada clase"
+        ]
+      ],
+      "explain": "Son los conceptos básicos del procesamiento de imágenes y de las CNN.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Un píxel tiene los valores Rojo=255, Verde=255, Azul=0. ¿De qué color se verá?",
+      "options": [
+        "Morado",
+        "Blanco",
+        "Amarillo",
+        "Negro"
+      ],
+      "answer": 2,
+      "explain": "Rojo y verde al máximo sin azul producen amarillo; Rojo=150, Verde=0, Azul=255 sería morado.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "La segmentación semántica ofrece una ubicación de los objetos más precisa que la detección de objetos porque clasifica cada píxel.",
+      "answer": true,
+      "explain": "La detección usa rectángulos; la segmentación asigna una clase a cada píxel y obtiene máscaras precisas.",
+      "obj": "A3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué dos afirmaciones sobre el entrenamiento de una CNN son correctas? (Elige dos.)",
+      "options": [
+        "Los pesos de los filtros empiezan con valores aleatorios",
+        "Los pesos de los filtros los define a mano un diseñador gráfico",
+        "La pérdida se calcula comparando las probabilidades predichas con la clase real",
+        "El entrenamiento termina siempre tras una única época"
+      ],
+      "answers": [
+        0,
+        2
+      ],
+      "explain": "Los núcleos se inicializan aleatoriamente y se ajustan durante varias épocas para reducir la pérdida.",
+      "obj": "A3"
+    },
+    {
+      "type": "mc",
+      "q": "Una empresa quiere un servicio que reciba una foto y devuelva una frase como «Un ciclista cruzando un puente al atardecer». ¿Qué tipo de modelo es el más adecuado?",
+      "options": [
+        "Un clasificador de imágenes con una sola etiqueta",
+        "Un filtro de Laplace",
+        "Un modelo multimodal de lenguaje y visión",
+        "Un modelo de detección de bordes"
+      ],
+      "answer": 2,
+      "explain": "Los modelos multimodales combinan incrustaciones de visión y lenguaje para generar descripciones de imágenes no vistas.",
+      "obj": "B3"
+    },
+    {
+      "type": "order",
+      "q": "Ordena los pasos de la generación de una imagen por difusión.",
+      "items": [
+        "El prompt identifica los rasgos visuales relacionados",
+        "Se parte de un conjunto aleatorio de píxeles (ruido)",
+        "Se elimina ruido para crear estructura",
+        "El modelo compara la imagen parcial con el prompt y repite",
+        "Se obtiene la imagen final que representa la escena"
+      ],
+      "explain": "La difusión refina iterativamente el ruido inicial guiándose por el prompt hasta la imagen final.",
+      "obj": "B3"
+    },
+    {
+      "type": "mc",
+      "q": "En un transformador de visión, ¿qué sustituye a los tokens de texto como unidad de entrada?",
+      "options": [
+        "Canales de audio",
+        "Etiquetas de clase",
+        "Metadatos EXIF",
+        "Parches de valores de píxeles"
+      ],
+      "answer": 3,
+      "explain": "El ViT extrae {{parches|patches}} de píxeles y genera un vector a partir de cada uno.",
+      "obj": "A3"
+    },
+    {
+      "type": "tf",
+      "q": "Un ViT «sabe» qué es un sombrero y qué es una cabeza; por eso relaciona ambos conceptos.",
+      "answer": false,
+      "explain": "El modelo no entiende los conceptos; solo infiere relaciones entre rasgos visuales que suelen aparecer juntos.",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Visión artificial",
+      "en": "Computer vision",
+      "def": "Área de la IA que permite a las aplicaciones procesar y entender información visual."
+    },
+    {
+      "es": "Píxel",
+      "en": "Pixel",
+      "def": "Valor numérico mínimo de una imagen; en escala de grises va de 0 (negro) a 255 (blanco)."
+    },
+    {
+      "es": "Canal",
+      "en": "Channel",
+      "def": "Capa de valores de píxel de un color; las imágenes en color tienen tres (RGB)."
+    },
+    {
+      "es": "Clasificación de imágenes",
+      "en": "Image classification",
+      "def": "Predecir una etiqueta para el tema principal de una imagen."
+    },
+    {
+      "es": "Detección de objetos",
+      "en": "Object detection",
+      "def": "Localizar varios objetos en una imagen con su clase y cuadro delimitador."
+    },
+    {
+      "es": "Segmentación semántica",
+      "en": "Semantic segmentation",
+      "def": "Clasificar cada píxel de la imagen según el objeto al que pertenece."
+    },
+    {
+      "es": "Núcleo de filtro",
+      "en": "Filter kernel",
+      "def": "Matriz de pesos que se convoluciona sobre una imagen para transformarla."
+    },
+    {
+      "es": "Red neuronal convolucional",
+      "en": "Convolutional neural network (CNN)",
+      "def": "Arquitectura de aprendizaje profundo que usa filtros para extraer mapas de características y predecir etiquetas."
+    },
+    {
+      "es": "Mapa de características",
+      "en": "Feature map",
+      "def": "Matriz numérica que produce una capa de filtros de una CNN."
+    },
+    {
+      "es": "Transformador de visión",
+      "en": "Vision transformer (ViT)",
+      "def": "Modelo que aplica atención a parches de imagen para crear incrustaciones de rasgos visuales."
+    },
+    {
+      "es": "Incrustación",
+      "en": "Embedding",
+      "def": "Vector numérico que representa un token o parche en un espacio semántico."
+    },
+    {
+      "es": "Modelo multimodal",
+      "en": "Multimodal model",
+      "def": "Modelo que combina varias modalidades, como texto e imagen, en un espacio compartido."
+    },
+    {
+      "es": "Difusión",
+      "en": "Diffusion",
+      "def": "Técnica de generación de imágenes que elimina ruido iterativamente guiada por un prompt."
+    }
+  ]
+}

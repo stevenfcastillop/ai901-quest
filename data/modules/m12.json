@@ -1,0 +1,963 @@
+{
+  "id": "m12",
+  "path": 2,
+  "order": 5,
+  "title": "Introducción a la visión artificial en Azure",
+  "titleEn": "Get started with computer vision in Azure",
+  "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/",
+  "summary": "Presenta las capacidades de visión artificial de Microsoft Foundry: modelos multimodales para analizar imágenes, modelos de generación de imágenes (familia GPT-Image) y modelos de generación de vídeo (Sora 2), tanto en el playground como desde código.",
+  "objectives": [
+    "Conocer los modelos multimodales para el análisis de imágenes.",
+    "Comprender las capacidades de generación de imágenes.",
+    "Comprender las capacidades de generación de vídeo."
+  ],
+  "units": [
+    {
+      "id": "m12u1",
+      "title": "Introducción",
+      "titleEn": "Introduction",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/1-introduction",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "La {{visión artificial|computer vision}} es el campo de la IA que permite a las máquinas interpretar y comprender información visual del mundo: imágenes, vídeos y transmisiones de cámara en directo. Sus capacidades se basan en modelos de IA y permiten automatizar tareas que antes consumían mucho tiempo."
+        },
+        {
+          "type": "p",
+          "text": "El módulo trata modelos capaces de identificar y analizar objetos, reconocer patrones, **leer texto en imágenes** e interpretar escenas como lo haría una persona, y también modelos que van más allá del análisis para **generar contenido visual nuevo**. Juntos permiten aplicaciones de búsqueda de imágenes, análisis de documentos, herramientas creativas y experiencias interactivas: sistemas que pueden tanto **ver** como **crear**."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Escenario",
+            "Cómo ayuda la visión artificial"
+          ],
+          "rows": [
+            [
+              "Detección de defectos en fabricación",
+              "Inspecciona productos en la cadena de montaje en tiempo real y detecta defectos superficiales, desalineaciones o piezas que faltan mediante {{detección de objetos|object detection}} y {{segmentación de imágenes|image segmentation}}. Reduce desperdicio y mejora el control de calidad."
+            ],
+            [
+              "Análisis de imagen médica",
+              "Ayuda a los radiólogos con radiografías, resonancias y TAC: resalta anomalías como tumores o fracturas, apoya el diagnóstico precoz y reduce errores humanos."
+            ],
+            [
+              "Control de estanterías en comercio",
+              "Las cámaras detectan productos agotados o mal colocados para actualizar el inventario en tiempo real y mejorar la experiencia del cliente."
+            ],
+            [
+              "Vehículos autónomos",
+              "Reconocen señales, marcas viales, peatones y otros vehículos para navegar con seguridad en entornos cambiantes."
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Microsoft Foundry es la plataforma unificada de Microsoft en Azure, ofrecida como {{plataforma como servicio|platform as a service (PaaS)}}, para operaciones de IA empresarial y desarrollo de aplicaciones. En ella están los modelos de visión de este módulo."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada escenario con la capacidad de visión que utiliza.",
+          "pairs": [
+            [
+              "Cadena de montaje",
+              "Detectar piezas que faltan o defectos superficiales"
+            ],
+            [
+              "Radiología",
+              "Resaltar anomalías como fracturas"
+            ],
+            [
+              "Supermercado",
+              "Detectar productos agotados en la estantería"
+            ],
+            [
+              "Coche autónomo",
+              "Reconocer señales de tráfico y peatones"
+            ]
+          ],
+          "explain": "Todos son casos de uso de visión artificial descritos en la unidad.",
+          "obj": "A3"
+        },
+        {
+          "type": "tf",
+          "q": "Según el módulo, los modelos de visión de Foundry pueden tanto analizar imágenes como generar contenido visual nuevo.",
+          "answer": true,
+          "explain": "El módulo cubre el análisis (modelos multimodales) y la generación de imágenes y vídeo.",
+          "obj": "A3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Qué es Microsoft Foundry?",
+          "options": [
+            "Un modelo de generación de vídeo",
+            "La plataforma unificada PaaS de Microsoft en Azure para operaciones de IA empresarial y desarrollo de apps",
+            "Una cámara inteligente para fábricas",
+            "Un formato de imagen comprimido"
+          ],
+          "answer": 1,
+          "explain": "Foundry es la plataforma como servicio donde se encuentran, despliegan y prueban los modelos.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u2",
+      "title": "Modelos multimodales para análisis de imágenes",
+      "titleEn": "Multimodal models for image analysis",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/2-vision-enabled-models",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los {{modelos multimodales|multimodal models}} pueden entender y trabajar con **más de un tipo de dato a la vez**: texto, imágenes, audio o vídeo. Por ejemplo, pueden describir una imagen en lenguaje natural o responder a una pregunta sobre una foto."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Se usan en **aplicaciones de IA**, donde entender imágenes mejora el flujo de trabajo del usuario.",
+            "Se usan en **{{agentes de IA|AI agents}}**, donde la entrada visual ayuda al agente a tomar mejores decisiones.",
+            "Ejemplos: un agente que revisa documentos y capturas subidos; una app de soporte que analiza fotos enviadas por clientes; una herramienta educativa que explica diagramas o gráficos en lenguaje llano."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Como aceptan texto e imágenes, **reducen la necesidad de canalizaciones de visión separadas** y facilitan experiencias inteligentes de extremo a extremo. A la combinación de comprensión visual con respuestas en lenguaje natural se le llama modelos {{GPT con visión|vision-enabled GPT / GPT with vision}}: están pensados para el razonamiento visual flexible y de propósito general, sin necesidad de ser experto en visión artificial."
+        },
+        {
+          "type": "h",
+          "text": "Modelos multimodales en Microsoft Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Describir el contenido de una imagen en lenguaje natural.",
+            "Responder preguntas sobre objetos, texto o escenas de una imagen.",
+            "Extraer el significado de gráficos, capturas de pantalla, documentos o fotos.",
+            "Combinar la comprensión de la imagen con instrucciones de texto en un único prompt."
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Modelo del catálogo",
+            "Características y usos"
+          ],
+          "rows": [
+            [
+              "GPT-4.1 / GPT-4.1-mini / GPT-4.1-nano",
+              "Modelos GPT multimodales de propósito general que procesan texto e imágenes juntos. Usos: descripción de imágenes y {{respuesta a preguntas visuales|visual question answering}}, análisis de documentos y capturas, interpretación de gráficos y diagramas."
+            ],
+            [
+              "Serie GPT-5 (p. ej. GPT-5.1, GPT-5.2)",
+              "Modelos multimodales avanzados para escenarios empresariales y {{agénticos|agentic}}: entradas de texto e imagen, {{salidas estructuradas|structured outputs}}, uso de herramientas y razonamiento con contexto amplio entre modalidades. Típicos en agentes de producción y apps multimodales complejas."
+            ],
+            [
+              "Modelos de socios",
+              "El catálogo también incluye modelos multimodales de proveedores como Anthropic, entre otros, con comprensión de texto e imagen."
+            ]
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Análisis de imágenes en el playground de Foundry"
+        },
+        {
+          "type": "p",
+          "text": "El portal de Foundry tiene una interfaz clásica y una nueva. En el nuevo portal, el {{playground de modelos|model playground}} permite chatear con un modelo desplegado: eliges un modelo con visión (por ejemplo gpt-4.1-mini), **adjuntas una imagen** y pruebas prompts para ver cómo la interpreta (por ejemplo, pedirle que describa el animal de la foto). Una vez validado, puedes usar lo mismo desde código mediante API."
+        },
+        {
+          "type": "h",
+          "text": "La Responses API de OpenAI"
+        },
+        {
+          "type": "p",
+          "text": "Para pasar del playground al código se usa la **{{API de respuestas|Responses API}} de OpenAI** en Foundry, diseñada para apps agénticas y con soporte nativo de entradas multimodales:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Una sola petición puede incluir **texto e imagen juntos**.",
+            "Las imágenes se envían como **URL** o como **datos codificados en base64**.",
+            "El modelo procesa ambas entradas a la vez para generar la respuesta.",
+            "Estructura del prompt: una instrucción de texto (p. ej. «¿Qué objetos se ven en esta imagen?») más una o varias imágenes en la misma petición."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "SDK de Python de OpenAI"
+        },
+        {
+          "type": "p",
+          "text": "Se instala con `pip install openai`. Necesitas la **clave** y el **endpoint** del recurso de Foundry y el **nombre del despliegue** del modelo."
+        },
+        {
+          "type": "tip",
+          "text": "Cada modelo desplegado tiene un nombre base (p. ej. gpt-4.1-mini) y un **nombre de despliegue** que eliges tú (p. ej. my-vision-deploy). En el parámetro `model` del código se pasa el **nombre del despliegue**. Pregunta muy típica de examen."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os\nfrom openai import OpenAI\n\n# Variables de entorno: FOUNDRY_KEY, ENDPOINT, MODEL_NAME\n# ENDPOINT = \"https://TU-RECURSO.openai.azure.com/openai/v1/\"\nclient = OpenAI(\n    api_key=os.getenv(\"FOUNDRY_KEY\"),\n    base_url=os.getenv(\"ENDPOINT\"),\n)\n\nimage_url = \"https://.../foto.jpg\"  # o una data URL base64\n\nresponse = client.responses.create(\n    model=os.getenv(\"MODEL_NAME\"),  # nombre del DESPLIEGUE\n    input=[{\n        \"role\": \"user\",\n        \"content\": [\n            {\"type\": \"input_text\", \"text\": \"¿Qué hay en la imagen? Responde en 3 viñetas.\"},\n            {\"type\": \"input_image\", \"image_url\": image_url}\n        ]\n    }]\n)\nprint(response.output_text)"
+        },
+        {
+          "type": "p",
+          "text": "Claves del código: el cliente `OpenAI` apunta al endpoint `/openai/v1/` del recurso; `client.responses.create` recibe un mensaje de rol `user` cuyo `content` es **multiparte**: un elemento `input_text` y un elemento `input_image`; la respuesta en texto se lee en `response.output_text`."
+        },
+        {
+          "type": "example",
+          "text": "App de safari: el usuario sube la foto de un animal y escribe una pregunta. La app carga la imagen, crea un mensaje multiparte (imagen + texto) y lo envía al modelo con visión, que responde identificando el animal teniendo en cuenta ambos datos."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "¿Qué es un modelo multimodal?",
+          "options": [
+            "Un modelo que solo procesa imágenes",
+            "Un modelo desplegado en varias regiones",
+            "Un modelo que solo genera vídeo",
+            "Un modelo que entiende y trabaja con más de un tipo de dato, como texto e imágenes"
+          ],
+          "answer": 3,
+          "explain": "Multimodal significa que admite varias modalidades de entrada (texto, imagen, audio, vídeo) a la vez.",
+          "obj": "B3"
+        },
+        {
+          "type": "multi",
+          "q": "¿De qué formas puede enviarse una imagen a un modelo con visión mediante la Responses API? (elige 2)",
+          "options": [
+            "Como URL",
+            "Como datos codificados en base64",
+            "Como archivo .docx adjunto",
+            "Dictándola por voz"
+          ],
+          "answers": [
+            0,
+            1
+          ],
+          "explain": "La Responses API acepta imágenes como URL o como datos base64 (data URL).",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "En `client.responses.create(model=...)`, ¿qué valor va en `model`?",
+          "options": [
+            "El nombre del recurso de Foundry",
+            "El nombre base del modelo en el catálogo",
+            "El nombre del despliegue que diste al modelo",
+            "La clave de API"
+          ],
+          "answer": 2,
+          "explain": "Foundry aloja tu despliegue; en código se referencia por el nombre de despliegue que elegiste.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "Para analizar una imagen con la Responses API hay que hacer dos peticiones separadas: una con el texto y otra con la imagen.",
+          "answer": false,
+          "explain": "Una sola petición incluye un contenido multiparte con `input_text` e `input_image`; el modelo procesa ambos a la vez.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u3",
+      "title": "Modelos de generación de imágenes",
+      "titleEn": "Image generation models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/3-image-generation",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Los modelos con visión suelen relacionar información visual con texto. Algunos hacen el proceso **a la inversa**: generan imágenes que corresponden a una descripción de texto ({{texto a imagen|text-to-image}})."
+        },
+        {
+          "type": "tip",
+          "text": "Para la mayoría de proyectos nuevos, Microsoft recomienda empezar con la familia **GPT-Image-1**, en especial **GPT-Image-1.5**, por su mejor calidad, soporte de edición y preparación para entornos empresariales."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Modelo",
+            "Características",
+            "Uso recomendado"
+          ],
+          "rows": [
+            [
+              "GPT-Image-1.5",
+              "El más reciente y avanzado de Foundry. Alta fidelidad, buena alineación con el prompt y coherencia entre iteraciones. Texto a imagen, {{imagen a imagen|image-to-image}} y edición precisa.",
+              "Marca, marketing y diseño, donde la precisión visual importa."
+            ],
+            [
+              "GPT-Image-1",
+              "Propósito general; evoluciona los modelos DALL-E anteriores. Texto a imagen, variaciones y edición precisa. Muy soportado en herramientas y API de Foundry (Responses API, herramientas de agentes).",
+              "Aplicaciones creativas, prototipos, contenido visual."
+            ],
+            [
+              "GPT-Image-1-Mini",
+              "Versión ligera y más económica de GPT-Image-1; mismas tareas básicas, optimizada para menor latencia y coste a costa de algo de fidelidad.",
+              "Experimentación, herramientas internas, generación masiva."
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Todos se pueden **desplegar** en un recurso de Foundry (Azure OpenAI).",
+            "Todos se pueden **probar** en el playground de Foundry.",
+            "Todos se pueden usar desde código con la **Responses API** de OpenAI o con las API de generación de imágenes."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "También hay modelos de terceros, como **FLUX**, una familia de modelos {{de código abierto|open-source}} de Black Forest Labs que genera imágenes fotorrealistas y de estilo flexible a partir de texto."
+        },
+        {
+          "type": "h",
+          "text": "Generación en el playground"
+        },
+        {
+          "type": "p",
+          "text": "Despliegas el modelo, describes la imagen que quieres y, tras unos instantes, obtienes una imagen que coincide con la descripción. El playground también muestra **código de ejemplo**."
+        },
+        {
+          "type": "h",
+          "text": "Generación con el SDK de Python"
+        },
+        {
+          "type": "p",
+          "text": "La clase `images` del SDK de OpenAI permite generar y editar imágenes llamando al endpoint de la Images API. Generar imágenes a partir de descripciones es muy útil en medios, publicaciones y creación de contenido. Necesitas:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Un recurso de Foundry.",
+            "Un modelo desplegado (su **nombre de despliegue** es lo que pasas como MODEL_NAME).",
+            "Autenticación mediante **clave de API** o **{{Microsoft Entra ID|Microsoft Entra ID}}**.",
+            "Llamadas a la Responses API (que pueden incluir imágenes como URL o data URL base64)."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "**{{Base64|Base64}}**: las imágenes son datos binarios, pero JSON y las URL solo admiten texto. Base64 convierte bytes en texto ASCII seguro para poder incrustar archivos en JSON o URL. La imagen generada se devuelve en base64 y hay que decodificarla para guardarla."
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "import os, base64\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.environ[\"FOUNDRY_KEY\"],\n    base_url=os.environ[\"ENDPOINT\"],  # https://TU-RECURSO.openai.azure.com/openai/v1/\n)\n\nprompt = \"Ilustración plana de un robot sosteniendo una maceta, estilo vectorial, colores pastel.\"\n\nresponse = client.responses.create(\n    model=os.environ[\"MODEL_NAME\"],  # nombre del despliegue (p. ej. de gpt-image-1)\n    input=prompt,\n    tools=[{\"type\": \"image_generation\"}],\n)\n\nimage_base64 = next(\n    item.result for item in response.output\n    if item.type == \"image_generation_call\"\n)\nwith open(\"foundry_generated.png\", \"wb\") as f:\n    f.write(base64.b64decode(image_base64))"
+        },
+        {
+          "type": "p",
+          "text": "Claves: se llama a `responses.create` con el prompt de texto y la herramienta `{\"type\": \"image_generation\"}`; en `response.output` se busca el elemento de tipo `image_generation_call`, cuyo `result` es la imagen en base64, y se decodifica con `base64.b64decode` para guardar el PNG."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Un equipo de marketing necesita imágenes de marca de alta fidelidad con edición precisa. ¿Qué modelo recomienda Microsoft como punto de partida?",
+          "options": [
+            "GPT-Image-1-Mini",
+            "GPT-Image-1.5",
+            "Sora 2",
+            "GPT-4.1-nano"
+          ],
+          "answer": 1,
+          "explain": "GPT-Image-1.5 es el modelo de imagen más avanzado de Foundry, orientado a branding, marketing y diseño.",
+          "obj": "B3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada modelo con su descripción.",
+          "pairs": [
+            [
+              "GPT-Image-1.5",
+              "El más avanzado: alta fidelidad y edición precisa"
+            ],
+            [
+              "GPT-Image-1",
+              "Propósito general, sucesor de DALL-E"
+            ],
+            [
+              "GPT-Image-1-Mini",
+              "Ligero y económico para alto volumen"
+            ],
+            [
+              "FLUX",
+              "Familia de código abierto de Black Forest Labs"
+            ]
+          ],
+          "explain": "Conocer la familia GPT-Image y los modelos de terceros ayuda a elegir según calidad, coste y latencia.",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Cómo se generan imágenes programáticamente con un modelo de imagen desplegado en Foundry?",
+          "options": [
+            "Enviando el prompt de texto a la Responses API con la herramienta image_generation",
+            "Subiendo imágenes manualmente al playground",
+            "Llamando al endpoint de GPT-4.1 sin herramientas",
+            "Con una consulta SQL"
+          ],
+          "answer": 0,
+          "explain": "El código usa `responses.create` con `tools=[{\"type\": \"image_generation\"}]` sobre el despliegue del modelo de imagen.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "La imagen generada se devuelve codificada en base64 y hay que decodificarla para guardarla como archivo.",
+          "answer": true,
+          "explain": "El `result` del elemento `image_generation_call` es base64; se decodifica con `base64.b64decode`.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u4",
+      "title": "Modelos de generación de vídeo",
+      "titleEn": "Video generation models",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/4-video-generation",
+      "kind": "teoria",
+      "theory": [
+        {
+          "type": "p",
+          "text": "Además de imágenes fijas, cada vez se consume más contenido en vídeo. Foundry incluye modelos de {{generación de vídeo|video generation}} para crear vídeo original."
+        },
+        {
+          "type": "h",
+          "text": "Sora 2"
+        },
+        {
+          "type": "p",
+          "text": "**Sora** es el modelo {{texto a vídeo|text-to-video}} de OpenAI. Sora 2 admite varias modalidades:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Texto → vídeo",
+            "Imagen → vídeo",
+            "Vídeo → vídeo ({{remezcla|remix}}): ediciones dirigidas sin regenerar el vídeo completo.",
+            "Novedades: **generación de audio**, más realismo y remezcla.",
+            "Disponible en la **API v1 de Azure OpenAI** y en el **Video Playground** de Foundry, con salvaguardas de IA responsable integradas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Usos típicos: vídeos de marketing y promoción, previsualizaciones cinematográficas y tráileres, contenido educativo e inmersivo. También hay modelos de vídeo de otros proveedores, como la familia de **Fal**."
+        },
+        {
+          "type": "h",
+          "text": "Vídeo en el playground"
+        },
+        {
+          "type": "p",
+          "text": "Tras desplegar un modelo de vídeo puedes probarlo en el playground, indicar parámetros como **dimensiones** y **duración**, y escribir un prompt que describa el contenido deseado. Tras unos minutos obtienes el vídeo. El código de ejemplo del playground usa la **interfaz REST**."
+        },
+        {
+          "type": "tip",
+          "text": "{{API REST|REST API}}: interfaz web que permite a los programas comunicarse por HTTP. Un {{SDK|SDK}} es un kit de desarrollo construido sobre ella; siempre puedes usar la REST directamente si no hay SDK para tu lenguaje. **curl** es una herramienta de línea de comandos (se ejecuta en **Bash**) que envía peticiones HTTP y muestra la respuesta del servidor."
+        },
+        {
+          "type": "h",
+          "text": "Trabajos asíncronos"
+        },
+        {
+          "type": "p",
+          "text": "Generar vídeo consume muchos recursos y tarda (normalmente **1 a 5 minutos**), por lo que se ejecuta como {{trabajo asíncrono|asynchronous job}}: creas el trabajo, **sondeas** ({{sondeo|polling}}) su estado y descargas el vídeo cuando termina. Necesitas un recurso de Foundry/Azure OpenAI en una región compatible con un **despliegue de Sora** (desde Models + endpoints) y autenticación por clave de API o Microsoft Entra ID."
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "text": "# 1. Crear el trabajo (devuelve un id de vídeo)\ncurl -X POST \"https://TU-RECURSO.openai.azure.com/openai/v1/videos\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"api-key: $AZURE_OPENAI_API_KEY\" \\\n  -d '{\"model\": \"sora-2\", \"prompt\": \"Primer plano de gotas de lluvia en una ventana con neones de noche.\", \"size\": \"1280x720\", \"seconds\": \"8\"}'\n\n# 2. Sondear el estado hasta completed (o failed)\ncurl -X GET \"https://TU-RECURSO.openai.azure.com/openai/v1/videos/{video_id}\" \\\n  -H \"api-key: $AZURE_OPENAI_API_KEY\"\n\n# 3. Descargar el MP4 cuando el estado sea completed\ncurl -L \"https://TU-RECURSO.openai.azure.com/openai/v1/videos/{video_id}/content?variant=video\" \\\n  -H \"api-key: $AZURE_OPENAI_API_KEY\" --output output.mp4"
+        },
+        {
+          "type": "p",
+          "text": "La API de Sora 2 tiene endpoints distintos para **iniciar** el render (POST a `/videos` con `model`, `prompt`, `size` y `seconds`), **consultar el estado** (GET a `/videos/{video_id}`) y **descargar** el contenido (`/videos/{video_id}/content?variant=video`)."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "order",
+          "q": "Ordena los pasos para generar un vídeo con Sora 2 mediante REST.",
+          "items": [
+            "Enviar un POST a /videos con el prompt, tamaño y duración",
+            "Recibir el id del vídeo",
+            "Sondear el estado con GET /videos/{video_id}",
+            "Descargar el MP4 cuando el estado sea completed"
+          ],
+          "explain": "Es un flujo asíncrono: crear trabajo, obtener id, sondear y descargar.",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "¿Por qué la generación de vídeo con Sora se gestiona como un trabajo asíncrono?",
+          "options": [
+            "Porque requiere interacción del usuario durante el render",
+            "Porque el vídeo se genera en el navegador",
+            "Porque la API REST nunca admite peticiones síncronas",
+            "Porque consume muchos recursos y tarda en completarse"
+          ],
+          "answer": 3,
+          "explain": "El render puede tardar de 1 a 5 minutos, así que se crea un trabajo y se consulta su estado.",
+          "obj": "B3"
+        },
+        {
+          "type": "multi",
+          "q": "¿Qué modalidades admite Sora 2? (elige 3)",
+          "options": [
+            "Texto a vídeo",
+            "Imagen a vídeo",
+            "Vídeo a vídeo (remezcla)",
+            "Vídeo a hoja de cálculo"
+          ],
+          "answers": [
+            0,
+            1,
+            2
+          ],
+          "explain": "Sora 2 admite texto, imagen y vídeo como entrada para producir vídeo, y añade generación de audio.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u5",
+      "title": "Ejercicio: visión artificial en Microsoft Foundry",
+      "titleEn": "Exercise - Get started with computer vision in Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/5-exercise",
+      "kind": "laboratorio",
+      "theory": [
+        {
+          "type": "p",
+          "text": "**Objetivo:** usar modelos de IA generativa de Microsoft Foundry para trabajar con datos visuales: analizar imágenes con un {{modelo multimodal|multimodal model}} y generar imágenes nuevas a partir de texto. El escenario es un asistente que identifica hardware informático antiguo. Duración aproximada: 30 minutos."
+        },
+        {
+          "type": "p",
+          "text": "**Requisitos:** una suscripción de Azure (la parte de generación de imágenes exige acceso a modelos de ese tipo y cuota en la región) y el archivo de imágenes de ejemplo `images.zip` del repositorio del laboratorio."
+        },
+        {
+          "type": "h",
+          "text": "1. Crear un proyecto de Foundry"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Abrir el portal de Microsoft Foundry (https://ai.azure.com), activar la opción **New Foundry** y crear un {{proyecto|project}} con nombre único (o reutilizar uno existente). En **Advanced options** se indica el recurso de Foundry, la suscripción, el {{grupo de recursos|resource group}} y una región recomendada. Si faltan permisos, desmarcar la creación de recursos recomendados."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "2. Analizar imágenes con un modelo generativo"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Descargar y descomprimir `images.zip`: son fotos de hardware antiguo que se van a analizar.",
+            "En **Catalog** > pestaña **Models**, explorar el {{catálogo de modelos|model catalog}} (modelos de Microsoft, OpenAI y otros proveedores) y buscar `gpt-5.4-mini` para ver sus capacidades.",
+            "Desplegarlo con **Deploy** y la configuración por defecto (si falla por cuota, usar otro modelo gpt con chat o un proyecto en otra región).",
+            "En el {{área de pruebas del modelo|model playground}}, poner como instrucciones que es un asistente que ayuda a identificar hardware antiguo.",
+            "Con **Upload image**, adjuntar una de las imágenes y escribir una pregunta como «¿Qué me puedes decir de esto?». El prompt lleva imagen y texto a la vez.",
+            "Revisar la respuesta, que describe el objeto de la foto, y repetir con las demás imágenes."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Código: imagen como entrada (Responses API)"
+        },
+        {
+          "type": "p",
+          "text": "En la pestaña **Call model** (Python, autenticación por clave) aparece código de ejemplo. Para enviar una imagen, el parámetro `input` combina contenido de texto y de imagen:"
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "response = client.responses.create(\n    model=deployment_name,\n    input=[{\n        \"role\": \"user\",\n        \"content\": [\n            {\"type\": \"input_text\", \"text\": \"what's in this image?\"},\n            {\"type\": \"input_image\", \"image_url\": \"https://.../joystick.png\"},\n        ],\n    }],\n)\nprint(response.output_text)"
+        },
+        {
+          "type": "h",
+          "text": "3. Generar imágenes nuevas"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Volver a la lista de modelos del proyecto y elegir **Deploy a base model**.",
+            "En el catálogo, filtrar **Collections: Direct from Azure** e **Inference tasks: Text to image** para ver los modelos de {{texto a imagen|text to image}}.",
+            "Desplegar uno disponible (por ejemplo `gpt-image-2`, `gpt-image-1-mini` o `FLUX.2-pro`); se abre el {{área de pruebas de imágenes|image playground}}.",
+            "Escribir una descripción, como «Un PC antiguo con monitor CRT», y revisar la imagen generada.",
+            "Si el modelo ofrece **View code** (Python, OpenAI SDK, clave), revisar el ejemplo de generación."
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "python",
+          "text": "img = client.images.generate(\n    model=deployment_name,\n    prompt=\"A cute baby polar bear\",\n    n=1,\n    size=\"1024x1024\",\n)\nimage_bytes = base64.b64decode(img.data[0].b64_json)"
+        },
+        {
+          "type": "p",
+          "text": "**Resultado:** el modelo de chat interpreta las fotos (entrada visual) y el modelo de texto a imagen crea imágenes nuevas (salida visual), que la API devuelve codificadas en base64."
+        },
+        {
+          "type": "h",
+          "text": "Limpieza"
+        },
+        {
+          "type": "p",
+          "text": "Al terminar, en el portal de Azure (https://portal.azure.com) se abre el grupo de recursos usado y se elige **Delete resource group**, escribiendo su nombre para confirmar; así no se generan costes."
+        },
+        {
+          "type": "tip",
+          "text": "Para el examen: para **entender** una imagen se usa un modelo multimodal con un prompt que mezcla `input_text` e `input_image` (Responses API); para **crear** imágenes se despliega un modelo de la tarea Text to image y se llama a `images.generate` con `prompt`, `n` y `size`."
+        },
+        {
+          "type": "p",
+          "text": "Guía oficial del laboratorio: https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Exercises/05a-image-analysis.html"
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "En el laboratorio quieres que el modelo describa la foto de un joystick antiguo desde código. ¿Cómo debe construirse el parámetro input de la Responses API?",
+          "options": [
+            "Solo con un elemento input_text que contenga la URL de la imagen",
+            "Con un mensaje de usuario cuyo content combina un input_text y un input_image",
+            "Llamando a images.generate con la URL en prompt",
+            "Subiendo la imagen como instrucciones del sistema"
+          ],
+          "answer": 1,
+          "explain": "Un prompt multimodal es un mensaje de usuario con varias partes: el texto de la pregunta (input_text) y la imagen (input_image).",
+          "obj": "B3"
+        },
+        {
+          "type": "match",
+          "q": "Relaciona cada tarea del laboratorio con lo que se usa.",
+          "pairs": [
+            [
+              "Preguntar qué hay en una foto",
+              "Modelo gpt con chat y Upload image en el playground"
+            ],
+            [
+              "Encontrar modelos que crean imágenes",
+              "Filtro Inference tasks: Text to image"
+            ],
+            [
+              "Generar una imagen desde código",
+              "client.images.generate con prompt, n y size"
+            ],
+            [
+              "Evitar costes al terminar",
+              "Eliminar el grupo de recursos en el portal de Azure"
+            ]
+          ],
+          "explain": "El análisis usa un modelo multimodal de chat; la generación, un modelo de texto a imagen; la limpieza se hace borrando el grupo de recursos.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "En el laboratorio, el mismo despliegue de gpt-5.4-mini se usa tanto para analizar las fotos como para generar la imagen del PC antiguo.",
+          "answer": false,
+          "explain": "Para generar imágenes se despliega un modelo distinto de la categoría Text to image, como gpt-image-2 o FLUX.2-pro.",
+          "obj": "B3"
+        },
+        {
+          "type": "order",
+          "q": "Ordena los pasos para analizar una imagen en el model playground.",
+          "items": [
+            "Buscar gpt-5.4-mini en el catálogo de modelos",
+            "Desplegar el modelo con Deploy",
+            "Definir las instrucciones del asistente de hardware antiguo",
+            "Adjuntar una imagen con Upload image y escribir la pregunta",
+            "Revisar la respuesta del modelo"
+          ],
+          "explain": "Hay que tener el modelo desplegado y configurado antes de enviar un prompt con imagen y texto.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u6",
+      "title": "Evaluación del módulo",
+      "titleEn": "Module assessment",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/6-knowledge-check",
+      "kind": "evaluacion",
+      "theory": [
+        {
+          "type": "h",
+          "text": "Repaso de conceptos clave"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Modelo multimodal**: entiende varios tipos de datos (p. ej. texto + imágenes) a la vez.",
+            "**Generar imágenes desde código**: enviar prompts de texto con la Responses API a un modelo de imagen desplegado.",
+            "**Parámetro `model`**: siempre el **nombre del despliegue**, no el nombre base ni el del recurso.",
+            "**Vídeo con Sora**: trabajo asíncrono porque es intensivo en recursos y tarda en completarse."
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "type": "mc",
+          "q": "Has desplegado gpt-image-1.5 con el nombre «carteles-prod» en el recurso «rg-marketing». ¿Qué pasas en el parámetro model?",
+          "options": [
+            "gpt-image-1.5",
+            "rg-marketing",
+            "carteles-prod",
+            "image_generation"
+          ],
+          "answer": 2,
+          "explain": "El parámetro model recibe el nombre del despliegue.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "GPT-4.1 es el modelo indicado para generar imágenes a partir de texto con la herramienta image_generation.",
+          "answer": false,
+          "explain": "Para generar imágenes se despliega un modelo de imagen como los de la familia GPT-Image.",
+          "obj": "B3"
+        },
+        {
+          "type": "mc",
+          "q": "Una app debe responder preguntas sobre gráficos que suben los usuarios. ¿Qué capacidad necesita?",
+          "options": [
+            "Generación de vídeo",
+            "Conversión de texto a voz",
+            "Un modelo de generación de imágenes",
+            "Un modelo multimodal con visión"
+          ],
+          "answer": 3,
+          "explain": "Interpretar gráficos y responder preguntas sobre ellos es análisis de imágenes con un modelo multimodal.",
+          "obj": "B3"
+        }
+      ]
+    },
+    {
+      "id": "m12u7",
+      "title": "Resumen",
+      "titleEn": "Summary",
+      "url": "https://learn.microsoft.com/en-us/training/modules/get-started-vision-azure/7-summary",
+      "kind": "resumen",
+      "theory": [
+        {
+          "type": "p",
+          "text": "El módulo ha recorrido los modelos con visión de Microsoft Foundry: **modelos multimodales** para analizar imágenes; **modelos de generación de imágenes** de la familia GPT-Image para crear y editar imágenes desde prompts con las herramientas y API de Foundry; y **generación de vídeo con Sora**, que permite texto a vídeo e imagen a vídeo tanto en playgrounds interactivos como mediante flujos REST asíncronos."
+        },
+        {
+          "type": "p",
+          "text": "Estos modelos tienden un puente entre los datos visuales y la IA basada en lenguaje: permiten análisis de documentos e imágenes, asistentes visuales, herramientas de accesibilidad y agentes multimodales, haciendo que entender imágenes sea una extensión natural de las aplicaciones de IA modernas."
+        }
+      ],
+      "exercises": [
+        {
+          "type": "match",
+          "q": "Relaciona cada necesidad con el tipo de modelo de Foundry.",
+          "pairs": [
+            [
+              "Describir una foto subida por un cliente",
+              "Modelo multimodal (GPT-4.1)"
+            ],
+            [
+              "Crear un cartel a partir de una descripción",
+              "Modelo de imagen (GPT-Image)"
+            ],
+            [
+              "Crear un tráiler de 8 segundos",
+              "Modelo de vídeo (Sora 2)"
+            ]
+          ],
+          "explain": "Análisis → multimodal; creación de imágenes → GPT-Image; creación de vídeo → Sora.",
+          "obj": "B3"
+        },
+        {
+          "type": "tf",
+          "q": "Los modelos multimodales permiten construir herramientas de accesibilidad, como describir imágenes a personas con discapacidad visual.",
+          "answer": true,
+          "explain": "El resumen menciona las herramientas de accesibilidad como escenario; además apoya el principio de inclusión.",
+          "obj": "A1"
+        }
+      ]
+    }
+  ],
+  "boss": [
+    {
+      "type": "mc",
+      "q": "Un agente debe revisar capturas de pantalla de errores y proponer soluciones usando herramientas y salidas estructuradas en producción. ¿Qué familia de modelos encaja mejor?",
+      "options": [
+        "GPT-Image-1-Mini",
+        "Serie GPT-5",
+        "Sora 2",
+        "FLUX"
+      ],
+      "answer": 1,
+      "explain": "La serie GPT-5 está pensada para escenarios agénticos empresariales con entradas multimodales, salidas estructuradas y uso de herramientas.",
+      "obj": "B3"
+    },
+    {
+      "type": "mc",
+      "q": "En una petición a la Responses API para analizar una imagen, ¿qué tipos de contenido lleva el mensaje del usuario?",
+      "options": [
+        "input_text e input_image",
+        "image_generation_call y output_text",
+        "audio y video",
+        "system y assistant"
+      ],
+      "answer": 0,
+      "explain": "El contenido multiparte combina un elemento input_text con uno o más input_image.",
+      "obj": "B3"
+    },
+    {
+      "type": "order",
+      "q": "Ordena el flujo habitual para llevar un modelo de visión a una aplicación.",
+      "items": [
+        "Desplegar el modelo en un recurso de Foundry",
+        "Probarlo con imágenes en el playground",
+        "Obtener endpoint, clave y nombre de despliegue",
+        "Llamar al modelo desde código con el SDK de OpenAI"
+      ],
+      "explain": "Primero se despliega y valida en el playground; después se usa desde código con los datos de conexión.",
+      "obj": "B3"
+    },
+    {
+      "type": "multi",
+      "q": "¿Qué necesitas para generar imágenes con el SDK de Python de OpenAI en Foundry? (elige 3)",
+      "options": [
+        "Un recurso de Foundry",
+        "Un modelo de imagen desplegado",
+        "Autenticación con clave de API o Microsoft Entra ID",
+        "Un despliegue de Sora",
+        "Un clúster de Kubernetes"
+      ],
+      "answers": [
+        0,
+        1,
+        2
+      ],
+      "explain": "Son los requisitos indicados: recurso, despliegue del modelo y autenticación.",
+      "obj": "B3"
+    },
+    {
+      "type": "tf",
+      "q": "Base64 se usa porque JSON y las URL solo admiten texto y las imágenes son datos binarios.",
+      "answer": true,
+      "explain": "Base64 transforma bytes en texto ASCII seguro para incrustarlos en JSON o URL.",
+      "obj": "B3"
+    },
+    {
+      "type": "mc",
+      "q": "Una herramienta interna genera miles de miniaturas al día y prima el coste y la latencia sobre la calidad máxima. ¿Qué modelo elegir?",
+      "options": [
+        "GPT-Image-1.5",
+        "Sora 2",
+        "GPT-5.2",
+        "GPT-Image-1-Mini"
+      ],
+      "answer": 3,
+      "explain": "GPT-Image-1-Mini es la versión ligera y económica, ideal para alto volumen y experimentación.",
+      "obj": "B3"
+    },
+    {
+      "type": "match",
+      "q": "Relaciona cada endpoint REST de Sora 2 con su función.",
+      "pairs": [
+        [
+          "POST /videos",
+          "Iniciar el trabajo de render"
+        ],
+        [
+          "GET /videos/{video_id}",
+          "Consultar el estado del trabajo"
+        ],
+        [
+          "GET /videos/{video_id}/content",
+          "Descargar el MP4 terminado"
+        ]
+      ],
+      "explain": "La API separa la creación, el sondeo y la descarga.",
+      "obj": "B3"
+    },
+    {
+      "type": "mc",
+      "q": "Quieres modificar solo una parte de un vídeo ya generado sin regenerarlo entero. ¿Qué capacidad de Sora 2 usas?",
+      "options": [
+        "Remezcla (vídeo a vídeo)",
+        "Texto a imagen",
+        "Respuesta a preguntas visuales",
+        "OCR"
+      ],
+      "answer": 0,
+      "explain": "La remezcla permite ediciones dirigidas sobre un vídeo existente.",
+      "obj": "B3"
+    },
+    {
+      "type": "tf",
+      "q": "Usar un modelo multimodal suele reducir la necesidad de construir canalizaciones de visión separadas.",
+      "answer": true,
+      "explain": "Al aceptar texto e imágenes en un mismo modelo, se simplifican las soluciones de extremo a extremo.",
+      "obj": "A3"
+    }
+  ],
+  "glossary": [
+    {
+      "es": "Visión artificial",
+      "en": "Computer vision",
+      "def": "Campo de la IA que permite a las máquinas interpretar imágenes, vídeos y transmisiones de cámara."
+    },
+    {
+      "es": "Modelo multimodal",
+      "en": "Multimodal model",
+      "def": "Modelo que entiende y procesa varios tipos de datos a la vez, como texto e imágenes."
+    },
+    {
+      "es": "GPT con visión",
+      "en": "Vision-enabled GPT",
+      "def": "Modelo GPT que combina comprensión visual con respuestas en lenguaje natural."
+    },
+    {
+      "es": "Responses API",
+      "en": "Responses API",
+      "def": "API de OpenAI en Foundry para apps agénticas con soporte nativo de entradas multimodales."
+    },
+    {
+      "es": "Nombre de despliegue",
+      "en": "Deployment name",
+      "def": "Nombre que eliges al desplegar un modelo; es el valor del parámetro model en el código."
+    },
+    {
+      "es": "Texto a imagen",
+      "en": "Text-to-image",
+      "def": "Generación de una imagen a partir de una descripción escrita."
+    },
+    {
+      "es": "Base64",
+      "en": "Base64",
+      "def": "Codificación que convierte datos binarios en texto ASCII para incluirlos en JSON o URL."
+    },
+    {
+      "es": "Texto a vídeo",
+      "en": "Text-to-video",
+      "def": "Generación de un vídeo a partir de un prompt de texto, como hace Sora."
+    },
+    {
+      "es": "Remezcla",
+      "en": "Remix",
+      "def": "Edición dirigida de un vídeo existente sin regenerarlo por completo."
+    },
+    {
+      "es": "Trabajo asíncrono",
+      "en": "Asynchronous job",
+      "def": "Tarea que se crea, se sondea hasta que termina y después se recoge su resultado."
+    },
+    {
+      "es": "Sondeo",
+      "en": "Polling",
+      "def": "Consultar repetidamente el estado de un trabajo hasta que se completa."
+    },
+    {
+      "es": "API REST",
+      "en": "REST API",
+      "def": "Interfaz web que permite a los programas comunicarse mediante HTTP."
+    }
+  ]
+}

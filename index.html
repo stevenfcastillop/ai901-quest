@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-901 Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="topbar" hidden>
+  <button class="brand" data-go="map" title="Volver al mapa">⚔️ <span>AI-901 Quest</span></button>
+  <div id="hud"></div>
+  <nav id="nav">
+    <button data-go="map" title="Mapa">🗺️<span>Mapa</span></button>
+    <button data-go="progress" title="Panel de progreso">📊<span>Progreso</span></button>
+    <button data-go="review" title="Templo del repaso">⛩️<span>Repaso</span><b id="reviewBadge" hidden></b></button>
+    <button data-go="library" title="Biblioteca: glosario y fichas">📖<span>Biblioteca</span></button>
+    <button data-go="shop" title="Tienda">🛒<span>Tienda</span></button>
+    <button data-go="exam" title="Torre del examen (simulacro)">🏰<span>Simulacro</span></button>
+    <button data-go="settings" title="Ajustes">⚙️<span>Ajustes</span></button>
+  </nav>
+</header>
+<main id="app"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
