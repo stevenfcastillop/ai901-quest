@@ -727,6 +727,29 @@
     if (!scenes.length) scenes.push({ title: u.title, blocks: [{ type: "p", text: "Esta unidad no tiene teoría." }] });
     return scenes;
   }
+  // Relevancia pregunta↔escena por palabras clave compartidas, ponderadas por lo poco comunes que son entre escenas.
+  const STOP = new Set("para como esta este estos estas pero sobre entre cada donde cuando desde hasta tiene tienen puede pueden debe hace hacer otro otra otros otras todo todos toda todas solo también tambien porque aunque mismo misma según segun cual cuál cuales sino más mucho muy siempre forma parte través traves ejemplo usar uso usando permite permiten caso casos tipo tipos manera respuesta correcta opción opcion verdadero falso siguiente siguientes afirmación afirmacion relaciona elige cuál qué que una uno unos unas los las del con por sus ese esa eso ello ellos ellas the and for with from that this".split(" "));
+  const norm = (s) => plain(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const tokens = (s) => new Set((norm(s).match(/[a-z0-9]{4,}/g) || []).filter((w) => !STOP.has(w)).map((w) => w.replace(/(es|s)$/, "")));
+  function qText(q) {
+    return [q.q, q.explain, ...(q.options || []), ...(q.items || []), ...((q.pairs || []).flat())].join(" ");
+  }
+  function placeQuestions(scenes, ex) {
+    const after = scenes.map(() => []);
+    const st = scenes.map((s) => tokens(s.title + " " + s.blocks.map(blockText).join(" ")));
+    const df = {};
+    st.forEach((set) => set.forEach((w) => (df[w] = (df[w] || 0) + 1)));
+    ex.forEach((q, i) => {
+      const qt = tokens(qText(q));
+      const scores = st.map((set) => { let sc = 0; qt.forEach((w) => { if (set.has(w)) sc += Math.log(1 + scenes.length / df[w]); }); return sc; });
+      const max = Math.max(...scores);
+      // La primera escena que casi iguala a la mejor (donde se explica el concepto). Sin coincidencias: al final.
+      after[max <= 0 ? scenes.length - 1 : scores.findIndex((s) => s >= 0.75 * max)].push(q);
+    });
+    return after;
+  }
+  window.__ai901 = { scenesOf, placeQuestions, UNIT };
+
   function sceneHint(scene, npc) {
     const tip = scene.blocks.find((b) => b.type === "tip") || scene.blocks.find((b) => b.type === "p");
     return tip ? { ico: npc.ico, n: npc.n, text: tip.text } : null;
@@ -804,9 +827,8 @@
     const m = MOD[u._mod], npc = NPC[m.path], mi = minionFor(u);
     const first = !(S.units[u.id] && S.units[u.id].done);
     const scenes = scenesOf(u), ex = u.exercises || [];
-    // Intercala las preguntas entre escenas.
-    const after = scenes.map(() => []);
-    ex.forEach((q, i) => { const k = Math.max(0, Math.min(scenes.length - 1, Math.floor(((i + 1) * scenes.length) / ex.length) - 1)); after[k].push(q); });
+    // Coloca cada pregunta justo después de la escena que trata su contenido.
+    const after = placeQuestions(scenes, ex);
     const steps = [];
     scenes.forEach((s, k) => { steps.push({ t: "scene", s, k }); after[k].forEach((q) => steps.push({ t: "fight", q, s })); });
     const arena = Arena({ foe: mi[0], ico: mi[1], hp: Math.max(1, Math.ceil(ex.length * 0.6)), hearts: null, crits: false });
